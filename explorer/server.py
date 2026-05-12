@@ -39,6 +39,7 @@ from explorer.routes.projects import router as projects_router
 from explorer.routes.mapper import router as mapper_router
 from explorer.routes.rdf_agent import router as rdf_agent_router
 from explorer.routes.structured_ingest import router as structured_ingest_router
+from explorer.routes.population import router as population_router
 app.include_router(ingest_router)
 app.include_router(model_router)
 app.include_router(export_router)
@@ -46,6 +47,7 @@ app.include_router(projects_router)
 app.include_router(mapper_router)
 app.include_router(rdf_agent_router)
 app.include_router(structured_ingest_router)
+app.include_router(population_router)
 
 # --- State ---
 g: RDFGraph = None
