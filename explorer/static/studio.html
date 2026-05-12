@@ -109,6 +109,7 @@ button.primary { background:var(--accent2); border-color:var(--accent2); color:#
       <div id="entity-preview" style="color:var(--text2);font-size:12px;font-style:italic;">Upload a file or paste text to see extracted entities</div>
       <div style="margin-top:12px;display:none;" id="commit-bar">
         <button class="primary" onclick="commitEntities()">Add to Graph</button>
+        <button onclick="mapToOntology()" style="margin-left:8px;">Map to Ontology</button>
         <span id="commit-count" style="margin-left:8px;font-size:12px;color:var(--text2);"></span>
       </div>
     </div>
@@ -323,6 +324,103 @@ async function commitEntities() {
   }
 }
 
+// MAP TO ONTOLOGY — maps ingested data to an existing ontology
+async function mapToOntology() {
+  if (!currentProject) { alert('Select a project first'); return; }
+
+  // Check if project has any ontology files
+  var resp = await fetch('/api/population/' + currentProject + '/ontologies');
+  var data = await resp.json();
+  var ontologies = data.ontologies || [];
+
+  if (!ontologies.length || ontologies.every(function(o) { return o.class_count === 0; })) {
+    alert('No ontology found in this project. Use "Add to Graph" first to create one, then come back to map data to it.');
+    return;
+  }
+
+  // Let user pick which ontology to map to
+  var names = ontologies.filter(function(o) { return o.class_count > 0; }).map(function(o) { return o.filename + ' (' + o.class_count + ' classes)'; });
+  var picked = prompt('Select ontology to map data to:\n\n' + names.join('\n'), ontologies[0].filename);
+  if (!picked) return;
+  var ontologyFile = picked.split(' (')[0].trim();
+
+  // Get the entities/data that was extracted
+  var checked = document.querySelectorAll('#entity-preview input[type=checkbox]:checked');
+  var selected = checked.length > 0
+    ? Array.from(checked).map(function(cb) { return extractedEntities[parseInt(cb.dataset.idx)]; })
+    : extractedEntities;
+
+  if (!selected.length) { alert('No data to map. Extract entities first.'); return; }
+
+  // Upload data to population API for mapping
+  var dataRows = selected.map(function(e) {
+    var row = {id: e.id, label: e.label, type: e.type};
+    if (e.description) row.description = e.description;
+    if (e.attributes) Object.assign(row, e.attributes);
+    return row;
+  });
+
+  // Get columns from the data
+  var allKeys = new Set();
+  dataRows.forEach(function(r) { Object.keys(r).forEach(function(k) { allKeys.add(k); }); });
+  var columns = Array.from(allKeys).map(function(k) { return {name: k, inferred_type: 'string'}; });
+
+  // Switch to Model tab and start mapping conversation
+  switchTab('model');
+  setModelMode('conversation');
+
+  addModelMsg('I want to map my data to the ontology in "' + ontologyFile + '". Here are my data columns:\n\n' + Array.from(allKeys).join(', ') + '\n\nSample data:\n' + JSON.stringify(dataRows.slice(0, 3), null, 2), 'user');
+  addModelMsg('Analyzing your data and ontology...', 'assistant', 'model-thinking');
+
+  // Call the mapping suggestion API
+  var mapResp = await fetch('/api/population/' + currentProject + '/suggest-mapping', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      columns: columns,
+      sample: dataRows.slice(0, 5),
+      ontology_file: ontologyFile,
+      session_id: currentProject
+    })
+  });
+  var mapData = await mapResp.json();
+
+  var el = document.getElementById('model-thinking');
+  if (el) el.remove();
+
+  if (mapData.error) {
+    addModelMsg('Error: ' + mapData.error, 'assistant');
+    return;
+  }
+
+  // Show mapping suggestion
+  var mappingText = 'Here\'s my suggested mapping to **' + ontologyFile + '**:\n\n';
+  mappingText += '**Target class:** ' + (mapData.target_class || 'auto-detect') + '\n';
+  mappingText += '**ID column:** ' + mapData.id_column + '\n';
+  mappingText += '**Label column:** ' + mapData.label_column + '\n\n';
+  mappingText += '**Column mappings:**\n';
+  (mapData.column_mappings || []).forEach(function(cm) {
+    var conf = Math.round((cm.confidence || 0) * 100) + '%';
+    var prop = cm.mapped_property ? cm.mapped_property.split('#').pop().split('/').pop() : 'unmapped';
+    mappingText += '• ' + cm.column_name + ' → ' + prop + ' (' + cm.mapping_type + ', ' + conf + ' confidence)\n';
+  });
+  mappingText += '\nSay "confirm" to generate instances, or tell me what to change.';
+
+  if (mapData.fallback) {
+    mappingText += '\n\n⚠️ LLM was unavailable, used heuristic matching.';
+  }
+
+  addModelMsg(mappingText, 'assistant');
+
+  // Store mapping state for confirmation
+  window._pendingMapping = {
+    mapping: mapData,
+    dataRows: dataRows,
+    ontologyFile: ontologyFile,
+    columns: columns
+  };
+}
+
 // MODEL TAB
 var modelMode = 'conversation';
 var canvasClasses = [];
@@ -343,6 +441,62 @@ async function sendModelChat() {
   if (!msg) return;
   input.value = '';
   addModelMsg(msg, 'user');
+
+  // Check if user is confirming a pending mapping
+  if (window._pendingMapping && msg.toLowerCase().indexOf('confirm') > -1) {
+    addModelMsg('Generating instances...', 'assistant', 'model-thinking');
+    var pm = window._pendingMapping;
+
+    // Confirm the mapping
+    var confirmResp = await fetch('/api/population/' + currentProject + '/confirm-mapping', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        ontology_file: pm.ontologyFile,
+        target_class: pm.mapping.target_class,
+        id_column: pm.mapping.id_column,
+        label_column: pm.mapping.label_column,
+        column_mappings: pm.mapping.column_mappings,
+        dataset_columns: pm.columns.map(function(c) { return c.name; })
+      })
+    });
+    var confirmData = await confirmResp.json();
+
+    if (confirmData.error) {
+      var el = document.getElementById('model-thinking');
+      if (el) el.remove();
+      addModelMsg('Mapping error: ' + confirmData.error, 'assistant');
+      return;
+    }
+
+    // Generate instances
+    var genResp = await fetch('/api/population/' + currentProject + '/generate-instances', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        mapping_id: confirmData.mapping_id,
+        data: pm.dataRows,
+        base_uri: 'http://kg.local/resource/'
+      })
+    });
+    var genData = await genResp.json();
+
+    var el = document.getElementById('model-thinking');
+    if (el) el.remove();
+
+    if (genData.error) {
+      addModelMsg('Generation error: ' + genData.error, 'assistant');
+    } else {
+      addModelMsg('Done! Generated **' + genData.instances_created + ' instances** with ' + genData.triples_generated + ' triples.\n\nSaved as: ' + genData.filename + '\n\nYou can now Build Graph to visualize the populated ontology.', 'assistant');
+      activeOntology = genData.filename;
+      await loadProject(currentProject);
+    }
+
+    window._pendingMapping = null;
+    return;
+  }
+
+  // Normal model conversation
   addModelMsg('Thinking...', 'assistant', 'model-thinking');
   var payload = { message: msg, session_id: currentProject || 'default' };
   if (currentProject) payload.project_id = currentProject;
