@@ -1,0 +1,5341 @@
+{
+  "nodes": [
+    {
+      "id": "external_aws_dynamodb",
+      "label": "AWS DynamoDB",
+      "file_type": "document",
+      "source_file": "external"
+    },
+    {
+      "id": "external_aws_bedrock",
+      "label": "AWS Bedrock",
+      "file_type": "document",
+      "source_file": "external"
+    },
+    {
+      "id": "external_postgres",
+      "label": "PostgreSQL",
+      "file_type": "document",
+      "source_file": "external"
+    },
+    {
+      "id": "external_redis",
+      "label": "Redis",
+      "file_type": "document",
+      "source_file": "external"
+    },
+    {
+      "id": "external_openai",
+      "label": "OpenAI API",
+      "file_type": "document",
+      "source_file": "external"
+    },
+    {
+      "id": "external_anthropic",
+      "label": "Anthropic Claude",
+      "file_type": "document",
+      "source_file": "external"
+    },
+    {
+      "id": "external_fastapi",
+      "label": "FastAPI",
+      "file_type": "document",
+      "source_file": "external"
+    },
+    {
+      "id": "external_jwt",
+      "label": "JWT Auth",
+      "file_type": "document",
+      "source_file": "external"
+    },
+    {
+      "id": "external_oauth",
+      "label": "OAuth",
+      "file_type": "document",
+      "source_file": "external"
+    },
+    {
+      "id": "external_kafka",
+      "label": "Apache Kafka",
+      "file_type": "document",
+      "source_file": "external"
+    },
+    {
+      "id": "external_greenhouse",
+      "label": "Greenhouse API",
+      "file_type": "document",
+      "source_file": "external"
+    },
+    {
+      "id": "html_path_result",
+      "label": "#path-result (HTML section)",
+      "file_type": "document",
+      "source_file": "index.html"
+    },
+    {
+      "id": "html_no_detail",
+      "label": "#no-detail (HTML section)",
+      "file_type": "document",
+      "source_file": "index.html"
+    },
+    {
+      "id": "html_graph_container",
+      "label": "#graph-container (HTML section)",
+      "file_type": "document",
+      "source_file": "index.html"
+    },
+    {
+      "id": "html_llm_url",
+      "label": "#llm-url (HTML section)",
+      "file_type": "document",
+      "source_file": "index.html"
+    },
+    {
+      "id": "html_hop_val",
+      "label": "#hop-val (HTML section)",
+      "file_type": "document",
+      "source_file": "index.html"
+    },
+    {
+      "id": "html_search_results",
+      "label": "#search-results (HTML section)",
+      "file_type": "document",
+      "source_file": "index.html"
+    },
+    {
+      "id": "html_d_label",
+      "label": "#d-label (HTML section)",
+      "file_type": "document",
+      "source_file": "index.html"
+    },
+    {
+      "id": "html_chat_panel",
+      "label": "#chat-panel (HTML section)",
+      "file_type": "document",
+      "source_file": "index.html"
+    },
+    {
+      "id": "html_llm_model",
+      "label": "#llm-model (HTML section)",
+      "file_type": "document",
+      "source_file": "index.html"
+    },
+    {
+      "id": "html_llm_key_row",
+      "label": "#llm-key-row (HTML section)",
+      "file_type": "document",
+      "source_file": "index.html"
+    },
+    {
+      "id": "html_llm_temp",
+      "label": "#llm-temp (HTML section)",
+      "file_type": "document",
+      "source_file": "index.html"
+    },
+    {
+      "id": "html_btn_3d",
+      "label": "#btn-3d (HTML section)",
+      "file_type": "document",
+      "source_file": "index.html"
+    },
+    {
+      "id": "html_graph_render",
+      "label": "#graph-render (HTML section)",
+      "file_type": "document",
+      "source_file": "index.html"
+    },
+    {
+      "id": "html_btn_llm_settings",
+      "label": "#btn-llm-settings (HTML section)",
+      "file_type": "document",
+      "source_file": "index.html"
+    },
+    {
+      "id": "html_llm_settings",
+      "label": "#llm-settings (HTML section)",
+      "file_type": "document",
+      "source_file": "index.html"
+    },
+    {
+      "id": "html_btn_test_llm",
+      "label": "#btn-test-llm (HTML section)",
+      "file_type": "document",
+      "source_file": "index.html"
+    },
+    {
+      "id": "html_d_type",
+      "label": "#d-type (HTML section)",
+      "file_type": "document",
+      "source_file": "index.html"
+    },
+    {
+      "id": "html_btn_physics",
+      "label": "#btn-physics (HTML section)",
+      "file_type": "document",
+      "source_file": "index.html"
+    },
+    {
+      "id": "html_llm_status",
+      "label": "#llm-status (HTML section)",
+      "file_type": "document",
+      "source_file": "index.html"
+    },
+    {
+      "id": "html_btn_expand",
+      "label": "#btn-expand (HTML section)",
+      "file_type": "document",
+      "source_file": "index.html"
+    },
+    {
+      "id": "html_btn_chat",
+      "label": "#btn-chat (HTML section)",
+      "file_type": "document",
+      "source_file": "index.html"
+    },
+    {
+      "id": "html_llm_region",
+      "label": "#llm-region (HTML section)",
+      "file_type": "document",
+      "source_file": "index.html"
+    },
+    {
+      "id": "html_d_desc",
+      "label": "#d-desc (HTML section)",
+      "file_type": "document",
+      "source_file": "index.html"
+    },
+    {
+      "id": "html_chat_input_row",
+      "label": "#chat-input-row (HTML section)",
+      "file_type": "document",
+      "source_file": "index.html"
+    },
+    {
+      "id": "html_toolbar",
+      "label": "#toolbar (HTML section)",
+      "file_type": "document",
+      "source_file": "index.html"
+    },
+    {
+      "id": "html_detail",
+      "label": "#detail (HTML section)",
+      "file_type": "document",
+      "source_file": "index.html"
+    },
+    {
+      "id": "html_btn_mode_sparql",
+      "label": "#btn-mode-sparql (HTML section)",
+      "file_type": "document",
+      "source_file": "index.html"
+    },
+    {
+      "id": "html_btn_path",
+      "label": "#btn-path (HTML section)",
+      "file_type": "document",
+      "source_file": "index.html"
+    },
+    {
+      "id": "html_btn_mode_context",
+      "label": "#btn-mode-context (HTML section)",
+      "file_type": "document",
+      "source_file": "index.html"
+    },
+    {
+      "id": "html_btn_reset",
+      "label": "#btn-reset (HTML section)",
+      "file_type": "document",
+      "source_file": "index.html"
+    },
+    {
+      "id": "html_path_from",
+      "label": "#path-from (HTML section)",
+      "file_type": "document",
+      "source_file": "index.html"
+    },
+    {
+      "id": "html_mode_badge",
+      "label": "#mode-badge (HTML section)",
+      "file_type": "document",
+      "source_file": "index.html"
+    },
+    {
+      "id": "html_llm_key",
+      "label": "#llm-key (HTML section)",
+      "file_type": "document",
+      "source_file": "index.html"
+    },
+    {
+      "id": "html_stats_bar",
+      "label": "#stats-bar (HTML section)",
+      "file_type": "document",
+      "source_file": "index.html"
+    },
+    {
+      "id": "html_chat_messages",
+      "label": "#chat-messages (HTML section)",
+      "file_type": "document",
+      "source_file": "index.html"
+    },
+    {
+      "id": "html_hop_slider",
+      "label": "#hop-slider (HTML section)",
+      "file_type": "document",
+      "source_file": "index.html"
+    },
+    {
+      "id": "html_path_to",
+      "label": "#path-to (HTML section)",
+      "file_type": "document",
+      "source_file": "index.html"
+    },
+    {
+      "id": "html_llm_url_row",
+      "label": "#llm-url-row (HTML section)",
+      "file_type": "document",
+      "source_file": "index.html"
+    },
+    {
+      "id": "html_app",
+      "label": "#app (HTML section)",
+      "file_type": "document",
+      "source_file": "index.html"
+    },
+    {
+      "id": "html_llm_provider",
+      "label": "#llm-provider (HTML section)",
+      "file_type": "document",
+      "source_file": "index.html"
+    },
+    {
+      "id": "html_d_conns",
+      "label": "#d-conns (HTML section)",
+      "file_type": "document",
+      "source_file": "index.html"
+    },
+    {
+      "id": "html_search_input",
+      "label": "#search-input (HTML section)",
+      "file_type": "document",
+      "source_file": "index.html"
+    },
+    {
+      "id": "html_type_filters",
+      "label": "#type-filters (HTML section)",
+      "file_type": "document",
+      "source_file": "index.html"
+    },
+    {
+      "id": "html_chat_input",
+      "label": "#chat-input (HTML section)",
+      "file_type": "document",
+      "source_file": "index.html"
+    },
+    {
+      "id": "html_sidebar",
+      "label": "#sidebar (HTML section)",
+      "file_type": "document",
+      "source_file": "index.html"
+    },
+    {
+      "id": "html_llm_region_row",
+      "label": "#llm-region-row (HTML section)",
+      "file_type": "document",
+      "source_file": "index.html"
+    },
+    {
+      "id": "js_init",
+      "label": "init() (JS)",
+      "file_type": "code",
+      "source_file": "index.html"
+    },
+    {
+      "id": "js_drillto",
+      "label": "drillTo() (JS)",
+      "file_type": "code",
+      "source_file": "index.html"
+    },
+    {
+      "id": "js_buildtypefilters",
+      "label": "buildTypeFilters() (JS)",
+      "file_type": "code",
+      "source_file": "index.html"
+    },
+    {
+      "id": "js_toggle3d",
+      "label": "toggle3D() (JS)",
+      "file_type": "code",
+      "source_file": "index.html"
+    },
+    {
+      "id": "js_filterdata",
+      "label": "filterData() (JS)",
+      "file_type": "code",
+      "source_file": "index.html"
+    },
+    {
+      "id": "js_refreshgraph",
+      "label": "refreshGraph() (JS)",
+      "file_type": "code",
+      "source_file": "index.html"
+    },
+    {
+      "id": "js_togglellmsettings",
+      "label": "toggleLLMSettings() (JS)",
+      "file_type": "code",
+      "source_file": "index.html"
+    },
+    {
+      "id": "js_setupevents",
+      "label": "setupEvents() (JS)",
+      "file_type": "code",
+      "source_file": "index.html"
+    },
+    {
+      "id": "js_toggletype",
+      "label": "toggleType() (JS)",
+      "file_type": "code",
+      "source_file": "index.html"
+    },
+    {
+      "id": "js_testllm",
+      "label": "testLLM() (JS)",
+      "file_type": "code",
+      "source_file": "index.html"
+    },
+    {
+      "id": "js_selectnode",
+      "label": "selectNode() (JS)",
+      "file_type": "code",
+      "source_file": "index.html"
+    },
+    {
+      "id": "js_savellmconfig",
+      "label": "saveLLMConfig() (JS)",
+      "file_type": "code",
+      "source_file": "index.html"
+    },
+    {
+      "id": "js_togglephysics",
+      "label": "togglePhysics() (JS)",
+      "file_type": "code",
+      "source_file": "index.html"
+    },
+    {
+      "id": "js_clearselection",
+      "label": "clearSelection() (JS)",
+      "file_type": "code",
+      "source_file": "index.html"
+    },
+    {
+      "id": "js_togglechat",
+      "label": "toggleChat() (JS)",
+      "file_type": "code",
+      "source_file": "index.html"
+    },
+    {
+      "id": "js_rendergraph",
+      "label": "renderGraph() (JS)",
+      "file_type": "code",
+      "source_file": "index.html"
+    },
+    {
+      "id": "js_setchatmode",
+      "label": "setChatMode() (JS)",
+      "file_type": "code",
+      "source_file": "index.html"
+    },
+    {
+      "id": "js_findpath",
+      "label": "findPath() (JS)",
+      "file_type": "code",
+      "source_file": "index.html"
+    },
+    {
+      "id": "js_onproviderchange",
+      "label": "onProviderChange() (JS)",
+      "file_type": "code",
+      "source_file": "index.html"
+    },
+    {
+      "id": "js_expandselected",
+      "label": "expandSelected() (JS)",
+      "file_type": "code",
+      "source_file": "index.html"
+    },
+    {
+      "id": "js_sendchat",
+      "label": "sendChat() (JS)",
+      "file_type": "code",
+      "source_file": "index.html"
+    },
+    {
+      "id": "js_dosearch",
+      "label": "doSearch() (JS)",
+      "file_type": "code",
+      "source_file": "index.html"
+    },
+    {
+      "id": "js_fitgraph",
+      "label": "fitGraph() (JS)",
+      "file_type": "code",
+      "source_file": "index.html"
+    },
+    {
+      "id": "js_addchatmsg",
+      "label": "addChatMsg() (JS)",
+      "file_type": "code",
+      "source_file": "index.html"
+    },
+    {
+      "id": "js_showllmstatus",
+      "label": "showLLMStatus() (JS)",
+      "file_type": "code",
+      "source_file": "index.html"
+    },
+    {
+      "id": "js_loadllmconfig",
+      "label": "loadLLMConfig() (JS)",
+      "file_type": "code",
+      "source_file": "index.html"
+    },
+    {
+      "id": "js_showdetail",
+      "label": "showDetail() (JS)",
+      "file_type": "code",
+      "source_file": "index.html"
+    },
+    {
+      "id": "js_detectgpu",
+      "label": "detectGPU() (JS)",
+      "file_type": "code",
+      "source_file": "index.html"
+    },
+    {
+      "id": "html_model_conversation",
+      "label": "#model-conversation (HTML section)",
+      "file_type": "document",
+      "source_file": "studio.html"
+    },
+    {
+      "id": "html_entity_preview",
+      "label": "#entity-preview (HTML section)",
+      "file_type": "document",
+      "source_file": "studio.html"
+    },
+    {
+      "id": "html_model_chat_input",
+      "label": "#model-chat-input (HTML section)",
+      "file_type": "document",
+      "source_file": "studio.html"
+    },
+    {
+      "id": "html_ingest_status",
+      "label": "#ingest-status (HTML section)",
+      "file_type": "document",
+      "source_file": "studio.html"
+    },
+    {
+      "id": "html_ttl_paste",
+      "label": "#ttl-paste (HTML section)",
+      "file_type": "document",
+      "source_file": "studio.html"
+    },
+    {
+      "id": "html_ttl_status",
+      "label": "#ttl-status (HTML section)",
+      "file_type": "document",
+      "source_file": "studio.html"
+    },
+    {
+      "id": "html_project_select",
+      "label": "#project-select (HTML section)",
+      "file_type": "document",
+      "source_file": "studio.html"
+    },
+    {
+      "id": "html_model_canvas",
+      "label": "#model-canvas (HTML section)",
+      "file_type": "document",
+      "source_file": "studio.html"
+    },
+    {
+      "id": "html_topbar",
+      "label": "#topbar (HTML section)",
+      "file_type": "document",
+      "source_file": "studio.html"
+    },
+    {
+      "id": "html_drop_zone",
+      "label": "#drop-zone (HTML section)",
+      "file_type": "document",
+      "source_file": "studio.html"
+    },
+    {
+      "id": "html_tab_content",
+      "label": "#tab-content (HTML section)",
+      "file_type": "document",
+      "source_file": "studio.html"
+    },
+    {
+      "id": "html_btn_path_b",
+      "label": "#btn-path-b (HTML section)",
+      "file_type": "document",
+      "source_file": "studio.html"
+    },
+    {
+      "id": "html_paste_text",
+      "label": "#paste-text (HTML section)",
+      "file_type": "document",
+      "source_file": "studio.html"
+    },
+    {
+      "id": "html_canvas_area",
+      "label": "#canvas-area (HTML section)",
+      "file_type": "document",
+      "source_file": "studio.html"
+    },
+    {
+      "id": "html_explore_iframe",
+      "label": "#explore-iframe (HTML section)",
+      "file_type": "document",
+      "source_file": "studio.html"
+    },
+    {
+      "id": "html_tab_explore",
+      "label": "#tab-explore (HTML section)",
+      "file_type": "document",
+      "source_file": "studio.html"
+    },
+    {
+      "id": "html_btn_path_a",
+      "label": "#btn-path-a (HTML section)",
+      "file_type": "document",
+      "source_file": "studio.html"
+    },
+    {
+      "id": "html_file_input",
+      "label": "#file-input (HTML section)",
+      "file_type": "document",
+      "source_file": "studio.html"
+    },
+    {
+      "id": "html_tab_ingest",
+      "label": "#tab-ingest (HTML section)",
+      "file_type": "document",
+      "source_file": "studio.html"
+    },
+    {
+      "id": "html_ttl_file_input",
+      "label": "#ttl-file-input (HTML section)",
+      "file_type": "document",
+      "source_file": "studio.html"
+    },
+    {
+      "id": "html_model_upload",
+      "label": "#model-upload (HTML section)",
+      "file_type": "document",
+      "source_file": "studio.html"
+    },
+    {
+      "id": "html_tab_model",
+      "label": "#tab-model (HTML section)",
+      "file_type": "document",
+      "source_file": "studio.html"
+    },
+    {
+      "id": "html_commit_count",
+      "label": "#commit-count (HTML section)",
+      "file_type": "document",
+      "source_file": "studio.html"
+    },
+    {
+      "id": "html_commit_bar",
+      "label": "#commit-bar (HTML section)",
+      "file_type": "document",
+      "source_file": "studio.html"
+    },
+    {
+      "id": "html_ttl_live",
+      "label": "#ttl-live (HTML section)",
+      "file_type": "document",
+      "source_file": "studio.html"
+    },
+    {
+      "id": "html_ingest_status_content",
+      "label": "#ingest-status-content (HTML section)",
+      "file_type": "document",
+      "source_file": "studio.html"
+    },
+    {
+      "id": "js_showingeststatus",
+      "label": "showIngestStatus() (JS)",
+      "file_type": "code",
+      "source_file": "studio.html"
+    },
+    {
+      "id": "js_rendercanvas",
+      "label": "renderCanvas() (JS)",
+      "file_type": "code",
+      "source_file": "studio.html"
+    },
+    {
+      "id": "js_aisuggest",
+      "label": "aiSuggest() (JS)",
+      "file_type": "code",
+      "source_file": "studio.html"
+    },
+    {
+      "id": "js_buildgraphfromupload",
+      "label": "buildGraphFromUpload() (JS)",
+      "file_type": "code",
+      "source_file": "studio.html"
+    },
+    {
+      "id": "js_buildgraph",
+      "label": "buildGraph() (JS)",
+      "file_type": "code",
+      "source_file": "studio.html"
+    },
+    {
+      "id": "js_addmodelmsg",
+      "label": "addModelMsg() (JS)",
+      "file_type": "code",
+      "source_file": "studio.html"
+    },
+    {
+      "id": "js_ingesttext",
+      "label": "ingestText() (JS)",
+      "file_type": "code",
+      "source_file": "studio.html"
+    },
+    {
+      "id": "js_addcanvasclass",
+      "label": "addCanvasClass() (JS)",
+      "file_type": "code",
+      "source_file": "studio.html"
+    },
+    {
+      "id": "js_dobuildgraph",
+      "label": "doBuildGraph() (JS)",
+      "file_type": "code",
+      "source_file": "studio.html"
+    },
+    {
+      "id": "js_validatettl",
+      "label": "validateTTL() (JS)",
+      "file_type": "code",
+      "source_file": "studio.html"
+    },
+    {
+      "id": "js_updatettlpreview",
+      "label": "updateTTLPreview() (JS)",
+      "file_type": "code",
+      "source_file": "studio.html"
+    },
+    {
+      "id": "js_setmodelmode",
+      "label": "setModelMode() (JS)",
+      "file_type": "code",
+      "source_file": "studio.html"
+    },
+    {
+      "id": "js_createproject",
+      "label": "createProject() (JS)",
+      "file_type": "code",
+      "source_file": "studio.html"
+    },
+    {
+      "id": "js_switchtab",
+      "label": "switchTab() (JS)",
+      "file_type": "code",
+      "source_file": "studio.html"
+    },
+    {
+      "id": "js_loadproject",
+      "label": "loadProject() (JS)",
+      "file_type": "code",
+      "source_file": "studio.html"
+    },
+    {
+      "id": "js_mergettl",
+      "label": "mergeTTL() (JS)",
+      "file_type": "code",
+      "source_file": "studio.html"
+    },
+    {
+      "id": "js_handlefiles",
+      "label": "handleFiles() (JS)",
+      "file_type": "code",
+      "source_file": "studio.html"
+    },
+    {
+      "id": "js_sendmodelchat",
+      "label": "sendModelChat() (JS)",
+      "file_type": "code",
+      "source_file": "studio.html"
+    },
+    {
+      "id": "js_downloadttl",
+      "label": "downloadTTL() (JS)",
+      "file_type": "code",
+      "source_file": "studio.html"
+    },
+    {
+      "id": "js_commitentities",
+      "label": "commitEntities() (JS)",
+      "file_type": "code",
+      "source_file": "studio.html"
+    },
+    {
+      "id": "js_copyttl",
+      "label": "copyTTL() (JS)",
+      "file_type": "code",
+      "source_file": "studio.html"
+    },
+    {
+      "id": "js_clearcanvas",
+      "label": "clearCanvas() (JS)",
+      "file_type": "code",
+      "source_file": "studio.html"
+    },
+    {
+      "id": "js_mergettlfromcanvas",
+      "label": "mergeTTLFromCanvas() (JS)",
+      "file_type": "code",
+      "source_file": "studio.html"
+    },
+    {
+      "id": "js_loadprojects",
+      "label": "loadProjects() (JS)",
+      "file_type": "code",
+      "source_file": "studio.html"
+    },
+    {
+      "id": "js_showentitypreview",
+      "label": "showEntityPreview() (JS)",
+      "file_type": "code",
+      "source_file": "studio.html"
+    },
+    {
+      "id": "html_stats_modal",
+      "label": "#stats-modal (HTML section)",
+      "file_type": "document",
+      "source_file": "view_new.html"
+    },
+    {
+      "id": "html_graph",
+      "label": "#graph (HTML section)",
+      "file_type": "document",
+      "source_file": "view_new.html"
+    },
+    {
+      "id": "html_search_box",
+      "label": "#search-box (HTML section)",
+      "file_type": "document",
+      "source_file": "view_new.html"
+    },
+    {
+      "id": "html_depth_indicator",
+      "label": "#depth-indicator (HTML section)",
+      "file_type": "document",
+      "source_file": "view_new.html"
+    },
+    {
+      "id": "html_stats",
+      "label": "#stats (HTML section)",
+      "file_type": "document",
+      "source_file": "view_new.html"
+    },
+    {
+      "id": "html_controls",
+      "label": "#controls (HTML section)",
+      "file_type": "document",
+      "source_file": "view_new.html"
+    },
+    {
+      "id": "html_btn_spq",
+      "label": "#btn-spq (HTML section)",
+      "file_type": "document",
+      "source_file": "view_new.html"
+    },
+    {
+      "id": "html_d_name",
+      "label": "#d-name (HTML section)",
+      "file_type": "document",
+      "source_file": "view_new.html"
+    },
+    {
+      "id": "html_filter_panel",
+      "label": "#filter-panel (HTML section)",
+      "file_type": "document",
+      "source_file": "view_new.html"
+    },
+    {
+      "id": "html_temp_val",
+      "label": "#temp-val (HTML section)",
+      "file_type": "document",
+      "source_file": "view_new.html"
+    },
+    {
+      "id": "html_path_finder",
+      "label": "#path-finder (HTML section)",
+      "file_type": "document",
+      "source_file": "view_new.html"
+    },
+    {
+      "id": "html_top_bar",
+      "label": "#top-bar (HTML section)",
+      "file_type": "document",
+      "source_file": "view_new.html"
+    },
+    {
+      "id": "html_btn_test",
+      "label": "#btn-test (HTML section)",
+      "file_type": "document",
+      "source_file": "view_new.html"
+    },
+    {
+      "id": "html_btn_ctx",
+      "label": "#btn-ctx (HTML section)",
+      "file_type": "document",
+      "source_file": "view_new.html"
+    },
+    {
+      "id": "html_stats_content",
+      "label": "#stats-content (HTML section)",
+      "file_type": "document",
+      "source_file": "view_new.html"
+    },
+    {
+      "id": "html_search",
+      "label": "#search (HTML section)",
+      "file_type": "document",
+      "source_file": "view_new.html"
+    },
+    {
+      "id": "html_legend",
+      "label": "#legend (HTML section)",
+      "file_type": "document",
+      "source_file": "view_new.html"
+    },
+    {
+      "id": "js_buildlegend",
+      "label": "buildLegend() (JS)",
+      "file_type": "code",
+      "source_file": "view_new.html"
+    },
+    {
+      "id": "js_drillwithhops",
+      "label": "drillWithHops() (JS)",
+      "file_type": "code",
+      "source_file": "view_new.html"
+    },
+    {
+      "id": "js_resetfocus",
+      "label": "resetFocus() (JS)",
+      "file_type": "code",
+      "source_file": "view_new.html"
+    },
+    {
+      "id": "js_showstats",
+      "label": "showStats() (JS)",
+      "file_type": "code",
+      "source_file": "view_new.html"
+    },
+    {
+      "id": "js_togglefilters",
+      "label": "toggleFilters() (JS)",
+      "file_type": "code",
+      "source_file": "view_new.html"
+    },
+    {
+      "id": "js_drillinto",
+      "label": "drillInto() (JS)",
+      "file_type": "code",
+      "source_file": "view_new.html"
+    },
+    {
+      "id": "js_focusnode",
+      "label": "focusNode() (JS)",
+      "file_type": "code",
+      "source_file": "view_new.html"
+    },
+    {
+      "id": "js_toggletypefilter",
+      "label": "toggleTypeFilter() (JS)",
+      "file_type": "code",
+      "source_file": "view_new.html"
+    },
+    {
+      "id": "js_getcolor",
+      "label": "getColor() (JS)",
+      "file_type": "code",
+      "source_file": "view_new.html"
+    },
+    {
+      "id": "js_setupsearch",
+      "label": "setupSearch() (JS)",
+      "file_type": "code",
+      "source_file": "view_new.html"
+    },
+    {
+      "id": "js_fitall",
+      "label": "fitAll() (JS)",
+      "file_type": "code",
+      "source_file": "view_new.html"
+    },
+    {
+      "id": "js_filterbycolor",
+      "label": "filterByColor() (JS)",
+      "file_type": "code",
+      "source_file": "view_new.html"
+    },
+    {
+      "id": "js_resetview",
+      "label": "resetView() (JS)",
+      "file_type": "code",
+      "source_file": "view_new.html"
+    }
+  ],
+  "edges": [
+    {
+      "source": "explorer_routes_export_py",
+      "target": "graph_explorer_py",
+      "relation": "imports_and_uses",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.9,
+      "source_file": "export.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_routes_export_py",
+      "target": "explorer_graphexplorer",
+      "relation": "imports_and_uses",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.9,
+      "source_file": "export.py",
+      "weight": 1.0
+    },
+    {
+      "source": "batch_build_py",
+      "target": "batch_rdf_build_init_graph",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "batch_build.py",
+      "weight": 1.0
+    },
+    {
+      "source": "batch_build_py",
+      "target": "provider_get_llm",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "batch_build.py",
+      "weight": 1.0
+    },
+    {
+      "source": "batch_build_py",
+      "target": "batch_rdf_build_main",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "batch_build.py",
+      "weight": 1.0
+    },
+    {
+      "source": "batch_build_py",
+      "target": "build_rdf_direct_main",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "batch_build.py",
+      "weight": 1.0
+    },
+    {
+      "source": "batch_build_py",
+      "target": "pdf_to_md_main",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "batch_build.py",
+      "weight": 1.0
+    },
+    {
+      "source": "batch_build_py",
+      "target": "ttl_import_main",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "batch_build.py",
+      "weight": 1.0
+    },
+    {
+      "source": "batch_build_py",
+      "target": "3d_force_graph_min_ct_sub",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "batch_build.py",
+      "weight": 1.0
+    },
+    {
+      "source": "batch_build_py",
+      "target": "batch_rdf_build_save_progress",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "batch_build.py",
+      "weight": 1.0
+    },
+    {
+      "source": "batch_build_py",
+      "target": "3d_force_graph_min_ct_add",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "batch_build.py",
+      "weight": 1.0
+    },
+    {
+      "source": "batch_build_py",
+      "target": "3d_force_graph_min_vu_get",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "batch_build.py",
+      "weight": 1.0
+    },
+    {
+      "source": "batch_build_py",
+      "target": "force_graph_min_rr_get",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "batch_build.py",
+      "weight": 1.0
+    },
+    {
+      "source": "batch_build_py",
+      "target": "server_shortest_path",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "batch_build.py",
+      "weight": 1.0
+    },
+    {
+      "source": "batch_build_py",
+      "target": "explorer_graphexplorer_shortest_path",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "batch_build.py",
+      "weight": 1.0
+    },
+    {
+      "source": "batch_build_py",
+      "target": "3d_force_graph_min_ct_set",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "batch_build.py",
+      "weight": 1.0
+    },
+    {
+      "source": "batch_build_py",
+      "target": "force_graph_min_rr_set",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "batch_build.py",
+      "weight": 1.0
+    },
+    {
+      "source": "batch_build_py",
+      "target": "3d_force_graph_min_jo_parse",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "batch_build.py",
+      "weight": 1.0
+    },
+    {
+      "source": "batch_build_py",
+      "target": "bedrock_bedrockprovider_generate_json",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "batch_build.py",
+      "weight": 1.0
+    },
+    {
+      "source": "batch_build_py",
+      "target": "ollama_ollamaprovider_generate_json",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "batch_build.py",
+      "weight": 1.0
+    },
+    {
+      "source": "batch_build_py",
+      "target": "provider_generate_json",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "batch_build.py",
+      "weight": 1.0
+    },
+    {
+      "source": "batch_build_py",
+      "target": "batch_rdf_build_load_progress",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "batch_build.py",
+      "weight": 1.0
+    },
+    {
+      "source": "batch_rdf_build_py",
+      "target": "build_tmf_ontology_make_id",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "batch_rdf_build.py",
+      "weight": 1.0
+    },
+    {
+      "source": "batch_rdf_build_py",
+      "target": "build_rdf_direct_make_id",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "batch_rdf_build.py",
+      "weight": 1.0
+    },
+    {
+      "source": "batch_rdf_build_py",
+      "target": "batch_build_init_graph",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "batch_rdf_build.py",
+      "weight": 1.0
+    },
+    {
+      "source": "batch_rdf_build_py",
+      "target": "batch_build_main",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "batch_rdf_build.py",
+      "weight": 1.0
+    },
+    {
+      "source": "batch_rdf_build_py",
+      "target": "build_rdf_direct_main",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "batch_rdf_build.py",
+      "weight": 1.0
+    },
+    {
+      "source": "batch_rdf_build_py",
+      "target": "pdf_to_md_main",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "batch_rdf_build.py",
+      "weight": 1.0
+    },
+    {
+      "source": "batch_rdf_build_py",
+      "target": "ttl_import_main",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "batch_rdf_build.py",
+      "weight": 1.0
+    },
+    {
+      "source": "batch_rdf_build_py",
+      "target": "3d_force_graph_min_ct_sub",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "batch_rdf_build.py",
+      "weight": 1.0
+    },
+    {
+      "source": "batch_rdf_build_py",
+      "target": "batch_build_save_progress",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "batch_rdf_build.py",
+      "weight": 1.0
+    },
+    {
+      "source": "batch_rdf_build_py",
+      "target": "server_get_graph",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "batch_rdf_build.py",
+      "weight": 1.0
+    },
+    {
+      "source": "batch_rdf_build_py",
+      "target": "sparql_store_sparqlstore_load_rdf_graph",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "batch_rdf_build.py",
+      "weight": 1.0
+    },
+    {
+      "source": "batch_rdf_build_py",
+      "target": "3d_force_graph_min_ct_add",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "batch_rdf_build.py",
+      "weight": 1.0
+    },
+    {
+      "source": "batch_rdf_build_py",
+      "target": "3d_force_graph_min_ct_min",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "batch_rdf_build.py",
+      "weight": 1.0
+    },
+    {
+      "source": "batch_rdf_build_py",
+      "target": "force_graph_min",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "batch_rdf_build.py",
+      "weight": 1.0
+    },
+    {
+      "source": "batch_rdf_build_py",
+      "target": "server_shortest_path",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "batch_rdf_build.py",
+      "weight": 1.0
+    },
+    {
+      "source": "batch_rdf_build_py",
+      "target": "explorer_graphexplorer_shortest_path",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "batch_rdf_build.py",
+      "weight": 1.0
+    },
+    {
+      "source": "batch_rdf_build_py",
+      "target": "3d_force_graph_min_ct_set",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "batch_rdf_build.py",
+      "weight": 1.0
+    },
+    {
+      "source": "batch_rdf_build_py",
+      "target": "force_graph_min_rr_set",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "batch_rdf_build.py",
+      "weight": 1.0
+    },
+    {
+      "source": "batch_rdf_build_py",
+      "target": "3d_force_graph_min_jo_parse",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "batch_rdf_build.py",
+      "weight": 1.0
+    },
+    {
+      "source": "batch_rdf_build_py",
+      "target": "server_search",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "batch_rdf_build.py",
+      "weight": 1.0
+    },
+    {
+      "source": "batch_rdf_build_py",
+      "target": "explorer_graphexplorer_search",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "batch_rdf_build.py",
+      "weight": 1.0
+    },
+    {
+      "source": "batch_rdf_build_py",
+      "target": "ingest_extract_from_text",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "batch_rdf_build.py",
+      "weight": 1.0
+    },
+    {
+      "source": "batch_rdf_build_py",
+      "target": "batch_build_load_progress",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "batch_rdf_build.py",
+      "weight": 1.0
+    },
+    {
+      "source": "build_tmf_ontology_py",
+      "target": "batch_rdf_build_make_id",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "build_tmf_ontology.py",
+      "weight": 1.0
+    },
+    {
+      "source": "build_tmf_ontology_py",
+      "target": "build_rdf_direct_make_id",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "build_tmf_ontology.py",
+      "weight": 1.0
+    },
+    {
+      "source": "build_tmf_ontology_py",
+      "target": "3d_force_graph_min_ct_sub",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "build_tmf_ontology.py",
+      "weight": 1.0
+    },
+    {
+      "source": "build_tmf_ontology_py",
+      "target": "3d_force_graph_min_ct_add",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "build_tmf_ontology.py",
+      "weight": 1.0
+    },
+    {
+      "source": "build_tmf_ontology_py",
+      "target": "3d_force_graph_min_vu_get",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "build_tmf_ontology.py",
+      "weight": 1.0
+    },
+    {
+      "source": "build_tmf_ontology_py",
+      "target": "force_graph_min_rr_get",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "build_tmf_ontology.py",
+      "weight": 1.0
+    },
+    {
+      "source": "build_tmf_ontology_py",
+      "target": "force_graph_min_qo_split",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "build_tmf_ontology.py",
+      "weight": 1.0
+    },
+    {
+      "source": "build_tmf_ontology_py",
+      "target": "server_shortest_path",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "build_tmf_ontology.py",
+      "weight": 1.0
+    },
+    {
+      "source": "build_tmf_ontology_py",
+      "target": "explorer_graphexplorer_shortest_path",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "build_tmf_ontology.py",
+      "weight": 1.0
+    },
+    {
+      "source": "build_tmf_ontology_py",
+      "target": "3d_force_graph_min_ct_set",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "build_tmf_ontology.py",
+      "weight": 1.0
+    },
+    {
+      "source": "build_tmf_ontology_py",
+      "target": "force_graph_min_rr_set",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "build_tmf_ontology.py",
+      "weight": 1.0
+    },
+    {
+      "source": "download_more_data_py",
+      "target": "sparql_store_sparqlstore_count",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "download_more_data.py",
+      "weight": 1.0
+    },
+    {
+      "source": "download_more_data_py",
+      "target": "3d_force_graph_min_us",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "download_more_data.py",
+      "weight": 1.0
+    },
+    {
+      "source": "download_more_data_py",
+      "target": "3d_force_graph_min_vu_get",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "download_more_data.py",
+      "weight": 1.0
+    },
+    {
+      "source": "download_more_data_py",
+      "target": "force_graph_min_rr_get",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "download_more_data.py",
+      "weight": 1.0
+    },
+    {
+      "source": "download_more_data_py",
+      "target": "3d_force_graph_min_ae_getsize",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "download_more_data.py",
+      "weight": 1.0
+    },
+    {
+      "source": "download_real_data_py",
+      "target": "sparql_store_sparqlstore_count",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "download_real_data.py",
+      "weight": 1.0
+    },
+    {
+      "source": "download_real_data_py",
+      "target": "3d_force_graph_min_vu_get",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "download_real_data.py",
+      "weight": 1.0
+    },
+    {
+      "source": "download_real_data_py",
+      "target": "force_graph_min_rr_get",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "download_real_data.py",
+      "weight": 1.0
+    },
+    {
+      "source": "download_tmf_py",
+      "target": "3d_force_graph_min_vu_get",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "download_tmf.py",
+      "weight": 1.0
+    },
+    {
+      "source": "download_tmf_py",
+      "target": "force_graph_min_rr_get",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "download_tmf.py",
+      "weight": 1.0
+    },
+    {
+      "source": "download_tmf_docs_py",
+      "target": "3d_force_graph_min_vu_get",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "download_tmf_docs.py",
+      "weight": 1.0
+    },
+    {
+      "source": "download_tmf_docs_py",
+      "target": "force_graph_min_rr_get",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "download_tmf_docs.py",
+      "weight": 1.0
+    },
+    {
+      "source": "main_py",
+      "target": "bedrock_bedrockprovider_generate",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "main.py",
+      "weight": 1.0
+    },
+    {
+      "source": "main_py",
+      "target": "ollama_ollamaprovider_generate",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "main.py",
+      "weight": 1.0
+    },
+    {
+      "source": "main_py",
+      "target": "provider_generate",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "main.py",
+      "weight": 1.0
+    },
+    {
+      "source": "main_py",
+      "target": "explorer_graphexplorer_god_nodes",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "main.py",
+      "weight": 1.0
+    },
+    {
+      "source": "main_py",
+      "target": "3d_force_graph_min_ct_add",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "main.py",
+      "weight": 1.0
+    },
+    {
+      "source": "main_py",
+      "target": "3d_force_graph_min_vu_get",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "main.py",
+      "weight": 1.0
+    },
+    {
+      "source": "main_py",
+      "target": "force_graph_min_rr_get",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "main.py",
+      "weight": 1.0
+    },
+    {
+      "source": "main_py",
+      "target": "pdf_to_md_extract_pages",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "main.py",
+      "weight": 1.0
+    },
+    {
+      "source": "main_py",
+      "target": "bedrock_bedrockprovider_generate_json",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "main.py",
+      "weight": 1.0
+    },
+    {
+      "source": "main_py",
+      "target": "ollama_ollamaprovider_generate_json",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "main.py",
+      "weight": 1.0
+    },
+    {
+      "source": "main_py",
+      "target": "provider_generate_json",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "main.py",
+      "weight": 1.0
+    },
+    {
+      "source": "main_py",
+      "target": "graph_viz_generate_enhanced_html",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "main.py",
+      "weight": 1.0
+    },
+    {
+      "source": "main_py",
+      "target": "pdf_to_md_split_into_sections",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "main.py",
+      "weight": 1.0
+    },
+    {
+      "source": "main_py",
+      "target": "explorer_graphexplorer_cross_community_edges",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "main.py",
+      "weight": 1.0
+    },
+    {
+      "source": "main_py",
+      "target": "ttl_import_import_ttl",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "main.py",
+      "weight": 1.0
+    },
+    {
+      "source": "main_py",
+      "target": "server_stats",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "main.py",
+      "weight": 1.0
+    },
+    {
+      "source": "main_py",
+      "target": "explorer_graphexplorer_stats",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "main.py",
+      "weight": 1.0
+    },
+    {
+      "source": "main_py",
+      "target": "ontology_builder_save_ontology",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "main.py",
+      "weight": 1.0
+    },
+    {
+      "source": "main_py",
+      "target": "qa_engine_qaengine",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "main.py",
+      "weight": 1.0
+    },
+    {
+      "source": "main_py",
+      "target": "ontology_builder_build_ontology",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "main.py",
+      "weight": 1.0
+    },
+    {
+      "source": "main_py",
+      "target": "sparql_store_sparqlstore_query",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "main.py",
+      "weight": 1.0
+    },
+    {
+      "source": "main_py",
+      "target": "server_expand",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "main.py",
+      "weight": 1.0
+    },
+    {
+      "source": "main_py",
+      "target": "explorer_graphexplorer_expand",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "main.py",
+      "weight": 1.0
+    },
+    {
+      "source": "main_py",
+      "target": "explorer_graphexplorer",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "main.py",
+      "weight": 1.0
+    },
+    {
+      "source": "main_py",
+      "target": "provider_get_llm",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "main.py",
+      "weight": 1.0
+    },
+    {
+      "source": "main_py",
+      "target": "rdf_export_graphify_to_rdf",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "main.py",
+      "weight": 1.0
+    },
+    {
+      "source": "main_py",
+      "target": "server_load_ttl",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "main.py",
+      "weight": 1.0
+    },
+    {
+      "source": "main_py",
+      "target": "sparql_store_sparqlstore_load_ttl",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "main.py",
+      "weight": 1.0
+    },
+    {
+      "source": "main_py",
+      "target": "sparql_agent_sparqlagent_generate_sparql",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "main.py",
+      "weight": 1.0
+    },
+    {
+      "source": "main_py",
+      "target": "server_run_sparql",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "main.py",
+      "weight": 1.0
+    },
+    {
+      "source": "main_py",
+      "target": "pdf_to_md_save_sections",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "main.py",
+      "weight": 1.0
+    },
+    {
+      "source": "main_py",
+      "target": "sparql_store_sparqlstore_count",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "main.py",
+      "weight": 1.0
+    },
+    {
+      "source": "main_py",
+      "target": "qa_engine_qaengine_ask",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "main.py",
+      "weight": 1.0
+    },
+    {
+      "source": "main_py",
+      "target": "server_ask",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "main.py",
+      "weight": 1.0
+    },
+    {
+      "source": "main_py",
+      "target": "rdf_export_export",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "main.py",
+      "weight": 1.0
+    },
+    {
+      "source": "main_py",
+      "target": "server_shortest_path",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "main.py",
+      "weight": 1.0
+    },
+    {
+      "source": "main_py",
+      "target": "explorer_graphexplorer_shortest_path",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "main.py",
+      "weight": 1.0
+    },
+    {
+      "source": "main_py",
+      "target": "sparql_store_sparqlstore",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "main.py",
+      "weight": 1.0
+    },
+    {
+      "source": "agent_qa_engine_py",
+      "target": "bedrock_bedrockprovider_generate",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "qa_engine.py",
+      "weight": 1.0
+    },
+    {
+      "source": "agent_qa_engine_py",
+      "target": "ollama_ollamaprovider_generate",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "qa_engine.py",
+      "weight": 1.0
+    },
+    {
+      "source": "agent_qa_engine_py",
+      "target": "provider_generate",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "qa_engine.py",
+      "weight": 1.0
+    },
+    {
+      "source": "agent_qa_engine_py",
+      "target": "sparql_store_sparqlstore_get_all_types",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "qa_engine.py",
+      "weight": 1.0
+    },
+    {
+      "source": "agent_qa_engine_py",
+      "target": "sparql_store_sparqlstore_count",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "qa_engine.py",
+      "weight": 1.0
+    },
+    {
+      "source": "agent_qa_engine_py",
+      "target": "main_ask",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "qa_engine.py",
+      "weight": 1.0
+    },
+    {
+      "source": "agent_qa_engine_py",
+      "target": "server_ask",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "qa_engine.py",
+      "weight": 1.0
+    },
+    {
+      "source": "agent_qa_engine_py",
+      "target": "sparql_agent_sparqlagent",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "qa_engine.py",
+      "weight": 1.0
+    },
+    {
+      "source": "agent_qa_engine_py",
+      "target": "3d_force_graph_min_vu_get",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "qa_engine.py",
+      "weight": 1.0
+    },
+    {
+      "source": "agent_qa_engine_py",
+      "target": "force_graph_min_rr_get",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "qa_engine.py",
+      "weight": 1.0
+    },
+    {
+      "source": "agent_qa_engine_py",
+      "target": "sparql_store_sparqlstore_query",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "qa_engine.py",
+      "weight": 1.0
+    },
+    {
+      "source": "agent_qa_engine_py",
+      "target": "force_graph_min_qo_split",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "qa_engine.py",
+      "weight": 1.0
+    },
+    {
+      "source": "agent_qa_engine_py",
+      "target": "sparql_agent_sparqlagent_execute",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "qa_engine.py",
+      "weight": 1.0
+    },
+    {
+      "source": "agent_sparql_agent_py",
+      "target": "force_graph_min_qo_split",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "sparql_agent.py",
+      "weight": 1.0
+    },
+    {
+      "source": "agent_sparql_agent_py",
+      "target": "sparql_store_sparqlstore_query",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "sparql_agent.py",
+      "weight": 1.0
+    },
+    {
+      "source": "agent_sparql_agent_py",
+      "target": "bedrock_bedrockprovider_generate",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "sparql_agent.py",
+      "weight": 1.0
+    },
+    {
+      "source": "agent_sparql_agent_py",
+      "target": "ollama_ollamaprovider_generate",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "sparql_agent.py",
+      "weight": 1.0
+    },
+    {
+      "source": "agent_sparql_agent_py",
+      "target": "provider_generate",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "sparql_agent.py",
+      "weight": 1.0
+    },
+    {
+      "source": "agent_sparql_agent_py",
+      "target": "sparql_store_sparqlstore_get_all_types",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "sparql_agent.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_server_py",
+      "target": "main_model",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "server.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_server_py",
+      "target": "explorer_graphexplorer_shortest_path",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "server.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_server_py",
+      "target": "3d_force_graph_min_ct_add",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "server.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_server_py",
+      "target": "3d_force_graph_min_vu_get",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "server.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_server_py",
+      "target": "force_graph_min_rr_get",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "server.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_server_py",
+      "target": "3d_force_graph_min_ct_set",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "server.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_server_py",
+      "target": "force_graph_min_rr_set",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "server.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_server_py",
+      "target": "3d_force_graph_min_jo_parse",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "server.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_server_py",
+      "target": "main_graph_stats",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "server.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_server_py",
+      "target": "explorer_graphexplorer_stats",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "server.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_server_py",
+      "target": "sparql_store_sparqlstore_query",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "server.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_server_py",
+      "target": "explorer_graphexplorer_expand",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "server.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_server_py",
+      "target": "explorer_graphexplorer_subgraph_json",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "server.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_server_py",
+      "target": "rdf_export_load_graphify_json",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "server.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_server_py",
+      "target": "bedrock_bedrockprovider_generate_json",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "server.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_server_py",
+      "target": "ollama_ollamaprovider_generate_json",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "server.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_server_py",
+      "target": "provider_generate_json",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "server.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_server_py",
+      "target": "sparql_store_sparqlstore_load_ttl",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "server.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_server_py",
+      "target": "sparql_store_sparqlstore_count",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "server.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_server_py",
+      "target": "force_graph_min_qo_split",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "server.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_server_py",
+      "target": "explorer_graphexplorer_search",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "server.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_server_py",
+      "target": "batch_build_init_graph",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "server.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_server_py",
+      "target": "batch_rdf_build_init_graph",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "server.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_server_py",
+      "target": "sparql_store_sparqlstore_load_rdf_graph",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "server.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_server_py",
+      "target": "main_ask",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "server.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_server_py",
+      "target": "qa_engine_qaengine_ask",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "server.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_main_py",
+      "target": "server_shortest_path",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "__main__.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_main_py",
+      "target": "explorer_graphexplorer_shortest_path",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "__main__.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_main_py",
+      "target": "server_load_ttl",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "__main__.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_main_py",
+      "target": "sparql_store_sparqlstore_load_ttl",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "__main__.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_routes_export_py",
+      "target": "server_shortest_path",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "export.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_routes_export_py",
+      "target": "explorer_graphexplorer_shortest_path",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "export.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_routes_export_py",
+      "target": "ingest_extract_from_csv",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "export.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_routes_export_py",
+      "target": "3d_force_graph_min_vu_get",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "export.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_routes_export_py",
+      "target": "force_graph_min_rr_get",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "export.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_routes_ingest_py",
+      "target": "build_rdf_direct_extract_from_file",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "ingest.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_routes_ingest_py",
+      "target": "3d_force_graph_min_ct_sub",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "ingest.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_routes_ingest_py",
+      "target": "3d_force_graph_min_b",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "ingest.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_routes_ingest_py",
+      "target": "force_graph_min_b",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "ingest.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_routes_ingest_py",
+      "target": "3d_force_graph_min_ct_add",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "ingest.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_routes_ingest_py",
+      "target": "3d_force_graph_min_vu_get",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "ingest.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_routes_ingest_py",
+      "target": "force_graph_min_rr_get",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "ingest.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_routes_ingest_py",
+      "target": "force_graph_min_qo_split",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "ingest.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_routes_ingest_py",
+      "target": "server_shortest_path",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "ingest.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_routes_ingest_py",
+      "target": "explorer_graphexplorer_shortest_path",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "ingest.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_routes_ingest_py",
+      "target": "3d_force_graph_min_ct_set",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "ingest.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_routes_ingest_py",
+      "target": "force_graph_min_rr_set",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "ingest.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_routes_ingest_py",
+      "target": "3d_force_graph_min_jo_parse",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "ingest.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_routes_ingest_py",
+      "target": "batch_rdf_build_extract_from_text",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "ingest.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_routes_model_py",
+      "target": "ingest_upload_file",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "model.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_routes_model_py",
+      "target": "build_rdf_direct_extract_from_file",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "model.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_routes_model_py",
+      "target": "3d_force_graph_min_ct_sub",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "model.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_routes_model_py",
+      "target": "3d_force_graph_min_ct_add",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "model.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_routes_model_py",
+      "target": "server_call_llm",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "model.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_routes_model_py",
+      "target": "3d_force_graph_min_vu_get",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "model.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_routes_model_py",
+      "target": "force_graph_min_rr_get",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "model.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_routes_model_py",
+      "target": "sparql_store_sparqlstore_query",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "model.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_routes_model_py",
+      "target": "force_graph_min_qo_split",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "model.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_routes_model_py",
+      "target": "server_shortest_path",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "model.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_routes_model_py",
+      "target": "explorer_graphexplorer_shortest_path",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "model.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_routes_model_py",
+      "target": "3d_force_graph_min_ct_set",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "model.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_routes_model_py",
+      "target": "force_graph_min_rr_set",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "model.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_routes_model_py",
+      "target": "3d_force_graph_min_jo_parse",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "model.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_routes_projects_py",
+      "target": "3d_force_graph_min_ct_add",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "projects.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_routes_projects_py",
+      "target": "3d_force_graph_min_vu_get",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "projects.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_routes_projects_py",
+      "target": "force_graph_min_rr_get",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "projects.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_routes_projects_py",
+      "target": "force_graph_min_qo_split",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "projects.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_routes_projects_py",
+      "target": "server_shortest_path",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "projects.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_routes_projects_py",
+      "target": "explorer_graphexplorer_shortest_path",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "projects.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_routes_projects_py",
+      "target": "3d_force_graph_min_ct_set",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "projects.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_routes_projects_py",
+      "target": "force_graph_min_rr_set",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "projects.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_routes_projects_py",
+      "target": "3d_force_graph_min_jo_parse",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "projects.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_3d_force_graph_min_js",
+      "target": "force_graph_min_rr_constructor",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "3d-force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_3d_force_graph_min_js",
+      "target": "force_graph_min_i",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "3d-force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_3d_force_graph_min_js",
+      "target": "force_graph_min_nt",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "3d-force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_3d_force_graph_min_js",
+      "target": "force_graph_min_z",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "3d-force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_3d_force_graph_min_js",
+      "target": "force_graph_min_ot",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "3d-force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_3d_force_graph_min_js",
+      "target": "force_graph_min_rr_set",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "3d-force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_3d_force_graph_min_js",
+      "target": "force_graph_min_dt",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "3d-force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_3d_force_graph_min_js",
+      "target": "force_graph_min_wt",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "3d-force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_3d_force_graph_min_js",
+      "target": "force_graph_min_y",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "3d-force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_3d_force_graph_min_js",
+      "target": "force_graph_min_t",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "3d-force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_3d_force_graph_min_js",
+      "target": "force_graph_min_x",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "3d-force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_3d_force_graph_min_js",
+      "target": "force_graph_min_clamp",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "3d-force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_3d_force_graph_min_js",
+      "target": "force_graph_min_ct",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "3d-force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_3d_force_graph_min_js",
+      "target": "force_graph_min_n",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "3d-force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_3d_force_graph_min_js",
+      "target": "force_graph_min_at",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "3d-force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_3d_force_graph_min_js",
+      "target": "projects_create_project",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "3d-force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_3d_force_graph_min_js",
+      "target": "force_graph_min_qo_project",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "3d-force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_3d_force_graph_min_js",
+      "target": "force_graph_min_bo_length",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "3d-force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_3d_force_graph_min_js",
+      "target": "force_graph_min_e",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "3d-force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_3d_force_graph_min_js",
+      "target": "force_graph_min_kt",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "3d-force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_3d_force_graph_min_js",
+      "target": "force_graph_min",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "3d-force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_3d_force_graph_min_js",
+      "target": "force_graph_min_qt",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "3d-force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_3d_force_graph_min_js",
+      "target": "force_graph_min_r",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "3d-force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_3d_force_graph_min_js",
+      "target": "force_graph_min_et",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "3d-force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_3d_force_graph_min_js",
+      "target": "force_graph_min_st",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "3d-force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_3d_force_graph_min_js",
+      "target": "force_graph_min_ne",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "3d-force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_3d_force_graph_min_js",
+      "target": "force_graph_min_w",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "3d-force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_3d_force_graph_min_js",
+      "target": "force_graph_min_ye",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "3d-force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_3d_force_graph_min_js",
+      "target": "force_graph_min_ht",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "3d-force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_3d_force_graph_min_js",
+      "target": "force_graph_min_bt",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "3d-force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_3d_force_graph_min_js",
+      "target": "force_graph_min_copy",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "3d-force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_3d_force_graph_min_js",
+      "target": "force_graph_min_s",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "3d-force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_3d_force_graph_min_js",
+      "target": "force_graph_min_qo_error",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "3d-force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_3d_force_graph_min_js",
+      "target": "force_graph_min_qo_translate",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "3d-force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_3d_force_graph_min_js",
+      "target": "force_graph_min_rr_has",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "3d-force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_3d_force_graph_min_js",
+      "target": "force_graph_min_qo_scale",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "3d-force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_3d_force_graph_min_js",
+      "target": "force_graph_min_mt",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "3d-force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_3d_force_graph_min_js",
+      "target": "force_graph_min_a",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "3d-force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_3d_force_graph_min_js",
+      "target": "force_graph_min_o",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "3d-force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_3d_force_graph_min_js",
+      "target": "force_graph_min_tt",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "3d-force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_3d_force_graph_min_js",
+      "target": "force_graph_min_gt",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "3d-force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_i",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_n",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_l",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_gt",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_vn",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_ct_round",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_pt_invert",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_pn",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_pt_rotate",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_ye",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_ee",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_m",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_mt_addeventlistener",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_h",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_ct",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_mt_dispatchevent",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_mt",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_qt",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_et",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_ve",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_ee_w",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_u",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_ht",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_t",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_ee_y",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_s",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_ge",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_bn_setattribute",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "server_view_new",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_te",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_mn",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_vu_delete",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_ee_z",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_on_remove",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_v",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_wt",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_g",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_kt",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_bt",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_pt",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_jo_stop",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_st",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_c",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_ne",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_er",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_vu_has",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_pt_scale",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_o",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_tn",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_tt",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_b",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_tr",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_e",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_nt",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_nr",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_oe",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_p",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_vu_get",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_ee_x",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_ct_set",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_bn_getattribute",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_on",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_ct_clamp",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_at",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_r",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_ln",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_ct_max",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_a",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_d",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_pt_translate",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_dt",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_wn",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_se",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_ge_order",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_f",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_ve_test",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_mt_removeeventlistener",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "consolidate_consolidate",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_ct_add",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_bn",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_jt",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_bn_hasattribute",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_ae",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_ct_min",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_cn",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_ct_copy",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_jo_start",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_static_force_graph_min_js",
+      "target": "3d_force_graph_min_ot",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "force-graph.min.js",
+      "weight": 1.0
+    },
+    {
+      "source": "graph_explorer_py",
+      "target": "server_shortest_path",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "explorer.py",
+      "weight": 1.0
+    },
+    {
+      "source": "graph_explorer_py",
+      "target": "main_graph_stats",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "explorer.py",
+      "weight": 1.0
+    },
+    {
+      "source": "graph_explorer_py",
+      "target": "server_stats",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "explorer.py",
+      "weight": 1.0
+    },
+    {
+      "source": "graph_explorer_py",
+      "target": "main_god_nodes",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "explorer.py",
+      "weight": 1.0
+    },
+    {
+      "source": "graph_explorer_py",
+      "target": "3d_force_graph_min_ct_add",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "explorer.py",
+      "weight": 1.0
+    },
+    {
+      "source": "graph_explorer_py",
+      "target": "3d_force_graph_min_vu_get",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "explorer.py",
+      "weight": 1.0
+    },
+    {
+      "source": "graph_explorer_py",
+      "target": "force_graph_min_rr_get",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "explorer.py",
+      "weight": 1.0
+    },
+    {
+      "source": "graph_explorer_py",
+      "target": "server_expand",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "explorer.py",
+      "weight": 1.0
+    },
+    {
+      "source": "graph_explorer_py",
+      "target": "server_search",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "explorer.py",
+      "weight": 1.0
+    },
+    {
+      "source": "graph_rdf_export_py",
+      "target": "3d_force_graph_min_ct_add",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "rdf_export.py",
+      "weight": 1.0
+    },
+    {
+      "source": "graph_rdf_export_py",
+      "target": "3d_force_graph_min_vu_get",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "rdf_export.py",
+      "weight": 1.0
+    },
+    {
+      "source": "graph_rdf_export_py",
+      "target": "force_graph_min_rr_get",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "rdf_export.py",
+      "weight": 1.0
+    },
+    {
+      "source": "graph_rdf_export_py",
+      "target": "server_shortest_path",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "rdf_export.py",
+      "weight": 1.0
+    },
+    {
+      "source": "graph_rdf_export_py",
+      "target": "explorer_graphexplorer_shortest_path",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "rdf_export.py",
+      "weight": 1.0
+    },
+    {
+      "source": "graph_rdf_export_py",
+      "target": "provider_load_config",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "rdf_export.py",
+      "weight": 1.0
+    },
+    {
+      "source": "graph_rdf_export_py",
+      "target": "3d_force_graph_min_ct_set",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "rdf_export.py",
+      "weight": 1.0
+    },
+    {
+      "source": "graph_rdf_export_py",
+      "target": "force_graph_min_rr_set",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "rdf_export.py",
+      "weight": 1.0
+    },
+    {
+      "source": "graph_rdf_export_py",
+      "target": "3d_force_graph_min_jo_parse",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "rdf_export.py",
+      "weight": 1.0
+    },
+    {
+      "source": "ingest_build_rdf_direct_py",
+      "target": "batch_rdf_build_make_id",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "build_rdf_direct.py",
+      "weight": 1.0
+    },
+    {
+      "source": "ingest_build_rdf_direct_py",
+      "target": "build_tmf_ontology_make_id",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "build_rdf_direct.py",
+      "weight": 1.0
+    },
+    {
+      "source": "ingest_build_rdf_direct_py",
+      "target": "batch_build_main",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "build_rdf_direct.py",
+      "weight": 1.0
+    },
+    {
+      "source": "ingest_build_rdf_direct_py",
+      "target": "batch_rdf_build_main",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "build_rdf_direct.py",
+      "weight": 1.0
+    },
+    {
+      "source": "ingest_build_rdf_direct_py",
+      "target": "pdf_to_md_main",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "build_rdf_direct.py",
+      "weight": 1.0
+    },
+    {
+      "source": "ingest_build_rdf_direct_py",
+      "target": "ttl_import_main",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "build_rdf_direct.py",
+      "weight": 1.0
+    },
+    {
+      "source": "ingest_build_rdf_direct_py",
+      "target": "3d_force_graph_min_ct_sub",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "build_rdf_direct.py",
+      "weight": 1.0
+    },
+    {
+      "source": "ingest_build_rdf_direct_py",
+      "target": "batch_build_init_graph",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "build_rdf_direct.py",
+      "weight": 1.0
+    },
+    {
+      "source": "ingest_build_rdf_direct_py",
+      "target": "batch_rdf_build_init_graph",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "build_rdf_direct.py",
+      "weight": 1.0
+    },
+    {
+      "source": "ingest_build_rdf_direct_py",
+      "target": "server_get_graph",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "build_rdf_direct.py",
+      "weight": 1.0
+    },
+    {
+      "source": "ingest_build_rdf_direct_py",
+      "target": "sparql_store_sparqlstore_load_rdf_graph",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "build_rdf_direct.py",
+      "weight": 1.0
+    },
+    {
+      "source": "ingest_build_rdf_direct_py",
+      "target": "3d_force_graph_min_ct_add",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "build_rdf_direct.py",
+      "weight": 1.0
+    },
+    {
+      "source": "ingest_build_rdf_direct_py",
+      "target": "server_shortest_path",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "build_rdf_direct.py",
+      "weight": 1.0
+    },
+    {
+      "source": "ingest_build_rdf_direct_py",
+      "target": "explorer_graphexplorer_shortest_path",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "build_rdf_direct.py",
+      "weight": 1.0
+    },
+    {
+      "source": "ingest_build_rdf_direct_py",
+      "target": "3d_force_graph_min_ct_set",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "build_rdf_direct.py",
+      "weight": 1.0
+    },
+    {
+      "source": "ingest_build_rdf_direct_py",
+      "target": "force_graph_min_rr_set",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "build_rdf_direct.py",
+      "weight": 1.0
+    },
+    {
+      "source": "ingest_build_rdf_direct_py",
+      "target": "3d_force_graph_min_jo_parse",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "build_rdf_direct.py",
+      "weight": 1.0
+    },
+    {
+      "source": "ingest_build_rdf_direct_py",
+      "target": "server_search",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "build_rdf_direct.py",
+      "weight": 1.0
+    },
+    {
+      "source": "ingest_build_rdf_direct_py",
+      "target": "explorer_graphexplorer_search",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "build_rdf_direct.py",
+      "weight": 1.0
+    },
+    {
+      "source": "ingest_consolidate_py",
+      "target": "force_graph_min_qo_split",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "consolidate.py",
+      "weight": 1.0
+    },
+    {
+      "source": "ingest_consolidate_py",
+      "target": "server_shortest_path",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "consolidate.py",
+      "weight": 1.0
+    },
+    {
+      "source": "ingest_consolidate_py",
+      "target": "explorer_graphexplorer_shortest_path",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "consolidate.py",
+      "weight": 1.0
+    },
+    {
+      "source": "ingest_pdf_to_md_py",
+      "target": "batch_build_main",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "pdf_to_md.py",
+      "weight": 1.0
+    },
+    {
+      "source": "ingest_pdf_to_md_py",
+      "target": "batch_rdf_build_main",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "pdf_to_md.py",
+      "weight": 1.0
+    },
+    {
+      "source": "ingest_pdf_to_md_py",
+      "target": "build_rdf_direct_main",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "pdf_to_md.py",
+      "weight": 1.0
+    },
+    {
+      "source": "ingest_pdf_to_md_py",
+      "target": "ttl_import_main",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "pdf_to_md.py",
+      "weight": 1.0
+    },
+    {
+      "source": "ingest_pdf_to_md_py",
+      "target": "3d_force_graph_min_ct_sub",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "pdf_to_md.py",
+      "weight": 1.0
+    },
+    {
+      "source": "ingest_pdf_to_md_py",
+      "target": "force_graph_min_qo_split",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "pdf_to_md.py",
+      "weight": 1.0
+    },
+    {
+      "source": "ingest_pdf_to_md_py",
+      "target": "server_shortest_path",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "pdf_to_md.py",
+      "weight": 1.0
+    },
+    {
+      "source": "ingest_pdf_to_md_py",
+      "target": "explorer_graphexplorer_shortest_path",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "pdf_to_md.py",
+      "weight": 1.0
+    },
+    {
+      "source": "ingest_ttl_import_py",
+      "target": "main_import_ttl",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "ttl_import.py",
+      "weight": 1.0
+    },
+    {
+      "source": "ingest_ttl_import_py",
+      "target": "server_shortest_path",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "ttl_import.py",
+      "weight": 1.0
+    },
+    {
+      "source": "ingest_ttl_import_py",
+      "target": "explorer_graphexplorer_shortest_path",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "ttl_import.py",
+      "weight": 1.0
+    },
+    {
+      "source": "ingest_ttl_import_py",
+      "target": "batch_build_main",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "ttl_import.py",
+      "weight": 1.0
+    },
+    {
+      "source": "ingest_ttl_import_py",
+      "target": "batch_rdf_build_main",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "ttl_import.py",
+      "weight": 1.0
+    },
+    {
+      "source": "ingest_ttl_import_py",
+      "target": "build_rdf_direct_main",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "ttl_import.py",
+      "weight": 1.0
+    },
+    {
+      "source": "ingest_ttl_import_py",
+      "target": "pdf_to_md_main",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "ttl_import.py",
+      "weight": 1.0
+    },
+    {
+      "source": "ingest_ttl_import_py",
+      "target": "3d_force_graph_min_jo_parse",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "ttl_import.py",
+      "weight": 1.0
+    },
+    {
+      "source": "ingest_ttl_import_py",
+      "target": "batch_build_init_graph",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "ttl_import.py",
+      "weight": 1.0
+    },
+    {
+      "source": "ingest_ttl_import_py",
+      "target": "batch_rdf_build_init_graph",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "ttl_import.py",
+      "weight": 1.0
+    },
+    {
+      "source": "ingest_ttl_import_py",
+      "target": "server_get_graph",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "ttl_import.py",
+      "weight": 1.0
+    },
+    {
+      "source": "ingest_ttl_import_py",
+      "target": "sparql_store_sparqlstore_load_rdf_graph",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "ttl_import.py",
+      "weight": 1.0
+    },
+    {
+      "source": "llm_bedrock_py",
+      "target": "force_graph_min_qo_split",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "bedrock.py",
+      "weight": 1.0
+    },
+    {
+      "source": "llm_bedrock_py",
+      "target": "ollama_ollamaprovider_generate",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "bedrock.py",
+      "weight": 1.0
+    },
+    {
+      "source": "llm_bedrock_py",
+      "target": "provider_generate",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "bedrock.py",
+      "weight": 1.0
+    },
+    {
+      "source": "llm_bedrock_py",
+      "target": "3d_force_graph_min_vu_get",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "bedrock.py",
+      "weight": 1.0
+    },
+    {
+      "source": "llm_bedrock_py",
+      "target": "force_graph_min_rr_get",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "bedrock.py",
+      "weight": 1.0
+    },
+    {
+      "source": "llm_bedrock_py",
+      "target": "ollama_ollamaprovider_generate_json",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "bedrock.py",
+      "weight": 1.0
+    },
+    {
+      "source": "llm_bedrock_py",
+      "target": "provider_generate_json",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "bedrock.py",
+      "weight": 1.0
+    },
+    {
+      "source": "llm_ollama_py",
+      "target": "explorer_graphexplorer_subgraph_json",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "ollama.py",
+      "weight": 1.0
+    },
+    {
+      "source": "llm_ollama_py",
+      "target": "rdf_export_load_graphify_json",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "ollama.py",
+      "weight": 1.0
+    },
+    {
+      "source": "llm_ollama_py",
+      "target": "bedrock_bedrockprovider_generate_json",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "ollama.py",
+      "weight": 1.0
+    },
+    {
+      "source": "llm_ollama_py",
+      "target": "provider_generate_json",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "ollama.py",
+      "weight": 1.0
+    },
+    {
+      "source": "llm_ollama_py",
+      "target": "force_graph_min_qo_split",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "ollama.py",
+      "weight": 1.0
+    },
+    {
+      "source": "llm_ollama_py",
+      "target": "bedrock_bedrockprovider_generate",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "ollama.py",
+      "weight": 1.0
+    },
+    {
+      "source": "llm_ollama_py",
+      "target": "provider_generate",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "ollama.py",
+      "weight": 1.0
+    },
+    {
+      "source": "llm_ollama_py",
+      "target": "3d_force_graph_min_vu_get",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "ollama.py",
+      "weight": 1.0
+    },
+    {
+      "source": "llm_ollama_py",
+      "target": "force_graph_min_rr_get",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "ollama.py",
+      "weight": 1.0
+    },
+    {
+      "source": "llm_provider_py",
+      "target": "bedrock_bedrockprovider_generate",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "provider.py",
+      "weight": 1.0
+    },
+    {
+      "source": "llm_provider_py",
+      "target": "ollama_ollamaprovider_generate",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "provider.py",
+      "weight": 1.0
+    },
+    {
+      "source": "llm_provider_py",
+      "target": "server_shortest_path",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "provider.py",
+      "weight": 1.0
+    },
+    {
+      "source": "llm_provider_py",
+      "target": "explorer_graphexplorer_shortest_path",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "provider.py",
+      "weight": 1.0
+    },
+    {
+      "source": "llm_provider_py",
+      "target": "ollama_ollamaprovider",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "provider.py",
+      "weight": 1.0
+    },
+    {
+      "source": "llm_provider_py",
+      "target": "bedrock_bedrockprovider",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "provider.py",
+      "weight": 1.0
+    },
+    {
+      "source": "llm_provider_py",
+      "target": "bedrock_bedrockprovider_generate_json",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "provider.py",
+      "weight": 1.0
+    },
+    {
+      "source": "llm_provider_py",
+      "target": "ollama_ollamaprovider_generate_json",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "provider.py",
+      "weight": 1.0
+    },
+    {
+      "source": "model_ontology_builder_py",
+      "target": "bedrock_bedrockprovider_generate",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "ontology_builder.py",
+      "weight": 1.0
+    },
+    {
+      "source": "model_ontology_builder_py",
+      "target": "ollama_ollamaprovider_generate",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "ontology_builder.py",
+      "weight": 1.0
+    },
+    {
+      "source": "model_ontology_builder_py",
+      "target": "provider_generate",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "ontology_builder.py",
+      "weight": 1.0
+    },
+    {
+      "source": "model_ontology_builder_py",
+      "target": "provider_get_llm",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "ontology_builder.py",
+      "weight": 1.0
+    },
+    {
+      "source": "model_ontology_builder_py",
+      "target": "3d_force_graph_min_jo_load",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "ontology_builder.py",
+      "weight": 1.0
+    },
+    {
+      "source": "model_ontology_builder_py",
+      "target": "batch_build_init_graph",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "ontology_builder.py",
+      "weight": 1.0
+    },
+    {
+      "source": "model_ontology_builder_py",
+      "target": "batch_rdf_build_init_graph",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "ontology_builder.py",
+      "weight": 1.0
+    },
+    {
+      "source": "model_ontology_builder_py",
+      "target": "server_get_graph",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "ontology_builder.py",
+      "weight": 1.0
+    },
+    {
+      "source": "model_ontology_builder_py",
+      "target": "sparql_store_sparqlstore_load_rdf_graph",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "ontology_builder.py",
+      "weight": 1.0
+    },
+    {
+      "source": "model_ontology_builder_py",
+      "target": "3d_force_graph_min_vu_get",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "ontology_builder.py",
+      "weight": 1.0
+    },
+    {
+      "source": "model_ontology_builder_py",
+      "target": "force_graph_min_rr_get",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "ontology_builder.py",
+      "weight": 1.0
+    },
+    {
+      "source": "model_ontology_builder_py",
+      "target": "sparql_store_sparqlstore_query",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "ontology_builder.py",
+      "weight": 1.0
+    },
+    {
+      "source": "model_ontology_builder_py",
+      "target": "force_graph_min_qo_split",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "ontology_builder.py",
+      "weight": 1.0
+    },
+    {
+      "source": "model_ontology_builder_py",
+      "target": "server_shortest_path",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "ontology_builder.py",
+      "weight": 1.0
+    },
+    {
+      "source": "model_ontology_builder_py",
+      "target": "explorer_graphexplorer_shortest_path",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "ontology_builder.py",
+      "weight": 1.0
+    },
+    {
+      "source": "model_ontology_builder_py",
+      "target": "provider_load_config",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "ontology_builder.py",
+      "weight": 1.0
+    },
+    {
+      "source": "model_ontology_builder_py",
+      "target": "3d_force_graph_min_jo_parse",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "ontology_builder.py",
+      "weight": 1.0
+    },
+    {
+      "source": "store_sparql_store_py",
+      "target": "3d_force_graph_min_jo_parse",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "sparql_store.py",
+      "weight": 1.0
+    },
+    {
+      "source": "store_sparql_store_py",
+      "target": "server_load_ttl",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "sparql_store.py",
+      "weight": 1.0
+    },
+    {
+      "source": "store_sparql_store_py",
+      "target": "batch_build_init_graph",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "sparql_store.py",
+      "weight": 1.0
+    },
+    {
+      "source": "store_sparql_store_py",
+      "target": "batch_rdf_build_init_graph",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "sparql_store.py",
+      "weight": 1.0
+    },
+    {
+      "source": "store_sparql_store_py",
+      "target": "server_get_graph",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "sparql_store.py",
+      "weight": 1.0
+    },
+    {
+      "source": "viz_graph_viz_py",
+      "target": "3d_force_graph_min_ct_set",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "graph_viz.py",
+      "weight": 1.0
+    },
+    {
+      "source": "viz_graph_viz_py",
+      "target": "force_graph_min_rr_set",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "graph_viz.py",
+      "weight": 1.0
+    },
+    {
+      "source": "viz_graph_viz_py",
+      "target": "3d_force_graph_min_vu_has",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "graph_viz.py",
+      "weight": 1.0
+    },
+    {
+      "source": "viz_graph_viz_py",
+      "target": "force_graph_min_rr_has",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "graph_viz.py",
+      "weight": 1.0
+    },
+    {
+      "source": "viz_graph_viz_py",
+      "target": "3d_force_graph_min_on",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "graph_viz.py",
+      "weight": 1.0
+    },
+    {
+      "source": "viz_graph_viz_py",
+      "target": "force_graph_min_on",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "graph_viz.py",
+      "weight": 1.0
+    },
+    {
+      "source": "viz_graph_viz_py",
+      "target": "3d_force_graph_min_vu_delete",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "graph_viz.py",
+      "weight": 1.0
+    },
+    {
+      "source": "viz_graph_viz_py",
+      "target": "force_graph_min_rr_delete",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "graph_viz.py",
+      "weight": 1.0
+    },
+    {
+      "source": "viz_graph_viz_py",
+      "target": "3d_force_graph_min_ct_add",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "graph_viz.py",
+      "weight": 1.0
+    },
+    {
+      "source": "viz_graph_viz_py",
+      "target": "3d_force_graph_min_vu_get",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "graph_viz.py",
+      "weight": 1.0
+    },
+    {
+      "source": "viz_graph_viz_py",
+      "target": "force_graph_min_rr_get",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "graph_viz.py",
+      "weight": 1.0
+    },
+    {
+      "source": "viz_graph_viz_py",
+      "target": "3d_force_graph_min_ct_max",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "graph_viz.py",
+      "weight": 1.0
+    },
+    {
+      "source": "viz_graph_viz_py",
+      "target": "3d_force_graph_min_mt_addeventlistener",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "graph_viz.py",
+      "weight": 1.0
+    },
+    {
+      "source": "viz_graph_viz_py",
+      "target": "3d_force_graph_min_i_update",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "graph_viz.py",
+      "weight": 1.0
+    },
+    {
+      "source": "viz_graph_viz_py",
+      "target": "force_graph_min_qo_update",
+      "relation": "calls",
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.85,
+      "source_file": "graph_viz.py",
+      "weight": 1.0
+    },
+    {
+      "source": "batch_rdf_build_py",
+      "target": "external_aws_dynamodb",
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "batch_rdf_build.py",
+      "weight": 1.0
+    },
+    {
+      "source": "ingest_build_rdf_direct_py",
+      "target": "external_aws_dynamodb",
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "build_rdf_direct.py",
+      "weight": 1.0
+    },
+    {
+      "source": "batch_build_py",
+      "target": "external_aws_bedrock",
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "batch_build.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_server_py",
+      "target": "external_aws_bedrock",
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "server.py",
+      "weight": 1.0
+    },
+    {
+      "source": "graph_explorer_py",
+      "target": "external_aws_bedrock",
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "explorer.py",
+      "weight": 1.0
+    },
+    {
+      "source": "llm_bedrock_py",
+      "target": "external_aws_bedrock",
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "bedrock.py",
+      "weight": 1.0
+    },
+    {
+      "source": "llm_provider_py",
+      "target": "external_aws_bedrock",
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "provider.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_server_py",
+      "target": "external_openai",
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "server.py",
+      "weight": 1.0
+    },
+    {
+      "source": "llm_provider_py",
+      "target": "external_openai",
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "provider.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_server_py",
+      "target": "external_anthropic",
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "server.py",
+      "weight": 1.0
+    },
+    {
+      "source": "llm_bedrock_py",
+      "target": "external_anthropic",
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "bedrock.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_server_py",
+      "target": "external_fastapi",
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "server.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_routes_export_py",
+      "target": "external_fastapi",
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "export.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_routes_ingest_py",
+      "target": "external_fastapi",
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "ingest.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_routes_model_py",
+      "target": "external_fastapi",
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "model.py",
+      "weight": 1.0
+    },
+    {
+      "source": "explorer_routes_projects_py",
+      "target": "external_fastapi",
+      "relation": "uses",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "projects.py",
+      "weight": 1.0
+    }
+  ],
+  "hyperedges": [
+    {
+      "id": "ml_pipeline",
+      "label": "ML Pipeline",
+      "nodes": [
+        "main_py",
+        "main_cli",
+        "explorer_static_3d_force_graph_min_js",
+        "3d_force_graph_min_t",
+        "graph_extractor_py",
+        "extractor_rationale_1"
+      ],
+      "relation": "form",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "."
+    },
+    {
+      "id": "data_pipeline",
+      "label": "Data Pipeline",
+      "nodes": [
+        "batch_rdf_build_py",
+        "batch_rdf_build_make_id",
+        "main_py",
+        "main_cli",
+        "explorer_static_3d_force_graph_min_js",
+        "3d_force_graph_min_t",
+        "ingest_build_rdf_direct_py",
+        "build_rdf_direct_make_id"
+      ],
+      "relation": "form",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "."
+    },
+    {
+      "id": "auth_pipeline",
+      "label": "Auth & Access Control",
+      "nodes": [
+        "batch_build_py",
+        "batch_build_init_graph",
+        "batch_rdf_build_py",
+        "batch_rdf_build_make_id",
+        "main_py",
+        "main_cli",
+        "explorer_server_py",
+        "server_uri_to_id",
+        "explorer_routes_ingest_py",
+        "ingest_extract_from_json_schema"
+      ],
+      "relation": "form",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "."
+    },
+    {
+      "id": "api_layer",
+      "label": "API Layer",
+      "nodes": [
+        "batch_rdf_build_py",
+        "batch_rdf_build_make_id",
+        "explorer_server_py",
+        "server_uri_to_id",
+        "explorer_routes_export_py",
+        "export_export_ttl",
+        "explorer_routes_ingest_py",
+        "ingest_extract_from_json_schema",
+        "explorer_routes_model_py",
+        "model_validate_ttl"
+      ],
+      "relation": "form",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "."
+    },
+    {
+      "id": "agent_pipeline",
+      "label": "Agent Pipeline",
+      "nodes": [
+        "batch_rdf_build_py",
+        "batch_rdf_build_make_id",
+        "download_more_data_py",
+        "download_real_data_py",
+        "main_py",
+        "main_cli",
+        "agent_qa_engine_py",
+        "qa_engine_qaengine",
+        "agent_sparql_agent_py",
+        "sparql_agent_sparqlagent"
+      ],
+      "relation": "form",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "."
+    },
+    {
+      "id": "test_suite",
+      "label": "Test Suite",
+      "nodes": [
+        "explorer_server_py",
+        "server_uri_to_id",
+        "graph_explorer_py",
+        "explorer_graphexplorer"
+      ],
+      "relation": "form",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "."
+    },
+    {
+      "id": "frontend_layer",
+      "label": "Frontend Layer",
+      "nodes": [
+        "main_py",
+        "main_cli",
+        "explorer_server_py",
+        "server_uri_to_id",
+        "explorer_static_3d_force_graph_min_js",
+        "3d_force_graph_min_t",
+        "explorer_static_force_graph_min_js",
+        "force_graph_min_n",
+        "viz_graph_viz_py",
+        "graph_viz_generate_enhanced_html"
+      ],
+      "relation": "form",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "."
+    },
+    {
+      "id": "ingestion_pipeline",
+      "label": "Ingestion Pipeline",
+      "nodes": [
+        "batch_build_py",
+        "batch_build_init_graph",
+        "batch_rdf_build_py",
+        "batch_rdf_build_make_id",
+        "build_tmf_ontology_py",
+        "build_tmf_ontology_make_id",
+        "download_more_data_py",
+        "download_real_data_py",
+        "download_tmf_py",
+        "download_tmf_docs_py"
+      ],
+      "relation": "form",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "."
+    },
+    {
+      "id": "db_layer",
+      "label": "Database Layer",
+      "nodes": [
+        "batch_build_py",
+        "batch_build_init_graph",
+        "batch_rdf_build_py",
+        "batch_rdf_build_make_id",
+        "build_tmf_ontology_py",
+        "build_tmf_ontology_make_id",
+        "download_more_data_py",
+        "download_real_data_py",
+        "download_tmf_py",
+        "download_tmf_docs_py"
+      ],
+      "relation": "form",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "."
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

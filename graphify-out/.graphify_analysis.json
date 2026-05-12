@@ -1,0 +1,693 @@
+{
+  "communities": {
+    "0": [
+      "alignment_to_demand_939",
+      "amazon_cloudfront",
+      "amazon_cloudfront_functions",
+      "amazon_codecatalyst",
+      "amazon_elasticache",
+      "amazon_glacier",
+      "amazon_q_developer",
+      "aws_cloudfront_functions",
+      "aws_config",
+      "aws_elastic_disaster_recovery",
+      "aws_global_accelerator",
+      "aws_iot_greengrass",
+      "aws_lambda",
+      "aws_network_manager",
+      "aws_s3",
+      "aws_systems_manager_automation",
+      "chat_application",
+      "cloudwatch_dashboards",
+      "connection_pooling",
+      "distributed_data_stores",
+      "dynamodb_accelerator",
+      "iam_authentication",
+      "incident_management_process",
+      "incident_manager",
+      "lambda_edge",
+      "object_lock",
+      "pilot_light_strategy",
+      "shared_dynamic_capacity",
+      "sqs",
+      "systems_manager_automation",
+      "versioning",
+      "vpc_traffic_mirroring",
+      "warm_standby_strategy"
+    ],
+    "1": [
+      "amazon_dynamodb",
+      "amazon_fsx_for_lustre",
+      "amazon_s3",
+      "attribute_based_access_control",
+      "aws_cloudtrail",
+      "aws_partner_network",
+      "aws_resources",
+      "aws_services",
+      "aws_trust_and_safety",
+      "define_groups",
+      "external_identity_provider",
+      "forensics_automation",
+      "function_and_scope",
+      "hierarchical_structure",
+      "iam_identity_center",
+      "incident_response_team",
+      "indicator_of_compromise",
+      "mitre_attck_framework",
+      "naming_conventions",
+      "performance_efficiency",
+      "permission_sets",
+      "scim_protocol",
+      "threat_technique_catalog",
+      "well_architected_framework"
+    ],
+    "2": [
+      "amazon_athena",
+      "amazon_security_lake",
+      "automated_export_options",
+      "aws_regions",
+      "aws_security_lake",
+      "common_data_lake_architecture_approaches",
+      "configure_data_source_publication",
+      "configure_publication",
+      "configure_tools",
+      "etl_processes",
+      "evaluate_export_options",
+      "identify_security_data_sources",
+      "log_archive_account",
+      "opted_in_accounts",
+      "quick",
+      "security_data_sources",
+      "security_tooling_account",
+      "standardized_locations",
+      "standardized_security_data_locations",
+      "third_party_data_products",
+      "third_party_solutions"
+    ],
+    "3": [
+      "amazon_aurora",
+      "amazon_devops_guru",
+      "amazon_rds",
+      "aws_auto_scaling",
+      "aws_cloudwatch",
+      "aws_devops_guru",
+      "aws_distributed_load_testing",
+      "aws_parameter_store",
+      "aws_rum",
+      "aws_synthetics",
+      "aws_xray",
+      "cloudwatch_evidently",
+      "cloudwatch_logs_insights",
+      "cloudwatch_synthetic_canaries",
+      "dynamodb",
+      "quota_monitor_for_aws",
+      "s3_storage_lens"
+    ],
+    "4": [
+      "amazon_cloudwatch",
+      "analyzer",
+      "automated_recovery_process",
+      "aws_budgets",
+      "aws_network_firewall",
+      "aws_security_analytics",
+      "disaster_recovery_plan",
+      "endpoint_service",
+      "fault_detection_and_failover_mechanisms",
+      "firewall_policy",
+      "gateway_load_balancer",
+      "playbooks",
+      "third_party_appliance",
+      "third_party_sources",
+      "traffic_routing"
+    ],
+    "5": [
+      "address_discrepancies",
+      "analyze_discrepancies",
+      "communication_plan",
+      "communication_tools",
+      "discuss_services",
+      "drills_gamedays",
+      "feedback_mechanisms",
+      "identify_gaps",
+      "identify_improvements",
+      "identify_misalignments",
+      "internal_customers",
+      "review_discussions",
+      "team_review",
+      "teams"
+    ],
+    "6": [
+      "aws_accounts",
+      "aws_control_tower",
+      "aws_control_tower_account_factory",
+      "aws_organizations",
+      "circular_dependency",
+      "complex_password",
+      "hardware_mfa_devices",
+      "integrated_mandatory_security_controls",
+      "landing_zone",
+      "multi_factor_authentication",
+      "optional_controls",
+      "password_rotation",
+      "password_rotation_schedule",
+      "root_user_credentials"
+    ],
+    "7": [
+      "application_security",
+      "automation",
+      "aws_environment",
+      "build_release_infrastructure",
+      "continuous_improvement",
+      "cross_functional_teams",
+      "deployment_practices",
+      "operations_team",
+      "people",
+      "people_training",
+      "security_team",
+      "software_development_lifecycle"
+    ],
+    "8": [
+      "aws_incident_detection_and_response",
+      "enterprise_support_customers",
+      "impact",
+      "incident_management_workshop",
+      "incident_response",
+      "incident_response_plans_and_tools",
+      "operational_event_responses",
+      "prioritization_matrix",
+      "priority_levels",
+      "team_members",
+      "technical_account_manager",
+      "urgency"
+    ],
+    "9": [
+      "aws_resource_access_manager",
+      "aws_well_architected_framework",
+      "aws_well_architected_tool",
+      "governance_risk_compliance",
+      "long_term_credentials",
+      "permission_boundaries",
+      "resource_policies",
+      "role_management",
+      "root_cause_analysis_rca",
+      "security_incidents",
+      "third_party_access"
+    ],
+    "10": [
+      "aws_cdk",
+      "aws_cloudformation",
+      "aws_marketplace",
+      "aws_systems_manager",
+      "cdk_scripts",
+      "ci_cd_pipeline",
+      "cloudformation_templates",
+      "infrastructure_as_code",
+      "refactor_underutilized_components",
+      "sustainability_proxy_metrics"
+    ],
+    "11": [
+      "aws_systems_manager_automations",
+      "document_repository",
+      "internal_documentation_store",
+      "markdown_document",
+      "markdown_template",
+      "playbook",
+      "runbook",
+      "team_member",
+      "version_control_system",
+      "wiki"
+    ],
+    "12": [
+      "code_changes",
+      "code_review_process",
+      "constructive_feedback",
+      "main_branch",
+      "monitor_and_audit",
+      "open_communication",
+      "production_environment",
+      "pull_request",
+      "reviewers"
+    ],
+    "13": [
+      "cloudwatch",
+      "devops_guru",
+      "ebs",
+      "log_analysis",
+      "logs",
+      "rum",
+      "synthetics",
+      "xray"
+    ],
+    "14": [
+      "automated_recovery_mechanisms",
+      "data_recovery_processes",
+      "hard_dependencies",
+      "soft_dependencies",
+      "steady_state_confirmation_steps",
+      "system_pre_warming",
+      "workload_architecture"
+    ],
+    "15": [
+      "aws_management_console",
+      "emergency_access_account",
+      "emergency_operations_groups",
+      "iam_identity_provider",
+      "iam_roles",
+      "saml_federation",
+      "temporary_credentials"
+    ],
+    "16": [
+      "amazon_cloudwatch_dashboard",
+      "amazon_pinpoint",
+      "amazon_sns",
+      "cloudwatch_dashboard",
+      "customer_communication",
+      "service_impairment_templates",
+      "social_media_engagement"
+    ],
+    "17": [
+      "code_quality",
+      "code_review",
+      "collaboration",
+      "feedback",
+      "security",
+      "team_culture"
+    ],
+    "18": [
+      "amazon_cloudwatch_rum",
+      "amazon_cognito_user_pools",
+      "aws_transit_gateway_flow_logs",
+      "network_access_analyzer",
+      "vpc",
+      "vpc_and_aws_transit_gateway_flow_logs"
+    ],
+    "19": [
+      "amazon_route_53",
+      "geolocation_routing",
+      "geoproximity_routing",
+      "ip_based_routing",
+      "latency_based_routing",
+      "routing_options"
+    ],
+    "20": [
+      "amazon_elastic_compute_cloud",
+      "amazon_eventbridge",
+      "aws_api_gateway",
+      "aws_appsync",
+      "aws_cost_categories",
+      "aws_tag_editor"
+    ],
+    "21": [
+      "culture_of_learning",
+      "foster_culture",
+      "organizational_resilience",
+      "problem_management_processes",
+      "review_and_revise",
+      "share_insights"
+    ],
+    "22": [
+      "aws_systems_manager_opscenter",
+      "customer_feedback",
+      "immediate_feedback",
+      "opsitems",
+      "software_development_process",
+      "team_member_feedback"
+    ],
+    "23": [
+      "a_b_testing",
+      "canary_testing",
+      "feature_flag_testing",
+      "regression_testing",
+      "test_result_reports"
+    ],
+    "24": [
+      "ami",
+      "certificate_authority",
+      "cloudtrail",
+      "crl",
+      "s3"
+    ],
+    "25": [
+      "infrastructure",
+      "operational_policies",
+      "problem_management_process",
+      "procedures",
+      "root_cause_analysis"
+    ],
+    "26": [
+      "ci_cd_pipelines",
+      "code_review_tools",
+      "codeguru_security",
+      "existing_code_repositories",
+      "github_pull_requests"
+    ],
+    "27": [
+      "database_operations",
+      "http_methods",
+      "idempotent_operations",
+      "identify_idempotent_operations",
+      "read_only_queries"
+    ],
+    "28": [
+      "api_gateway_rest_api",
+      "application_load_balancer",
+      "aws_waf",
+      "cloudfront_distribution",
+      "web_acl"
+    ],
+    "29": [
+      "application_security_education",
+      "code_review_training",
+      "knowledge_sharing",
+      "less_experienced_team_members",
+      "pair_programming"
+    ],
+    "30": [
+      "aws_codedeploy",
+      "aws_ecs",
+      "canary_deployments",
+      "rollback_mechanisms"
+    ],
+    "31": [
+      "amazon_ec2_auto_scaling",
+      "application_auto_scaling",
+      "auto_scaling_mechanism",
+      "kubernetes_cluster_autoscaler"
+    ],
+    "32": [
+      "aws_cloudwatch_log_retention",
+      "aws_dynamodb_ttl",
+      "aws_ecr",
+      "aws_ecr_lifecycle_policies"
+    ],
+    "33": [
+      "aws_rds",
+      "aws_secrets_manager",
+      "enhanced_monitoring",
+      "performance_insights"
+    ],
+    "34": [
+      "aws_health",
+      "lifecycle_events",
+      "operational_notifications",
+      "unplanned_security"
+    ],
+    "35": [
+      "critical_components",
+      "recovery_conditions",
+      "recovery_site",
+      "revert_plan"
+    ],
+    "36": [
+      "aws_cost_management",
+      "compute_savings_plan",
+      "linked_account",
+      "management_account"
+    ],
+    "37": [
+      "permission_policies",
+      "principal_attributes",
+      "resource_attributes"
+    ],
+    "38": [
+      "abac_policies",
+      "principal_tag_condition_key",
+      "resource_tag_key"
+    ],
+    "39": [
+      "asynchronous_dependency",
+      "event_streaming",
+      "messaging"
+    ],
+    "40": [
+      "access_control",
+      "aws_kms",
+      "least_privilege"
+    ],
+    "41": [
+      "event_assessment_process",
+      "event_monitoring_review_process",
+      "incident_escalation_criteria"
+    ],
+    "42": [
+      "ksuids",
+      "unique_identifiers",
+      "uuids"
+    ],
+    "43": [
+      "checklists_actions",
+      "future_incidents_prevention",
+      "prevention_of_incidents"
+    ],
+    "44": [
+      "aws_saml_attributes_principal_tag",
+      "saml_2_0",
+      "scim"
+    ],
+    "45": [
+      "iam_role_chaining",
+      "principal_tags",
+      "source_identity"
+    ],
+    "46": [
+      "hiring_and_training",
+      "operational_requirements",
+      "team_size_and_skills"
+    ],
+    "47": [
+      "monitoring_and_auditing",
+      "response_idempotency"
+    ],
+    "48": [
+      "aws_codebuild",
+      "aws_codepipeline"
+    ],
+    "49": [
+      "metrics_and_alarms",
+      "time_to_detection"
+    ],
+    "50": [
+      "response_plans_escalation_plans",
+      "time_to_diagnosis"
+    ],
+    "51": [
+      "runbooks_playbooks",
+      "time_to_mitigation"
+    ],
+    "52": [
+      "code_review_checklist",
+      "development_team"
+    ],
+    "53": [
+      "cost_and_usage_data",
+      "wellarchitected_framework"
+    ],
+    "54": [
+      "cloud_intelligence_dashboards",
+      "kpi_dashboard"
+    ],
+    "55": [
+      "post_incident_analysis",
+      "response_plans"
+    ],
+    "56": [
+      "decision_making_processes",
+      "stakeholders"
+    ],
+    "57": [
+      "observability",
+      "workload_observability"
+    ],
+    "58": [
+      "aws_config_rules",
+      "aws_systems_manager_state_manager"
+    ],
+    "59": [
+      "aws_glacier",
+      "glacier_vault_lock"
+    ],
+    "60": [
+      "aws_acm"
+    ],
+    "61": [
+      "amazon_efs"
+    ],
+    "62": [
+      "synthetic_monitoring"
+    ]
+  },
+  "cohesion": {
+    "0": 0.07,
+    "1": 0.09,
+    "2": 0.1,
+    "3": 0.15,
+    "4": 0.17,
+    "5": 0.14,
+    "6": 0.15,
+    "7": 0.17,
+    "8": 0.17,
+    "9": 0.18,
+    "10": 0.2,
+    "11": 0.24,
+    "12": 0.33,
+    "13": 0.29,
+    "14": 0.29,
+    "15": 0.29,
+    "16": 0.29,
+    "17": 0.33,
+    "18": 0.4,
+    "19": 0.33,
+    "20": 0.4,
+    "21": 0.33,
+    "22": 0.33,
+    "23": 0.4,
+    "24": 0.5,
+    "25": 0.4,
+    "26": 0.4,
+    "27": 0.6,
+    "28": 0.4,
+    "29": 0.4,
+    "30": 0.5,
+    "31": 0.5,
+    "32": 0.5,
+    "33": 0.5,
+    "34": 0.5,
+    "35": 0.5,
+    "36": 0.5,
+    "37": 0.67,
+    "38": 0.67,
+    "39": 0.67,
+    "40": 0.67,
+    "41": 1.0,
+    "42": 0.67,
+    "43": 0.67,
+    "44": 1.33,
+    "45": 1.33,
+    "46": 0.67,
+    "47": 1.0,
+    "48": 1.0,
+    "49": 1.0,
+    "50": 1.0,
+    "51": 1.0,
+    "52": 1.0,
+    "53": 1.0,
+    "54": 1.0,
+    "55": 1.0,
+    "56": 1.0,
+    "57": 1.0,
+    "58": 1.0,
+    "59": 1.0,
+    "60": 1.0,
+    "61": 1.0,
+    "62": 1.0
+  },
+  "gods": [
+    {
+      "id": "code_review_process",
+      "label": "Code Review Process",
+      "degree": 12
+    },
+    {
+      "id": "aws_cloudwatch",
+      "label": "Amazon CloudWatch",
+      "degree": 9
+    },
+    {
+      "id": "aws_s3",
+      "label": "Amazon S3",
+      "degree": 9
+    },
+    {
+      "id": "aws_lambda",
+      "label": "AWS Lambda",
+      "degree": 8
+    },
+    {
+      "id": "aws_well_architected_framework",
+      "label": "AWS Well-Architected Framework",
+      "degree": 7
+    },
+    {
+      "id": "define_groups",
+      "label": "Define Groups",
+      "degree": 7
+    },
+    {
+      "id": "aws_xray",
+      "label": "AWS X-Ray",
+      "degree": 7
+    },
+    {
+      "id": "configure_data_source_publication",
+      "label": "Configure data source publication to your standardized locations",
+      "degree": 7
+    },
+    {
+      "id": "incident_manager",
+      "label": "Incident Manager",
+      "degree": 6
+    },
+    {
+      "id": "automated_recovery_mechanisms",
+      "label": "Automated Recovery Mechanisms",
+      "degree": 6
+    }
+  ],
+  "surprises": [
+    {
+      "source": "Code Review Process",
+      "target": "Main Branch",
+      "source_files": [
+        "C:\\Users\\615418931\\kg\\raw\\_subset\\doc_109.md",
+        "C:\\Users\\615418931\\kg\\raw\\_subset\\doc_3.md"
+      ],
+      "confidence": "INFERRED",
+      "relation": "relates_to",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories; peripheral node `Main Branch` unexpectedly reaches hub `Code Review Process`"
+    },
+    {
+      "source": "Code Review Process",
+      "target": "Production Environment",
+      "source_files": [
+        "C:\\Users\\615418931\\kg\\raw\\_subset\\doc_109.md",
+        "C:\\Users\\615418931\\kg\\raw\\_subset\\doc_3.md"
+      ],
+      "confidence": "INFERRED",
+      "relation": "relates_to",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories; peripheral node `Production Environment` unexpectedly reaches hub `Code Review Process`"
+    },
+    {
+      "source": "AWS Lambda",
+      "target": "AWS Network Manager",
+      "source_files": [
+        "C:\\Users\\615418931\\kg\\raw\\_subset\\doc_133.md",
+        "C:\\Users\\615418931\\kg\\raw\\_subset\\doc_175.md"
+      ],
+      "confidence": "INFERRED",
+      "relation": "part_of",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories; peripheral node `AWS Network Manager` unexpectedly reaches hub `AWS Lambda`"
+    },
+    {
+      "source": "Amazon CloudWatch",
+      "target": "Systems Manager Automation",
+      "source_files": [
+        "C:\\Users\\615418931\\kg\\raw\\_subset\\doc_152.md",
+        "C:\\Users\\615418931\\kg\\raw\\_subset\\doc_60.md"
+      ],
+      "confidence": "INFERRED",
+      "relation": "part_of",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories; bridges separate communities"
+    },
+    {
+      "source": "Amazon S3",
+      "target": "IAM Authentication",
+      "source_files": [
+        "C:\\Users\\615418931\\kg\\raw\\_subset\\doc_160.md",
+        "C:\\Users\\615418931\\kg\\raw\\_subset\\doc_75.md"
+      ],
+      "confidence": "INFERRED",
+      "relation": "uses",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories; peripheral node `IAM Authentication` unexpectedly reaches hub `Amazon S3`"
+    }
+  ]
+}

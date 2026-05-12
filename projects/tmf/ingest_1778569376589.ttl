@@ -1,0 +1,12 @@
+@prefix kg: <http://kg.local/ontology#> .
+@prefix kgr: <http://kg.local/resource/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+kgr:address a kg:Concept ; skos:prefLabel "Address" .
+kgr:address rdfs:comment "Structured textual way of describing how to find a Property in an urban area (country properties are often defined differently). Note : Address corresponds to SID UrbanPropertyAddress" .
+kgr:address rdfs:subClassOf kgr:entity .
+kgr:subaddress a kg:Concept ; skos:prefLabel "Subaddress" .
+kgr:subaddress rdfs:comment "Referenced from Address" .
+kgr:address kg:subaddress kgr:subaddress .

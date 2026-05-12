@@ -1,0 +1,39 @@
+---
+title: "Definition"
+source_pdf: "wellarchitected-framework.pdf"
+pdf_page: 61
+---
+
+# Definition
+
+There are six best practice areas for sustainability in the cloud:
+• Region selection
+• Alignment to demand
+• Software and architecture
+• Data
+• Hardware and services
+• Process and culture
+Sustainability in the cloud is a nearly continuous effort focused primarily on energy reduction
+and efficiency across all components of a workload by achieving the maximum benefit from the
+resources provisioned and minimizing the total resources required. This effort can range from the
+initial selection of an efficient programming language, adoption of modern algorithms, use of
+efficient data storage techniques, deploying to correctly sized and efficient compute infrastructure,
+and minimizing requirements for high-powered end user hardware.
+
+
+# Definition
+
+There are four best practice areas for reliability in the cloud:
+• Foundations
+• Workload architecture
+• Change management
+• Failure management
+
+# Definition
+
+There are five best practice areas for performance efficiency in the cloud:
+• Architecture selection
+• Compute and hardware
+• Data management
+• Networking and content delivery
+• Process and culture

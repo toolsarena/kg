@@ -1,0 +1,1486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KG Studio</title>
+<style>
+:root {
+  --bg: #0a0a12; --bg2: #12121e; --bg3: #1a1a2e; --border: #2a2a4e;
+  --text: #c9d1d9; --text2: #8b949e; --accent: #58a6ff; --accent2: #1f6feb;
+  --green: #3fb950; --red: #f85149; --orange: #d29922; --purple: #bc8cff;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; height:100vh; overflow:hidden; }
+
+/* Top bar */
+#topbar { height:48px; background:var(--bg2); border-bottom:1px solid var(--border); display:flex; align-items:center; padding:0 16px; gap:12px; }
+#topbar .logo { font-size:16px; font-weight:600; color:var(--accent); display:flex; align-items:center; gap:8px; }
+#topbar .tabs { display:flex; gap:2px; margin-left:32px; }
+.tab-btn { padding:8px 20px; background:none; border:none; color:var(--text2); font-size:13px; cursor:pointer; border-bottom:2px solid transparent; transition:all 0.15s; }
+.tab-btn:hover { color:var(--text); }
+.tab-btn.active { color:var(--accent); border-bottom-color:var(--accent); }
+
+/* Tab content */
+#tab-content { height:calc(100vh - 48px); }
+.tab-pane { display:none; width:100%; height:100%; }
+.tab-pane.active { display:block; }
+
+/* Explore tab — iframe */
+#tab-explore iframe { width:100%; height:100%; border:none; }
+
+/* Ingest tab */
+#tab-ingest { padding:24px; overflow-y:auto; }
+#tab-ingest .ingest-layout { display:flex; gap:24px; height:calc(100vh - 96px); }
+#tab-ingest .ingest-left { width:400px; flex-shrink:0; display:flex; flex-direction:column; gap:16px; }
+#tab-ingest .ingest-right { flex:1; background:var(--bg2); border-radius:8px; border:1px solid var(--border); padding:16px; overflow-y:auto; }
+
+/* Model tab */
+#tab-model { display:flex; height:100%; }
+#tab-model .model-sidebar { width:360px; flex-shrink:0; background:var(--bg2); border-right:1px solid var(--border); display:flex; flex-direction:column; overflow:hidden; }
+#tab-model .model-canvas { flex:1; position:relative; }
+#tab-model .model-ttl { width:360px; flex-shrink:0; background:var(--bg2); border-left:1px solid var(--border); display:flex; flex-direction:column; }
+
+/* Shared components */
+.card { background:var(--bg2); border:1px solid var(--border); border-radius:8px; padding:16px; }
+.card h3 { font-size:12px; color:var(--text2); text-transform:uppercase; letter-spacing:1px; margin-bottom:10px; }
+input[type=text], select, textarea { width:100%; padding:8px 10px; background:var(--bg); border:1px solid var(--border); color:var(--text); border-radius:6px; font-size:13px; outline:none; }
+input:focus, textarea:focus { border-color:var(--accent); }
+button { padding:8px 16px; background:var(--bg3); border:1px solid var(--border); color:var(--text); border-radius:6px; cursor:pointer; font-size:13px; transition:all 0.15s; }
+button:hover { background:var(--border); }
+button.primary { background:var(--accent2); border-color:var(--accent2); color:#fff; }
+.drop-zone { border:2px dashed var(--border); border-radius:8px; padding:40px; text-align:center; color:var(--text2); cursor:pointer; transition:all 0.2s; }
+.drop-zone:hover, .drop-zone.dragover { border-color:var(--accent); color:var(--accent); }
+.entity-item { padding:8px 10px; border-radius:6px; margin:4px 0; font-size:12px; display:flex; justify-content:space-between; align-items:center; background:var(--bg); border:1px solid var(--border); }
+.entity-item .etype { font-size:10px; padding:2px 6px; border-radius:3px; }
+.section { padding:12px 14px; border-bottom:1px solid var(--border); }
+.section h3 { font-size:11px; color:var(--text2); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px; }
+
+/* Chat in model tab */
+.model-chat { flex:1; overflow-y:auto; padding:12px; }
+.model-chat-input { padding:10px; border-top:1px solid var(--border); display:flex; gap:6px; }
+.model-chat-input input { flex:1; }
+.chat-msg { margin-bottom:10px; }
+.chat-msg.user { text-align:right; }
+.chat-msg .bubble { display:inline-block; max-width:90%; padding:8px 12px; border-radius:12px; font-size:13px; line-height:1.5; text-align:left; }
+.chat-msg.user .bubble { background:var(--accent2); color:#fff; }
+.chat-msg.assistant .bubble { background:var(--bg3); color:var(--text); }
+
+/* Canvas nodes */
+.canvas-node { position:absolute; padding:8px 14px; border-radius:8px; border:2px solid var(--accent); background:var(--bg2); color:var(--text); font-size:12px; cursor:move; user-select:none; z-index:2; }
+.canvas-node.ai-suggested { border-style:dashed; border-color:var(--purple); opacity:0.7; }
+.canvas-node.ai-suggested:hover { opacity:1; }
+.canvas-node .accept-btn { display:none; position:absolute; top:-8px; right:-8px; width:18px; height:18px; border-radius:50%; background:var(--green); color:#fff; font-size:10px; border:none; cursor:pointer; align-items:center; justify-content:center; }
+.canvas-node.ai-suggested .accept-btn { display:flex; }
+
+/* Build tab — gra.fo style */
+#tab-build { display:flex; height:100%; }
+#build-canvas { flex:1; position:relative; background:var(--bg); overflow:hidden; cursor:crosshair; }
+#build-canvas.mode-select { cursor:default; }
+#build-canvas.mode-edge { cursor:crosshair; }
+.build-node { position:absolute; min-width:100px; padding:10px 16px; border-radius:10px; border:2px solid var(--accent); background:var(--bg2); color:var(--text); font-size:13px; font-weight:500; text-align:center; cursor:grab; user-select:none; z-index:3; transition:box-shadow 0.15s; }
+.build-node:hover { box-shadow:0 0 12px rgba(88,166,255,0.3); }
+.build-node.selected { border-color:var(--green); box-shadow:0 0 16px rgba(63,185,80,0.4); }
+.build-node.instance { border-color:var(--orange); border-radius:20px; }
+.build-node .node-type { position:absolute; top:-8px; left:8px; font-size:9px; padding:1px 5px; border-radius:3px; background:var(--bg3); color:var(--text2); border:1px solid var(--border); }
+.build-node .port { position:absolute; width:10px; height:10px; border-radius:50%; background:var(--accent); border:2px solid var(--bg); cursor:crosshair; z-index:4; }
+.build-node .port-out { right:-5px; top:50%; transform:translateY(-50%); }
+.build-node .port-in { left:-5px; top:50%; transform:translateY(-50%); }
+.build-toolbar { position:absolute; top:12px; left:12px; z-index:10; display:flex; gap:6px; flex-wrap:wrap; }
+.build-toolbar button { font-size:12px; }
+.build-toolbar .sep { width:1px; background:var(--border); margin:0 4px; }
+#build-edge-svg { position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:2; }
+#build-edge-svg line { stroke:var(--accent); stroke-width:2; }
+#build-edge-svg line.selected { stroke:var(--green); stroke-width:3; }
+#build-edge-svg text { fill:var(--text2); font-size:11px; pointer-events:all; cursor:pointer; }
+#build-edge-svg text:hover { fill:var(--accent); }
+#build-nodes-container { position:absolute; top:0; left:0; width:100%; height:100%; }
+.build-status { position:absolute; bottom:12px; left:12px; z-index:10; font-size:11px; color:var(--text2); background:var(--bg2); padding:4px 10px; border-radius:4px; border:1px solid var(--border); }
+
+/* TTL preview */
+.ttl-preview { flex:1; overflow-y:auto; padding:12px; font-family:'Fira Code',monospace; font-size:11px; color:var(--green); white-space:pre-wrap; background:var(--bg); }
+</style>
+</head>
+<body>
+
+<!-- Top bar with tabs -->
+<div id="topbar">
+  <div class="logo">🔬 KG Studio</div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('ingest')">📥 Ingest</button>
+    <button class="tab-btn" onclick="switchTab('build')">✏️ Build</button>
+    <button class="tab-btn" onclick="switchTab('map')">🗺️ Map</button>
+    <button class="tab-btn" onclick="switchTab('model')">🧠 Model</button>
+    <button class="tab-btn" onclick="switchTab('agent')">🤖 RDF Agent</button>
+    <button class="tab-btn" onclick="switchTab('explore')">🔍 Explore</button>
+  </div>
+  <div style="margin-left:auto;display:flex;align-items:center;gap:8px;">
+    <select id="project-select" onchange="loadProject(this.value)" style="padding:4px 8px;background:var(--bg);border:1px solid var(--border);color:var(--text);border-radius:4px;font-size:12px;">
+      <option value="">-- Select Project --</option>
+    </select>
+    <button onclick="createProject()" style="padding:4px 10px;font-size:11px;">+ New Project</button>
+  </div>
+</div>
+
+<!-- Tab content -->
+<div id="tab-content">
+
+  <!-- ==================== INGEST TAB ==================== -->
+  <div id="tab-ingest" class="tab-pane active">
+    <div class="ingest-layout">
+      <div class="ingest-left">
+        <!-- Upload -->
+        <div class="card">
+          <h3>Upload Files</h3>
+          <div class="drop-zone" id="drop-zone" onclick="document.getElementById('file-input').click()">
+            Drop files here or click to browse<br>
+            <span style="font-size:11px;color:var(--text2);">PDF, CSV, JSON, Markdown, TTL, Text</span>
+          </div>
+          <input type="file" id="file-input" style="display:none" multiple accept=".pdf,.csv,.json,.jsonld,.ttl,.owl,.rdf,.md,.txt,.html">
+        </div>
+        <!-- Paste text -->
+        <div class="card">
+          <h3>Paste Text</h3>
+          <textarea id="paste-text" rows="5" placeholder="Paste any text here..."></textarea>
+          <button onclick="ingestText()" style="margin-top:8px;">Extract Entities</button>
+        </div>
+        <!-- Status -->
+        <div class="card" id="ingest-status" style="display:none;">
+          <h3>Extraction Result</h3>
+          <div id="ingest-status-content"></div>
+        </div>
+      </div>
+      <!-- Preview -->
+      <div class="ingest-right">
+        <h3 style="font-size:12px;color:var(--text2);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">Extracted Entities Preview</h3>
+        <div id="entity-preview" style="color:var(--text2);font-size:12px;font-style:italic;">Upload a file or paste text to see extracted entities</div>
+        <div style="margin-top:12px;display:none;" id="commit-bar">
+          <button class="primary" onclick="commitEntities()">Add to Graph</button>
+          <span id="commit-count" style="margin-left:8px;font-size:12px;color:var(--text2);"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== BUILD TAB (gra.fo style) ==================== -->
+  <div id="tab-build" class="tab-pane">
+    <div style="display:flex;height:100%;">
+      <!-- Canvas -->
+      <div id="build-canvas" class="mode-select">
+        <div class="build-toolbar">
+          <button class="primary" onclick="setBuildMode('select')">↖ Select</button>
+          <button onclick="setBuildMode('class')">◻ Class</button>
+          <button onclick="setBuildMode('instance')">◯ Instance</button>
+          <button onclick="setBuildMode('edge')">→ Edge</button>
+          <div class="sep"></div>
+          <button onclick="buildDeleteSelected()">🗑 Delete</button>
+          <button onclick="buildClearAll()">Clear All</button>
+          <div class="sep"></div>
+          <button class="primary" onclick="buildToRDF()">⚡ Convert to RDF</button>
+          <button onclick="buildSendToMap()">→ Send to Map</button>
+        </div>
+        <svg id="build-edge-svg"></svg>
+        <div id="build-nodes-container"></div>
+        <div class="build-status" id="build-status">Mode: Select | Click canvas to add nodes, drag between ports to connect</div>
+      </div>
+
+      <!-- Right: Live RDF output -->
+      <div style="width:380px;flex-shrink:0;background:var(--bg2);border-left:1px solid var(--border);display:flex;flex-direction:column;">
+        <div class="section">
+          <h3>Live RDF Output</h3>
+          <div style="display:flex;gap:4px;">
+            <button onclick="copyBuildTTL()" style="flex:1;font-size:11px;">Copy</button>
+            <button onclick="downloadBuildTTL()" style="flex:1;font-size:11px;">Download</button>
+            <button class="primary" onclick="mergeBuildTTL()" style="flex:1;font-size:11px;">Merge to Graph</button>
+          </div>
+        </div>
+        <div class="section">
+          <h3>Graph Summary</h3>
+          <div id="build-summary" style="font-size:11px;color:var(--text2);">0 nodes, 0 edges</div>
+        </div>
+        <div class="section" id="build-map-section" style="border-top:2px solid var(--accent);">
+          <h3>🗺️ Map Data to This Ontology</h3>
+          <div class="drop-zone" id="map-drop-zone" onclick="document.getElementById('map-file-input').click()" style="padding:16px;font-size:12px;">
+            Drop CSV/JSON here
+          </div>
+          <input type="file" id="map-file-input" style="display:none" accept=".csv,.json">
+          <textarea id="map-paste-data" rows="2" placeholder="Or paste data..." style="margin-top:6px;font-family:monospace;font-size:10px;"></textarea>
+          <button onclick="parseMapData()" style="margin-top:4px;width:100%;font-size:11px;">Parse Data</button>
+          <div id="map-col-count" style="font-size:10px;color:var(--accent);margin-top:4px;"></div>
+          <div id="map-preview" style="font-size:10px;overflow-x:auto;max-height:80px;overflow-y:auto;margin-top:4px;"></div>
+          <div id="map-columns" style="display:none;"></div>
+          <div style="margin-top:8px;">
+            <label style="font-size:10px;color:var(--text2);">Target Class</label>
+            <select id="map-target-class" style="font-size:11px;"><option>Concept</option></select>
+          </div>
+          <div style="display:flex;gap:4px;margin-top:4px;">
+            <div style="flex:1;"><label style="font-size:10px;color:var(--text2);">ID Col</label><select id="map-id-col" style="font-size:11px;"></select></div>
+            <div style="flex:1;"><label style="font-size:10px;color:var(--text2);">Label Col</label><select id="map-label-col" style="font-size:11px;"></select></div>
+          </div>
+          <div style="margin-top:6px;"><label style="font-size:10px;color:var(--text2);">Properties</label> <button onclick="addPropMapping()" style="font-size:9px;padding:1px 6px;">+</button></div>
+          <div id="map-props"></div>
+          <div style="margin-top:4px;"><label style="font-size:10px;color:var(--text2);">Relationships</label> <button onclick="addRelMapping()" style="font-size:9px;padding:1px 6px;">+</button></div>
+          <div id="map-rels"></div>
+          <button class="primary" onclick="autoMap()" style="width:100%;margin-top:8px;font-size:11px;">🤖 Auto-Map</button>
+          <button class="primary" onclick="generateMappedRDF()" style="width:100%;margin-top:4px;font-size:11px;">📦 Generate RDF</button>
+          <button onclick="generateAndVisualize()" style="width:100%;margin-top:4px;font-size:11px;background:var(--green);border-color:var(--green);color:#fff;">⚡ Merge & View</button>
+          <div id="map-result" style="font-size:10px;margin-top:4px;"></div>
+          <div id="map-ontology-info" style="display:none;"></div>
+          <div id="map-ontology-classes-list" style="display:none;"></div>
+        </div>
+        <div class="ttl-preview" id="build-ttl-output">@prefix kg: &lt;http://kg.local/ontology#&gt; .
+@prefix owl: &lt;http://www.w3.org/2002/07/owl#&gt; .
+
+# Draw your graph on the canvas → RDF appears here</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MAP TAB ==================== -->
+  <div id="tab-map" class="tab-pane" style="padding:24px;overflow-y:auto;">
+    <div style="text-align:center;padding:60px;color:var(--text2);">
+      <h2 style="color:var(--accent);margin-bottom:12px;">🗺️ Map Data</h2>
+      <p>Data mapping is available in the <b>Build tab</b> — right panel below Graph Summary.</p>
+      <p style="margin-top:8px;">Select a project, go to Build tab, and use the "🗺️ Map Data to This Ontology" section.</p>
+      <button class="primary" onclick="switchTab('build')" style="margin-top:16px;">Go to Build Tab</button>
+    </div>
+  </div>
+
+  <!-- ==================== RDF AGENT TAB ==================== -->
+  <div id="tab-agent" class="tab-pane">
+    <div style="display:flex;height:100%;">
+      <!-- Left: Patterns library -->
+      <div style="width:300px;flex-shrink:0;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;">
+        <div class="section">
+          <h3>📚 Modeling Patterns</h3>
+        </div>
+        <div id="patterns-list" style="flex:1;overflow-y:auto;padding:0 8px 8px;"></div>
+      </div>
+
+      <!-- Center: Agent chat -->
+      <div style="flex:1;display:flex;flex-direction:column;">
+        <div style="padding:12px 16px;border-bottom:1px solid var(--border);display:flex;gap:8px;">
+          <button class="primary" id="agent-mode-build" onclick="setAgentMode('build')" style="font-size:11px;">🛠️ Build RDF</button>
+          <button id="agent-mode-teach" onclick="setAgentMode('teach')" style="font-size:11px;">🎓 Teach Me</button>
+          <button id="agent-mode-convert" onclick="setAgentMode('convert')" style="font-size:11px;">🔄 Convert Visual</button>
+        </div>
+        <div id="agent-chat" style="flex:1;overflow-y:auto;padding:16px;">
+          <div class="chat-msg assistant"><div class="bubble">I'm the RDF Agent. I can:<br><br>• <b>Build RDF</b> — describe what you want in plain English, I'll generate TTL<br>• <b>Teach</b> — ask me about modeling patterns (hierarchy, composition, events...)<br>• <b>Convert</b> — paste a visual graph description, I'll make it RDF<br><br>Try: "Model a microservices architecture with Auth, User, and Payment services"</div></div>
+        </div>
+        <div style="padding:12px;border-top:1px solid var(--border);display:flex;gap:8px;">
+          <input type="text" id="agent-input" placeholder="Describe what you want to model..." style="flex:1;">
+          <button class="primary" onclick="sendAgentMsg()">Send</button>
+        </div>
+      </div>
+
+      <!-- Right: TTL output -->
+      <div style="width:380px;flex-shrink:0;background:var(--bg2);border-left:1px solid var(--border);display:flex;flex-direction:column;">
+        <div class="section">
+          <h3>Agent Output</h3>
+          <div style="display:flex;gap:4px;">
+            <button onclick="copyAgentTTL()" style="flex:1;font-size:11px;">Copy</button>
+            <button onclick="downloadAgentTTL()" style="flex:1;font-size:11px;">Download</button>
+            <button class="primary" onclick="mergeAgentTTL()" style="flex:1;font-size:11px;">Merge to Graph</button>
+          </div>
+        </div>
+        <div class="ttl-preview" id="agent-ttl-output"># RDF Agent output will appear here</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODEL TAB ==================== -->
+  <div id="tab-model" class="tab-pane">
+    <!-- Left: LLM conversation + TTL upload -->
+    <div class="model-sidebar">
+      <div class="section" style="display:flex;gap:4px;">
+        <button class="primary" id="btn-path-a" onclick="setModelMode('conversation')" style="flex:1;font-size:11px;">💬 LLM Assist</button>
+        <button id="btn-path-b" onclick="setModelMode('upload')" style="flex:1;font-size:11px;">📄 Upload TTL</button>
+      </div>
+
+      <!-- Path A: LLM conversation -->
+      <div id="model-conversation" class="model-chat">
+        <div class="chat-msg assistant">
+          <div class="bubble">I'm your ontology co-pilot. Describe your domain and I'll help you model it.<br><br>Try: "I want to model an incident management system" or "Help me create an ontology for microservices"</div>
+        </div>
+      </div>
+      <div class="model-chat-input">
+        <input type="text" id="model-chat-input" placeholder="Describe your domain...">
+        <button class="primary" onclick="sendModelChat()">Send</button>
+      </div>
+
+      <!-- Path B: TTL upload (hidden by default) -->
+      <div id="model-upload" style="display:none;padding:14px;flex:1;overflow-y:auto;">
+        <div class="drop-zone" onclick="document.getElementById('ttl-file-input').click()" style="margin-bottom:12px;">
+          Drop .ttl file here
+        </div>
+        <input type="file" id="ttl-file-input" style="display:none" accept=".ttl,.owl,.rdf">
+        <textarea id="ttl-paste" rows="10" placeholder="Or paste TTL here..." style="margin-bottom:8px;font-family:monospace;font-size:11px;"></textarea>
+        <div style="display:flex;gap:6px;">
+          <button onclick="validateTTL()" style="flex:1;">Validate</button>
+          <button class="primary" onclick="buildGraphFromUpload()" style="flex:1;">Build Graph</button>
+        </div>
+        <div id="ttl-status" style="margin-top:8px;font-size:12px;"></div>
+      </div>
+    </div>
+
+    <!-- Center: Visual canvas -->
+    <div class="model-canvas" id="model-canvas">
+      <div style="position:absolute;top:12px;left:12px;z-index:5;display:flex;gap:6px;">
+        <button onclick="addCanvasClass()">+ Class</button>
+        <button onclick="aiSuggest()">🤖 AI Suggest</button>
+        <button onclick="clearCanvas()">Clear</button>
+      </div>
+      <div id="canvas-area" style="width:100%;height:100%;position:relative;overflow:hidden;"></div>
+    </div>
+
+    <!-- Right: Live TTL preview -->
+    <div class="model-ttl">
+      <div class="section">
+        <h3>Live TTL</h3>
+        <div style="display:flex;gap:4px;">
+          <button onclick="copyTTL()" style="flex:1;font-size:11px;">Copy</button>
+          <button onclick="downloadTTL()" style="flex:1;font-size:11px;">Download</button>
+        </div>
+        <button class="primary" onclick="buildGraph()" style="width:100%;margin-top:8px;padding:12px;font-size:14px;">Build Graph</button>
+      </div>
+      <div class="ttl-preview" id="ttl-live">@prefix kg: &lt;http://kg.local/ontology#&gt; .
+@prefix owl: &lt;http://www.w3.org/2002/07/owl#&gt; .
+
+# Add classes on the canvas to generate TTL</div>
+    </div>
+  </div>
+
+  <!-- ==================== EXPLORE TAB ==================== -->
+  <div id="tab-explore" class="tab-pane">
+    <iframe src="/" id="explore-iframe"></iframe>
+  </div>
+
+</div>
+
+<script>
+// ============================================================
+// TAB SWITCHING
+// ============================================================
+function switchTab(tab) {
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  document.querySelector(`.tab-btn[onclick="switchTab('${tab}')"]`).classList.add('active');
+  // Re-render Build canvas when switching to it (edges need visible DOM for offsetWidth)
+  if (tab === 'build' && buildNodes.length) {
+    setTimeout(renderBuild, 50);
+  }
+  if (tab === 'map') {
+    refreshMapOntology();
+  }
+}
+
+// ============================================================
+// INGEST TAB
+// ============================================================
+let extractedEntities = [];
+
+// Drag and drop
+const dropZone = document.getElementById('drop-zone');
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+dropZone.addEventListener('drop', e => { e.preventDefault(); dropZone.classList.remove('dragover'); handleFiles(e.dataTransfer.files); });
+document.getElementById('file-input').addEventListener('change', e => handleFiles(e.target.files));
+
+async function handleFiles(files) {
+  var allEntities = [];
+  for (const file of files) {
+    const form = new FormData();
+    form.append('file', file);
+    const resp = await fetch('/api/ingest/upload', { method: 'POST', body: form });
+    const data = await resp.json();
+    if (data.error) { showIngestStatus('Error on ' + file.name + ': ' + data.error, 'var(--red)'); continue; }
+    if (data.entities) allEntities = allEntities.concat(data.entities);
+  }
+  showIngestStatus('Extracted ' + allEntities.length + ' entities from ' + files.length + ' files', 'var(--green)');
+  if (allEntities.length) showEntityPreview(allEntities);
+}
+
+async function ingestText() {
+  const text = document.getElementById('paste-text').value;
+  if (!text) return;
+  const resp = await fetch('/api/ingest/text', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({text}) });
+  const data = await resp.json();
+  if (data.error) { showIngestStatus('Error: ' + data.error, 'var(--red)'); return; }
+  showIngestStatus(`Extracted ${data.entities?.length || 0} entities`, 'var(--green)');
+  if (data.entities) showEntityPreview(data.entities);
+}
+
+function showIngestStatus(msg, color) {
+  const el = document.getElementById('ingest-status');
+  el.style.display = 'block';
+  document.getElementById('ingest-status-content').innerHTML = `<span style="color:${color}">${msg}</span>`;
+}
+
+function showEntityPreview(entities) {
+  extractedEntities = entities;
+  const el = document.getElementById('entity-preview');
+  const colors = { service: 'var(--orange)', concept: 'var(--accent)', process: 'var(--orange)', document: 'var(--text2)' };
+  el.innerHTML = entities.map((e, i) => `
+    <div class="entity-item">
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+        <input type="checkbox" checked data-idx="${i}">
+        <span>${e.label}</span>
+      </label>
+      <span class="etype" style="color:${colors[e.type] || 'var(--text2)'}">${e.type}</span>
+    </div>
+  `).join('');
+  document.getElementById('commit-bar').style.display = 'block';
+  document.getElementById('commit-count').textContent = `${entities.length} entities`;
+}
+
+async function commitEntities() {
+  const checked = document.querySelectorAll('#entity-preview input[type=checkbox]:checked');
+  const selected = Array.from(checked).map(cb => extractedEntities[parseInt(cb.dataset.idx)]);
+  const resp = await fetch('/api/ingest/commit', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({entities: selected}) });
+  const data = await resp.json();
+  if (data.ttl) {
+    showIngestStatus(`Generated TTL with ${data.entity_count} entities. Merge to graph from Model tab.`, 'var(--green)');
+    // Auto-switch to model tab with TTL
+    document.getElementById('ttl-paste').value = data.ttl;
+    switchTab('model');
+    setModelMode('upload');
+  }
+}
+
+// ============================================================
+// MODEL TAB
+// ============================================================
+let modelMode = 'conversation';
+let canvasClasses = [];
+let canvasRelationships = [];
+
+function setModelMode(mode) {
+  modelMode = mode;
+  document.getElementById('model-conversation').style.display = mode === 'conversation' ? '' : 'none';
+  document.querySelector('.model-chat-input').style.display = mode === 'conversation' ? '' : 'none';
+  document.getElementById('model-upload').style.display = mode === 'upload' ? '' : 'none';
+  document.getElementById('btn-path-a').classList.toggle('primary', mode === 'conversation');
+  document.getElementById('btn-path-b').classList.toggle('primary', mode === 'upload');
+}
+
+// LLM conversation
+async function sendModelChat() {
+  const input = document.getElementById('model-chat-input');
+  const msg = input.value.trim();
+  if (!msg) return;
+  input.value = '';
+  addModelMsg(msg, 'user');
+  addModelMsg('Thinking...', 'assistant', 'model-thinking');
+
+  const resp = await fetch('/api/model/conversation', {
+    method: 'POST', headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ message: msg, session_id: 'default' })
+  });
+  const data = await resp.json();
+  document.getElementById('model-thinking')?.remove();
+  addModelMsg(data.response || 'No response', 'assistant');
+
+  // Update canvas with ontology
+  if (data.ontology && data.ontology.classes) {
+    canvasClasses = data.ontology.classes;
+    canvasRelationships = data.ontology.relationships || [];
+    renderCanvas();
+    updateTTLPreview();
+  }
+  if (data.ttl) {
+    document.getElementById('ttl-live').textContent = data.ttl;
+  }
+}
+
+document.getElementById('model-chat-input').addEventListener('keydown', e => { if (e.key === 'Enter') sendModelChat(); });
+
+function addModelMsg(text, role, id) {
+  const el = document.getElementById('model-conversation');
+  const div = document.createElement('div');
+  div.className = `chat-msg ${role}`;
+  if (id) div.id = id;
+  div.innerHTML = `<div class="bubble">${text.replace(/\n/g, '<br>')}</div>`;
+  el.appendChild(div);
+  el.scrollTop = el.scrollHeight;
+}
+
+// TTL upload
+document.getElementById('ttl-file-input')?.addEventListener('change', async e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const text = await file.text();
+  document.getElementById('ttl-paste').value = text;
+});
+
+async function validateTTL() {
+  const ttl = document.getElementById('ttl-paste').value;
+  const resp = await fetch('/api/model/validate', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ttl}) });
+  const data = await resp.json();
+  const el = document.getElementById('ttl-status');
+  if (data.valid) el.innerHTML = `<span style="color:var(--green)">Valid ✓ — ${data.triples} triples, ${data.classes} classes, ${data.properties} properties</span>`;
+  else el.innerHTML = `<span style="color:var(--red)">Invalid: ${data.error}</span>`;
+}
+
+async function mergeTTL() {
+  var ttl = document.getElementById('ttl-paste').value;
+  var el = document.getElementById('ttl-status');
+  el.innerHTML = '<span style="color:var(--accent)">Merging...</span>';
+  var resp = await fetch('/api/model/merge-ttl', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ttl: ttl}) });
+  var data = await resp.json();
+  if (data.merged) {
+    el.innerHTML = '<span style="color:var(--green)">Merged ' + data.new_triples + ' triples!</span>';
+    document.getElementById('explore-iframe').src = '/';
+    setTimeout(function(){ switchTab('explore'); }, 500);
+  } else {
+    el.innerHTML = '<span style="color:var(--red)">Error: ' + (data.error || 'unknown') + '</span>';
+  }
+}
+
+// ============================================================
+// VISUAL CANVAS (Path C)
+// ============================================================
+let dragNode = null, dragOffset = {x:0, y:0};
+
+function addCanvasClass() {
+  const name = prompt('Class name:');
+  if (!name) return;
+  const id = name.toLowerCase().replace(/[^a-z0-9]/g, '_');
+  canvasClasses.push({
+    id, label: name, description: '', properties: [],
+    x: 100 + Math.random() * 400, y: 100 + Math.random() * 300
+  });
+  renderCanvas();
+  updateTTLPreview();
+}
+
+function renderCanvas() {
+  const area = document.getElementById('canvas-area');
+  // Keep only toolbar, remove old nodes
+  area.querySelectorAll('.canvas-node, svg').forEach(el => el.remove());
+
+  // Draw nodes
+  canvasClasses.forEach((cls, i) => {
+    const div = document.createElement('div');
+    div.className = 'canvas-node' + (cls.aiSuggested ? ' ai-suggested' : '');
+    div.textContent = cls.label;
+    div.style.left = (cls.x || 100 + i * 150) + 'px';
+    div.style.top = (cls.y || 100 + i * 80) + 'px';
+    div.dataset.idx = i;
+    // Drag
+    div.addEventListener('mousedown', e => {
+      dragNode = i;
+      dragOffset = { x: e.clientX - (cls.x||0), y: e.clientY - (cls.y||0) };
+      e.preventDefault();
+    });
+    // Accept button for AI suggestions
+    if (cls.aiSuggested) {
+      const btn = document.createElement('button');
+      btn.className = 'accept-btn';
+      btn.textContent = '✓';
+      btn.onclick = (e) => { e.stopPropagation(); cls.aiSuggested = false; renderCanvas(); updateTTLPreview(); };
+      div.appendChild(btn);
+    }
+    area.appendChild(div);
+  });
+
+  // Draw relationship lines (SVG)
+  if (canvasRelationships.length) {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;';
+    canvasRelationships.forEach(rel => {
+      const src = canvasClasses.find(c => c.id === rel.source);
+      const tgt = canvasClasses.find(c => c.id === rel.target);
+      if (!src || !tgt) return;
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', (src.x||100) + 50); line.setAttribute('y1', (src.y||100) + 15);
+      line.setAttribute('x2', (tgt.x||100) + 50); line.setAttribute('y2', (tgt.y||100) + 15);
+      line.setAttribute('stroke', rel.aiSuggested ? '#bc8cff' : '#58a6ff');
+      line.setAttribute('stroke-width', '1.5');
+      line.setAttribute('stroke-dasharray', rel.aiSuggested ? '5,5' : 'none');
+      svg.appendChild(line);
+      // Label
+      const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      text.setAttribute('x', ((src.x||100) + (tgt.x||100)) / 2 + 50);
+      text.setAttribute('y', ((src.y||100) + (tgt.y||100)) / 2 + 10);
+      text.setAttribute('fill', '#8b949e');
+      text.setAttribute('font-size', '10');
+      text.setAttribute('text-anchor', 'middle');
+      text.textContent = rel.relation || rel.label || '';
+      svg.appendChild(text);
+    });
+    area.appendChild(svg);
+  }
+}
+
+// Canvas drag handling
+document.addEventListener('mousemove', e => {
+  if (dragNode === null) return;
+  canvasClasses[dragNode].x = e.clientX - dragOffset.x;
+  canvasClasses[dragNode].y = e.clientY - dragOffset.y;
+  renderCanvas();
+});
+document.addEventListener('mouseup', () => { if (dragNode !== null) { dragNode = null; updateTTLPreview(); } });
+
+function clearCanvas() {
+  canvasClasses = [];
+  canvasRelationships = [];
+  renderCanvas();
+  updateTTLPreview();
+}
+
+async function updateTTLPreview() {
+  const resp = await fetch('/api/model/canvas-to-ttl', {
+    method: 'POST', headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ classes: canvasClasses.filter(c => !c.aiSuggested), relationships: canvasRelationships.filter(r => !r.aiSuggested) })
+  });
+  const data = await resp.json();
+  document.getElementById('ttl-live').textContent = data.ttl || '# Empty';
+}
+
+async function aiSuggest() {
+  const resp = await fetch('/api/model/suggest', {
+    method: 'POST', headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ classes: canvasClasses, relationships: canvasRelationships, context: '' })
+  });
+  const data = await resp.json();
+  if (data.suggestions) {
+    data.suggestions.forEach((s, i) => {
+      if (s.type === 'class') {
+        canvasClasses.push({ ...s, aiSuggested: true, x: 300 + i * 140, y: 250 + i * 60 });
+      } else if (s.type === 'relationship') {
+        canvasRelationships.push({ ...s, aiSuggested: true });
+      }
+    });
+    renderCanvas();
+  }
+}
+
+function copyTTL() {
+  navigator.clipboard.writeText(document.getElementById('ttl-live').textContent);
+}
+
+function downloadTTL() {
+  const blob = new Blob([document.getElementById('ttl-live').textContent], {type: 'text/turtle'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'ontology.ttl'; a.click();
+}
+
+async function buildGraph() {
+  // Get TTL from wherever it is — canvas, upload, or LLM
+  var ttl = document.getElementById('ttl-live').textContent;
+  var uploadTTL = document.getElementById('ttl-paste').value;
+  if (uploadTTL && uploadTTL.length > 50) ttl = uploadTTL;
+  if (!ttl || ttl.indexOf('# Add classes') > -1) {
+    alert('No TTL to build. Upload TTL or use LLM/canvas first.');
+    return;
+  }
+  doBuildGraph(ttl);
+}
+
+async function buildGraphFromUpload() {
+  var ttl = document.getElementById('ttl-paste').value;
+  if (!ttl || ttl.length < 20) {
+    alert('Paste or upload TTL first.');
+    return;
+  }
+  doBuildGraph(ttl);
+}
+
+async function doBuildGraph(ttl) {
+  // Ensure project exists
+  if (!currentProject) {
+    var name = prompt('Project name:');
+    if (!name) return;
+    var resp = await fetch('/api/projects/create', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({name:name}) });
+    var data = await resp.json();
+    if (data.error) { alert(data.error); return; }
+    currentProject = data.id;
+    await loadProjects();
+    document.getElementById('project-select').value = currentProject;
+  }
+  // Save TTL to project
+  var saveResp = await fetch('/api/projects/' + currentProject + '/save', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({ttl:ttl})
+  });
+  var saveData = await saveResp.json();
+  if (saveData.error) { alert('Save error: ' + saveData.error); return; }
+  // Build graph from project
+  var buildResp = await fetch('/api/projects/' + currentProject + '/build', {method:'POST'});
+  var buildData = await buildResp.json();
+  if (buildData.error) { alert('Build error: ' + buildData.error); return; }
+  // Open viewer
+  window.open('/view-new?project=' + currentProject, '_blank');
+}
+
+// ============================================================
+// BUILD TAB STATE (declared early so loadProject can use them)
+// ============================================================
+var buildMode = 'select';
+var buildNodes = [];
+var buildEdges = [];
+var buildSelected = null;
+var buildDragNode = null;
+var buildDragOffset = {x:0, y:0};
+var buildEdgeStart = null;
+var buildTempLine = null;
+var buildIdCounter = 0;
+
+// ============================================================
+// PROJECTS
+// ============================================================
+var currentProject = null;
+
+async function loadProjects() {
+  var resp = await fetch('/api/projects/');
+  var projects = await resp.json();
+  var sel = document.getElementById('project-select');
+  sel.innerHTML = '<option value="">-- Select Project --</option>';
+  projects.forEach(function(p) {
+    var opt = document.createElement('option');
+    opt.value = p.id;
+    opt.textContent = p.name + (p.triples ? ' (' + p.triples + ' triples)' : '');
+    sel.appendChild(opt);
+  });
+}
+
+async function createProject() {
+  var name = prompt('Project name:');
+  if (!name) return;
+  var resp = await fetch('/api/projects/create', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({name: name})
+  });
+  var data = await resp.json();
+  if (data.error) { alert(data.error); return; }
+  currentProject = data.id;
+  await loadProjects();
+  document.getElementById('project-select').value = currentProject;
+}
+
+async function loadProject(pid) {
+  if (!pid) { currentProject = null; refreshMapOntology(); return; }
+  currentProject = pid;
+  var resp = await fetch('/api/projects/' + pid);
+  var data = await resp.json();
+  if (data.ttl) {
+    document.getElementById('ttl-live').textContent = data.ttl;
+    document.getElementById('ttl-paste').value = data.ttl;
+    // Populate Build tab canvas from project ontology
+    loadProjectIntoBuild(data.ttl);
+  }
+  refreshMapOntology();
+}
+
+function loadProjectIntoBuild(ttl) {
+  buildNodes = [];
+  buildEdges = [];
+  buildIdCounter = 0;
+
+  var lines = ttl.split(/\r?\n/);
+  var classMap = {};
+  var idx = 0;
+
+  // Pass 1: Extract classes
+  for (var i = 0; i < lines.length; i++) {
+    var line = lines[i];
+    if (line.indexOf('a owl:Class') === -1) continue;
+    var cm = line.match(/^(\S+)\s+a\s+owl:Class/);
+    if (!cm) continue;
+    var uri = cm[1];
+    var lm = line.match(/rdfs:label\s+"([^"]+)"/);
+    var label = lm ? lm[1] : uri.split(':').pop().replace(/_/g, ' ');
+    var nodeId = 'n' + (++buildIdCounter);
+    var col = idx % 6;
+    var row = Math.floor(idx / 6);
+    buildNodes.push({id: nodeId, label: label, type: 'class', x: 60 + col * 180, y: 70 + row * 80});
+    classMap[uri] = {id: nodeId, label: label};
+    idx++;
+  }
+
+  // Pass 2: Extract object properties as edges
+  for (var i = 0; i < lines.length; i++) {
+    var line = lines[i];
+    if (line.indexOf('a owl:ObjectProperty') === -1) continue;
+    var dm = line.match(/rdfs:domain\s+(\S+?)\s*[;.]/)
+    var rm = line.match(/rdfs:range\s+(\S+?)\s*[;.]/);
+    var lm = line.match(/rdfs:label\s+"([^"]+)"/);
+    if (!dm || !rm) continue;
+    var src = classMap[dm[1]];
+    var tgt = classMap[rm[1]];
+    if (src && tgt) {
+      var edgeId = 'e' + (++buildIdCounter);
+      var elabel = lm ? lm[1] : 'relates';
+      buildEdges.push({id: edgeId, source: src.id, target: tgt.id, label: elabel});
+    }
+  }
+
+  document.getElementById('build-ttl-output').textContent = ttl;
+  document.getElementById('build-status').textContent = 'Project loaded | Nodes: ' + buildNodes.length + ' | Edges: ' + buildEdges.length;
+  document.getElementById('build-summary').textContent = buildNodes.length + ' nodes, ' + buildEdges.length + ' edges';
+  renderBuild();
+}
+
+// Load projects on start
+loadProjects();
+refreshMapOntology();
+
+async function mergeTTLFromCanvas() {
+  buildGraph();
+}
+
+// ============================================================
+// BUILD TAB — gra.fo style visual graph builder
+// ============================================================
+
+function setBuildMode(mode) {
+  buildMode = mode;
+  const canvas = document.getElementById('build-canvas');
+  canvas.className = 'mode-' + mode;
+  const labels = {select:'Select', class:'Add Class (click canvas)', instance:'Add Instance (click canvas)', edge:'Draw Edge (drag from port to port)'};
+  document.getElementById('build-status').textContent = 'Mode: ' + labels[mode] + ' | Nodes: ' + buildNodes.length + ' | Edges: ' + buildEdges.length;
+  // Deselect
+  if (mode !== 'select') { buildSelected = null; renderBuild(); }
+}
+
+// Canvas click — add node
+document.getElementById('build-canvas').addEventListener('click', function(e) {
+  if (e.target !== this && !e.target.matches('#build-nodes-container')) return;
+  if (buildMode === 'class' || buildMode === 'instance') {
+    const rect = this.getBoundingClientRect();
+    const x = e.clientX - rect.left - 50;
+    const y = e.clientY - rect.top - 20;
+    const label = prompt(buildMode === 'class' ? 'Class name:' : 'Instance name:');
+    if (!label) return;
+    const id = 'n' + (++buildIdCounter);
+    buildNodes.push({id, label, type: buildMode, x, y});
+    renderBuild();
+    buildUpdateTTL();
+  } else if (buildMode === 'select') {
+    buildSelected = null;
+    renderBuild();
+  }
+});
+// Also handle click on the nodes container
+document.getElementById('build-nodes-container')?.addEventListener('click', function(e) {
+  if (e.target === this && (buildMode === 'class' || buildMode === 'instance')) {
+    const canvas = document.getElementById('build-canvas');
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left - 50;
+    const y = e.clientY - rect.top - 20;
+    const label = prompt(buildMode === 'class' ? 'Class name:' : 'Instance name:');
+    if (!label) return;
+    const id = 'n' + (++buildIdCounter);
+    buildNodes.push({id, label, type: buildMode, x, y});
+    renderBuild();
+    buildUpdateTTL();
+  }
+});
+
+function renderBuild() {
+  const container = document.getElementById('build-nodes-container');
+  container.innerHTML = '';
+  // Render nodes
+  buildNodes.forEach(n => {
+    const div = document.createElement('div');
+    div.className = 'build-node' + (n.type === 'instance' ? ' instance' : '') + (buildSelected === n.id ? ' selected' : '');
+    div.style.left = n.x + 'px';
+    div.style.top = n.y + 'px';
+    div.dataset.id = n.id;
+    div.innerHTML = `<span class="node-type">${n.type}</span>${n.label}<div class="port port-out" data-node="${n.id}" data-dir="out"></div><div class="port port-in" data-node="${n.id}" data-dir="in"></div>`;
+    // Node drag
+    div.addEventListener('mousedown', function(e) {
+      if (e.target.classList.contains('port')) return; // port drag handled separately
+      if (buildMode === 'select' || buildMode === 'class' || buildMode === 'instance') {
+        e.stopPropagation();
+        buildSelected = n.id;
+        buildDragNode = n.id;
+        const rect = document.getElementById('build-canvas').getBoundingClientRect();
+        buildDragOffset = {x: e.clientX - rect.left - n.x, y: e.clientY - rect.top - n.y};
+        renderBuild();
+      }
+    });
+    // Port mousedown — start edge
+    div.querySelectorAll('.port').forEach(port => {
+      port.addEventListener('mousedown', function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        buildEdgeStart = n.id;
+        // Create temp line
+        const svg = document.getElementById('build-edge-svg');
+        const rect = document.getElementById('build-canvas').getBoundingClientRect();
+        buildTempLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        const startX = n.x + (port.dataset.dir === 'out' ? div.offsetWidth : 0);
+        const startY = n.y + div.offsetHeight / 2;
+        buildTempLine.setAttribute('x1', startX);
+        buildTempLine.setAttribute('y1', startY);
+        buildTempLine.setAttribute('x2', startX);
+        buildTempLine.setAttribute('y2', startY);
+        buildTempLine.setAttribute('stroke', '#bc8cff');
+        buildTempLine.setAttribute('stroke-width', '2');
+        buildTempLine.setAttribute('stroke-dasharray', '5,5');
+        svg.appendChild(buildTempLine);
+      });
+    });
+    container.appendChild(div);
+  });
+  // Render edges in SVG
+  renderBuildEdges();
+  // Update status
+  document.getElementById('build-summary').textContent = buildNodes.length + ' nodes, ' + buildEdges.length + ' edges';
+}
+
+function renderBuildEdges() {
+  const svg = document.getElementById('build-edge-svg');
+  svg.innerHTML = '';
+  const container = document.getElementById('build-nodes-container');
+  buildEdges.forEach(edge => {
+    const srcNode = buildNodes.find(n => n.id === edge.source);
+    const tgtNode = buildNodes.find(n => n.id === edge.target);
+    if (!srcNode || !tgtNode) return;
+    const srcEl = container.querySelector(`[data-id="${edge.source}"]`);
+    const tgtEl = container.querySelector(`[data-id="${edge.target}"]`);
+    const srcW = srcEl ? srcEl.offsetWidth : 100;
+    const srcH = srcEl ? srcEl.offsetHeight : 36;
+    const tgtH = tgtEl ? tgtEl.offsetHeight : 36;
+    const x1 = srcNode.x + srcW;
+    const y1 = srcNode.y + srcH / 2;
+    const x2 = tgtNode.x;
+    const y2 = tgtNode.y + tgtH / 2;
+    // Line
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('x1', x1); line.setAttribute('y1', y1);
+    line.setAttribute('x2', x2); line.setAttribute('y2', y2);
+    if (buildSelected === edge.id) line.classList.add('selected');
+    svg.appendChild(line);
+    // Arrow
+    const angle = Math.atan2(y2 - y1, x2 - x1);
+    const ax = x2 - 10 * Math.cos(angle - 0.4);
+    const ay = y2 - 10 * Math.sin(angle - 0.4);
+    const bx = x2 - 10 * Math.cos(angle + 0.4);
+    const by = y2 - 10 * Math.sin(angle + 0.4);
+    const arrow = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+    arrow.setAttribute('points', `${x2},${y2} ${ax},${ay} ${bx},${by}`);
+    arrow.setAttribute('fill', buildSelected === edge.id ? 'var(--green)' : 'var(--accent)');
+    svg.appendChild(arrow);
+    // Label
+    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    text.setAttribute('x', (x1 + x2) / 2);
+    text.setAttribute('y', (y1 + y2) / 2 - 6);
+    text.setAttribute('text-anchor', 'middle');
+    text.textContent = edge.label;
+    text.addEventListener('click', () => { buildSelected = edge.id; renderBuild(); });
+    svg.appendChild(text);
+  });
+}
+
+// Mouse move — drag node or draw edge
+document.getElementById('build-canvas').addEventListener('mousemove', function(e) {
+  const rect = this.getBoundingClientRect();
+  const mx = e.clientX - rect.left;
+  const my = e.clientY - rect.top;
+  // Dragging node
+  if (buildDragNode) {
+    const node = buildNodes.find(n => n.id === buildDragNode);
+    if (node) {
+      node.x = mx - buildDragOffset.x;
+      node.y = my - buildDragOffset.y;
+      renderBuild();
+    }
+  }
+  // Drawing edge
+  if (buildTempLine) {
+    buildTempLine.setAttribute('x2', mx);
+    buildTempLine.setAttribute('y2', my);
+  }
+});
+
+// Mouse up — finish drag or edge
+document.addEventListener('mouseup', function(e) {
+  if (buildDragNode) {
+    buildDragNode = null;
+    buildUpdateTTL();
+    return;
+  }
+  if (buildEdgeStart && buildTempLine) {
+    // Find target node under cursor
+    const canvas = document.getElementById('build-canvas');
+    const rect = canvas.getBoundingClientRect();
+    const mx = e.clientX - rect.left;
+    const my = e.clientY - rect.top;
+    let targetNode = null;
+    for (const n of buildNodes) {
+      const el = document.querySelector(`#build-nodes-container [data-id="${n.id}"]`);
+      if (!el) continue;
+      const w = el.offsetWidth, h = el.offsetHeight;
+      if (mx >= n.x && mx <= n.x + w && my >= n.y && my <= n.y + h && n.id !== buildEdgeStart) {
+        targetNode = n;
+        break;
+      }
+    }
+    if (targetNode) {
+      const label = prompt('Relationship label:', 'relates_to');
+      if (label) {
+        const id = 'e' + (++buildIdCounter);
+        buildEdges.push({id, source: buildEdgeStart, target: targetNode.id, label});
+        buildUpdateTTL();
+      }
+    }
+    buildTempLine.remove();
+    buildTempLine = null;
+    buildEdgeStart = null;
+    renderBuild();
+  }
+});
+
+function buildDeleteSelected() {
+  if (!buildSelected) return;
+  // Check if it's a node
+  const ni = buildNodes.findIndex(n => n.id === buildSelected);
+  if (ni >= 0) {
+    buildEdges = buildEdges.filter(e => e.source !== buildSelected && e.target !== buildSelected);
+    buildNodes.splice(ni, 1);
+  } else {
+    // Edge
+    buildEdges = buildEdges.filter(e => e.id !== buildSelected);
+  }
+  buildSelected = null;
+  renderBuild();
+  buildUpdateTTL();
+}
+
+function buildClearAll() {
+  if (!confirm('Clear all nodes and edges?')) return;
+  buildNodes = []; buildEdges = []; buildSelected = null;
+  renderBuild();
+  buildUpdateTTL();
+}
+
+async function buildUpdateTTL() {
+  // Convert current visual to RDF via backend
+  const nodes = buildNodes.map(n => ({id: n.label, label: n.label, type: n.type}));
+  const edges = buildEdges.map(e => {
+    const src = buildNodes.find(n => n.id === e.source);
+    const tgt = buildNodes.find(n => n.id === e.target);
+    return {source: src?.label || '', target: tgt?.label || '', label: e.label};
+  });
+  if (!nodes.length) {
+    document.getElementById('build-ttl-output').textContent = '# Draw your graph on the canvas \u2192 RDF appears here';
+    return;
+  }
+  const resp = await fetch('/api/rdf-agent/convert-visual', {
+    method: 'POST', headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({nodes, edges})
+  });
+  const data = await resp.json();
+  document.getElementById('build-ttl-output').textContent = data.ttl || '# Error: ' + (data.error || '');
+  document.getElementById('build-status').textContent = `Mode: ${buildMode} | Nodes: ${buildNodes.length} | Edges: ${buildEdges.length} | Triples: ${data.triples || 0}`;
+}
+
+async function buildToRDF() {
+  await buildUpdateTTL();
+}
+
+function buildSendToMap() {
+  // Send current build ontology to Map tab as the target ontology
+  switchTab('map');
+  // The map tab will pick up from build via loadMapOntology
+}
+
+function copyBuildTTL() { navigator.clipboard.writeText(document.getElementById('build-ttl-output').textContent); }
+function downloadBuildTTL() {
+  const blob = new Blob([document.getElementById('build-ttl-output').textContent], {type:'text/turtle'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'visual_graph.ttl'; a.click();
+}
+async function mergeBuildTTL() {
+  const ttl = document.getElementById('build-ttl-output').textContent;
+  if (!ttl || ttl.startsWith('#')) { alert('Build a graph first'); return; }
+  const resp = await fetch('/api/model/merge-ttl', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ttl}) });
+  const data = await resp.json();
+  if (data.merged) alert('Merged ' + data.new_triples + ' triples to graph!');
+  else alert('Error: ' + (data.error || 'unknown'));
+}
+
+// Double-click to rename
+document.getElementById('build-nodes-container')?.addEventListener('dblclick', function(e) {
+  const nodeEl = e.target.closest('.build-node');
+  if (!nodeEl) return;
+  const node = buildNodes.find(n => n.id === nodeEl.dataset.id);
+  if (!node) return;
+  const newLabel = prompt('Rename:', node.label);
+  if (newLabel) { node.label = newLabel; renderBuild(); buildUpdateTTL(); }
+});
+
+// ============================================================
+// MAP TAB
+// ============================================================
+let mapData = { columns: [], sample: [], data: [], total_rows: 0 };
+let mapOntologyClasses = [];
+let mapOntologyProps = [];
+
+// When project changes, refresh the Map tab ontology view
+function refreshMapOntology() {
+  var infoEl = document.getElementById('map-ontology-info');
+  var listEl = document.getElementById('map-ontology-classes-list');
+
+  // Always fetch from backend (it scans all projects + ontologies)
+  infoEl.innerHTML = '<span style="color:var(--accent);">Loading ontology...</span>';
+  fetch('/api/mapper/ontology-classes').then(function(r){ return r.json(); }).then(function(data) {
+    mapOntologyClasses = data.classes || [];
+    mapOntologyProps = data.properties || [];
+    // Also add Build tab classes
+    buildNodes.filter(function(n){ return n.type === 'class'; }).forEach(function(n) {
+      var id = n.label.toLowerCase().replace(/[^a-z0-9]/g, '_');
+      if (!mapOntologyClasses.find(function(c){ return c.id === id; })) {
+        mapOntologyClasses.push({id: id, label: n.label, source: 'build'});
+      }
+    });
+    var projectLabel = currentProject ? ' (Project: ' + currentProject + ')' : '';
+    infoEl.innerHTML = '<span style="color:var(--green);">' + mapOntologyClasses.length + ' classes, ' + mapOntologyProps.length + ' properties' + projectLabel + '</span>';
+    renderMapOntologyList();
+    populateMapSelects();
+  }).catch(function(err) {
+    infoEl.innerHTML = '<span style="color:var(--red);">Error loading: ' + err + '</span>';
+  });
+}
+
+function renderMapOntologyList() {
+  const el = document.getElementById('map-ontology-classes-list');
+  if (!mapOntologyClasses.length) { el.innerHTML = '<span style="color:var(--text2);font-size:11px;">No classes found</span>'; return; }
+  el.innerHTML = mapOntologyClasses.map(c => `
+    <div class="entity-item" style="padding:5px 8px;">
+      <span>◻ ${c.label}</span>
+      <span class="etype" style="color:var(--text2);">${c.source || ''}</span>
+    </div>
+  `).join('');
+}
+
+function populateMapSelects() {
+  const sel = document.getElementById('map-target-class');
+  sel.innerHTML = mapOntologyClasses.map(c => `<option value="${c.id}">${c.label}</option>`).join('');
+}
+
+// File upload for mapper
+const mapDropZone = document.getElementById('map-drop-zone');
+mapDropZone.addEventListener('dragover', e => { e.preventDefault(); mapDropZone.classList.add('dragover'); });
+mapDropZone.addEventListener('dragleave', () => mapDropZone.classList.remove('dragover'));
+mapDropZone.addEventListener('drop', e => { e.preventDefault(); mapDropZone.classList.remove('dragover'); handleMapFile(e.dataTransfer.files[0]); });
+document.getElementById('map-file-input').addEventListener('change', e => { if(e.target.files[0]) handleMapFile(e.target.files[0]); });
+
+async function handleMapFile(file) {
+  const form = new FormData();
+  form.append('file', file);
+  const resp = await fetch('/api/mapper/upload-data', { method: 'POST', body: form });
+  const data = await resp.json();
+  if (data.error) { alert(data.error); return; }
+  mapData = data;
+  renderMapColumns();
+  refreshMapOntology();
+}
+
+async function parseMapData() {
+  const text = document.getElementById('map-paste-data').value;
+  if (!text) return;
+  const resp = await fetch('/api/mapper/paste-data', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({text}) });
+  const data = await resp.json();
+  if (data.error) { alert(data.error); return; }
+  mapData = data;
+  renderMapColumns();
+  refreshMapOntology();
+}
+
+function renderMapColumns() {
+  document.getElementById('map-col-count').textContent = `(${mapData.columns.length} cols, ${mapData.total_rows} rows)`;
+  document.getElementById('map-columns').innerHTML = mapData.columns.map(c =>
+    `<div class="entity-item"><span>${c}</span><span class="etype" style="color:var(--text2);">${typeof (mapData.sample[0]||{})[c]}</span></div>`
+  ).join('');
+  // Preview table
+  if (mapData.sample.length) {
+    let html = '<table style="width:100%;border-collapse:collapse;"><tr>' + mapData.columns.map(c => `<th style="padding:3px 6px;border-bottom:1px solid var(--border);color:var(--accent);font-size:10px;text-align:left;">${c}</th>`).join('') + '</tr>';
+    mapData.sample.slice(0,3).forEach(row => {
+      html += '<tr>' + mapData.columns.map(c => `<td style="padding:3px 6px;border-bottom:1px solid var(--border);font-size:10px;">${(row[c]||"").toString().slice(0,30)}</td>`).join('') + '</tr>';
+    });
+    html += '</table>';
+    document.getElementById('map-preview').innerHTML = html;
+  }
+  // Populate selects
+  const colOpts = mapData.columns.map(c => `<option value="${c}">${c}</option>`).join('');
+  document.getElementById('map-id-col').innerHTML = colOpts;
+  document.getElementById('map-label-col').innerHTML = colOpts;
+}
+
+async function loadOntologyClasses() {
+  refreshMapOntology();
+}
+
+function addPropMapping() {
+  const div = document.getElementById('map-props');
+  const colOpts = mapData.columns.map(c => `<option value="${c}">${c}</option>`).join('');
+  const row = document.createElement('div');
+  row.style.cssText = 'display:flex;gap:6px;margin-bottom:6px;align-items:center;';
+  row.innerHTML = `<select class="map-prop-col" style="flex:1;">${colOpts}</select><span style="color:var(--text2);">→</span><input class="map-prop-name" type="text" placeholder="property name" style="flex:1;"><button onclick="this.parentElement.remove()" style="padding:2px 6px;font-size:10px;">✕</button>`;
+  div.appendChild(row);
+}
+
+function addRelMapping() {
+  const div = document.getElementById('map-rels');
+  const colOpts = mapData.columns.map(c => `<option value="${c}">${c}</option>`).join('');
+  const classOpts = mapOntologyClasses.map(c => `<option value="${c.id}">${c.label}</option>`).join('');
+  const row = document.createElement('div');
+  row.style.cssText = 'display:flex;gap:6px;margin-bottom:6px;align-items:center;flex-wrap:wrap;';
+  row.innerHTML = `<select class="map-rel-col" style="flex:1;">${colOpts}</select><span style="color:var(--text2);">→</span><input class="map-rel-pred" type="text" placeholder="predicate" style="flex:1;"><select class="map-rel-target" style="flex:1;">${classOpts}</select><button onclick="this.parentElement.remove()" style="padding:2px 6px;font-size:10px;">✕</button>`;
+  div.appendChild(row);
+}
+
+async function autoMap() {
+  if (!mapData.columns.length) { alert('Upload data first'); return; }
+  const resp = await fetch('/api/mapper/auto-map', {
+    method: 'POST', headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ columns: mapData.columns, sample: mapData.sample, classes: mapOntologyClasses })
+  });
+  const data = await resp.json();
+  if (data.suggestion) {
+    const s = data.suggestion;
+    document.getElementById('map-target-class').value = s.class || 'Concept';
+    document.getElementById('map-id-col').value = s.id_column || mapData.columns[0];
+    document.getElementById('map-label-col').value = s.label_column || mapData.columns[0];
+    // Fill property mappings
+    document.getElementById('map-props').innerHTML = '';
+    for (const [col, prop] of Object.entries(s.property_map || {})) {
+      addPropMapping();
+      const rows = document.getElementById('map-props').children;
+      const last = rows[rows.length - 1];
+      last.querySelector('.map-prop-col').value = col;
+      last.querySelector('.map-prop-name').value = prop;
+    }
+    // Fill relationship mappings
+    document.getElementById('map-rels').innerHTML = '';
+    for (const [col, rel] of Object.entries(s.relationship_map || {})) {
+      addRelMapping();
+      const rows = document.getElementById('map-rels').children;
+      const last = rows[rows.length - 1];
+      last.querySelector('.map-rel-col').value = col;
+      last.querySelector('.map-rel-pred').value = rel.predicate || 'relates_to';
+      if (rel.target_class) last.querySelector('.map-rel-target').value = rel.target_class;
+    }
+  }
+}
+
+async function generateMappedRDF() {
+  if (!mapData.sample.length) { alert('No data loaded'); return; }
+  // Collect mappings
+  const propMap = {};
+  document.querySelectorAll('#map-props > div').forEach(row => {
+    const col = row.querySelector('.map-prop-col').value;
+    const prop = row.querySelector('.map-prop-name').value;
+    if (col && prop) propMap[col] = prop;
+  });
+  const relMap = {};
+  document.querySelectorAll('#map-rels > div').forEach(row => {
+    const col = row.querySelector('.map-rel-col').value;
+    const pred = row.querySelector('.map-rel-pred').value;
+    const target = row.querySelector('.map-rel-target').value;
+    if (col && pred) relMap[col] = { predicate: pred, target_class: target };
+  });
+
+  const payload = {
+    class: document.getElementById('map-target-class').value,
+    id_column: document.getElementById('map-id-col').value,
+    label_column: document.getElementById('map-label-col').value,
+    property_map: propMap,
+    relationship_map: relMap,
+    data: mapData.data && mapData.data.length ? mapData.data : mapData.sample
+  };
+
+  const resp = await fetch('/api/mapper/generate-rdf', {
+    method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(payload)
+  });
+  const data = await resp.json();
+  if (data.error) { alert(data.error); return; }
+  document.getElementById('map-ttl-output').textContent = data.ttl || '# No output';
+  document.getElementById('map-result').innerHTML = `<span style="color:var(--green);">Generated ${data.triples} triples from ${data.instances} instances</span>`;
+}
+
+function copyMapTTL() { navigator.clipboard.writeText(document.getElementById('map-ttl-output').textContent); }
+function downloadMapTTL() {
+  const blob = new Blob([document.getElementById('map-ttl-output').textContent], {type:'text/turtle'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'mapped_data.ttl'; a.click();
+}
+async function mergeMapTTL() {
+  const ttl = document.getElementById('map-ttl-output').textContent;
+  if (!ttl || ttl.startsWith('#')) { alert('Generate RDF first'); return; }
+  const resp = await fetch('/api/model/merge-ttl', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ttl}) });
+  const data = await resp.json();
+  if (data.merged) alert('Merged ' + data.new_triples + ' triples to graph!');
+  else alert('Error: ' + (data.error || 'unknown'));
+}
+
+async function generateAndVisualize() {
+  // Step 1: Generate RDF from data
+  await generateMappedRDF();
+  const dataTTL = document.getElementById('map-ttl-output').textContent;
+  if (!dataTTL || dataTTL.startsWith('#')) return;
+
+  // Step 2: Combine ontology (from Build tab) + data instances
+  const buildTTL = document.getElementById('build-ttl-output')?.textContent || '';
+  const hasBuildOntology = buildTTL && !buildTTL.startsWith('#');
+  const combinedTTL = (hasBuildOntology ? buildTTL + '\n\n# --- Data instances ---\n' : '') + dataTTL;
+
+  // Step 3: Ensure project exists
+  if (!currentProject) {
+    const name = prompt('Save to project (name):');
+    if (!name) return;
+    const resp = await fetch('/api/projects/create', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({name}) });
+    const data = await resp.json();
+    if (data.error) { alert(data.error); return; }
+    currentProject = data.id;
+    await loadProjects();
+    document.getElementById('project-select').value = currentProject;
+  }
+
+  // Step 4: Save combined TTL to project
+  const saveResp = await fetch('/api/projects/' + currentProject + '/save', {
+    method: 'POST', headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ttl: combinedTTL})
+  });
+  const saveData = await saveResp.json();
+  if (saveData.error) { alert('Save error: ' + saveData.error); return; }
+
+  // Step 5: Build graph in memory for visualization
+  const buildResp = await fetch('/api/projects/' + currentProject + '/build', {method:'POST'});
+  const buildData = await buildResp.json();
+  if (buildData.error) { alert('Build error: ' + buildData.error); return; }
+
+  // Step 6: Show graph
+  document.getElementById('map-result').innerHTML = `<span style="color:var(--green);">\u2705 Saved to project <b>${currentProject}</b> | ${saveData.triples} triples | ${buildData.nodes} nodes, ${buildData.edges} edges</span>`;
+  document.getElementById('explore-iframe').src = '/view-new';
+  setTimeout(() => switchTab('explore'), 300);
+}
+
+// ============================================================
+// RDF AGENT TAB
+// ============================================================
+let agentMode = 'build';
+
+function setAgentMode(mode) {
+  agentMode = mode;
+  ['build','teach','convert'].forEach(m => {
+    document.getElementById('agent-mode-' + m).classList.toggle('primary', m === mode);
+  });
+  const placeholder = { build: 'Describe what you want to model...', teach: 'Ask about modeling techniques...', convert: 'Describe nodes and edges...' };
+  document.getElementById('agent-input').placeholder = placeholder[mode];
+}
+
+document.getElementById('agent-input').addEventListener('keydown', e => { if (e.key === 'Enter') sendAgentMsg(); });
+
+async function sendAgentMsg() {
+  const input = document.getElementById('agent-input');
+  const msg = input.value.trim();
+  if (!msg) return;
+  input.value = '';
+  addAgentMsg(msg, 'user');
+  addAgentMsg('Thinking...', 'assistant', 'agent-thinking');
+
+  let endpoint, payload;
+  if (agentMode === 'build') {
+    endpoint = '/api/rdf-agent/build';
+    payload = { description: msg, context: document.getElementById('agent-ttl-output').textContent };
+  } else if (agentMode === 'teach') {
+    endpoint = '/api/rdf-agent/teach';
+    payload = { question: msg };
+  } else {
+    endpoint = '/api/rdf-agent/convert-visual';
+    // Parse simple node/edge description
+    payload = parseVisualDescription(msg);
+  }
+
+  const resp = await fetch(endpoint, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(payload) });
+  const data = await resp.json();
+  document.getElementById('agent-thinking')?.remove();
+
+  if (agentMode === 'build') {
+    addAgentMsg(data.explanation || data.error || 'Done', 'assistant');
+    if (data.ttl) document.getElementById('agent-ttl-output').textContent = data.ttl;
+    if (data.pattern_used) addAgentMsg(`Pattern: <b>${data.pattern_used}</b> | ${data.valid ? '\u2705 Valid' : '\u274c Invalid'} | ${data.triples || 0} triples`, 'assistant');
+  } else if (agentMode === 'teach') {
+    addAgentMsg(data.answer || 'No answer', 'assistant');
+    if (data.related_patterns?.length) addAgentMsg('Related patterns: ' + data.related_patterns.join(', '), 'assistant');
+  } else {
+    addAgentMsg(data.valid ? `Converted! ${data.triples} triples generated.` : ('Error: ' + (data.error || 'unknown')), 'assistant');
+    if (data.ttl) document.getElementById('agent-ttl-output').textContent = data.ttl;
+  }
+}
+
+function parseVisualDescription(text) {
+  // Simple parser: "A -> B [label], C -> D [label]" or just nodes
+  const nodes = [];
+  const edges = [];
+  const seen = new Set();
+  const parts = text.split(/[,;\n]+/);
+  parts.forEach(part => {
+    const arrow = part.match(/(.+?)\s*->\s*(.+?)(?:\s*\[(.+?)\])?$/);
+    if (arrow) {
+      const src = arrow[1].trim(), tgt = arrow[2].trim(), label = (arrow[3] || 'relates_to').trim();
+      if (!seen.has(src)) { nodes.push({id: src, label: src, type: 'instance'}); seen.add(src); }
+      if (!seen.has(tgt)) { nodes.push({id: tgt, label: tgt, type: 'instance'}); seen.add(tgt); }
+      edges.push({source: src, target: tgt, label});
+    } else {
+      const name = part.trim();
+      if (name && !seen.has(name)) { nodes.push({id: name, label: name, type: 'class'}); seen.add(name); }
+    }
+  });
+  return {nodes, edges};
+}
+
+function addAgentMsg(text, role, id) {
+  const el = document.getElementById('agent-chat');
+  const div = document.createElement('div');
+  div.className = `chat-msg ${role}`;
+  if (id) div.id = id;
+  div.innerHTML = `<div class="bubble">${text.replace(/\n/g, '<br>')}</div>`;
+  el.appendChild(div);
+  el.scrollTop = el.scrollHeight;
+}
+
+function copyAgentTTL() { navigator.clipboard.writeText(document.getElementById('agent-ttl-output').textContent); }
+function downloadAgentTTL() {
+  const blob = new Blob([document.getElementById('agent-ttl-output').textContent], {type:'text/turtle'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'agent_output.ttl'; a.click();
+}
+async function mergeAgentTTL() {
+  const ttl = document.getElementById('agent-ttl-output').textContent;
+  if (!ttl || ttl.startsWith('#')) { alert('No RDF to merge'); return; }
+  const resp = await fetch('/api/model/merge-ttl', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ttl}) });
+  const data = await resp.json();
+  if (data.merged) alert('Merged ' + data.new_triples + ' triples to graph!');
+  else alert('Error: ' + (data.error || 'unknown'));
+}
+
+// Load patterns on start
+async function loadPatterns() {
+  const resp = await fetch('/api/rdf-agent/patterns');
+  const data = await resp.json();
+  const el = document.getElementById('patterns-list');
+  el.innerHTML = (data.patterns || []).map(p => `
+    <div class="entity-item" style="cursor:pointer;flex-direction:column;align-items:flex-start;" onclick="showPattern('${p.id}')">
+      <span style="font-weight:500;">${p.name}</span>
+      <span style="font-size:10px;color:var(--text2);margin-top:2px;">${p.when}</span>
+    </div>
+  `).join('');
+}
+
+async function showPattern(id) {
+  const resp = await fetch('/api/rdf-agent/patterns/' + id);
+  const data = await resp.json();
+  if (data.ttl) {
+    document.getElementById('agent-ttl-output').textContent = data.ttl;
+    addAgentMsg(`<b>${data.name}</b><br>${data.description}<br><br><i>When to use:</i> ${data.when}`, 'assistant');
+    switchTab('agent');
+  }
+}
+
+loadPatterns();
+</script>
+</body>
+</html>

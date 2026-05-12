@@ -1,0 +1,147 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix sid: <http://kg.local/sid/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# =============================================
+# TMF SID Ontology - Modeled from TMF Open API JSON Schemas
+# Source: github.com/tmforum-apis/Open_Api_And_Data_Model
+# =============================================
+
+# === COMMON DOMAIN ===
+sid:Entity a owl:Class ; rdfs:label "Entity" ; rdfs:comment "Base class for all TMF SID entities. Provides id, href, @type, @baseType." .
+sid:TimePeriod a owl:Class ; rdfs:label "Time Period" ; rdfs:comment "A period of time with startDateTime and endDateTime." .
+sid:Characteristic a owl:Class ; rdfs:label "Characteristic" ; rdfs:comment "Describes a given characteristic of an object with a name and a value." .
+sid:ContactMedium a owl:Class ; rdfs:label "Contact Medium" ; rdfs:comment "Contact medium for a party: email, phone, fax, postal address." .
+sid:Note a owl:Class ; rdfs:label "Note" ; rdfs:comment "Extra information about a given entity." .
+sid:Feature a owl:Class ; rdfs:label "Feature" ; rdfs:comment "Configuration feature of a service or resource." .
+sid:Place a owl:Class ; rdfs:label "Place" ; rdfs:comment "A geographic place where things are located or services delivered." .
+sid:Attachment a owl:Class ; rdfs:label "Attachment" ; rdfs:comment "Complements description through video, pictures, documents." .
+sid:Channel a owl:Class ; rdfs:label "Channel" ; rdfs:comment "Channel for selling product offerings." .
+
+# === ENGAGED PARTY DOMAIN ===
+sid:Party a owl:Class ; rdfs:label "Party" ; rdfs:subClassOf sid:Entity ; rdfs:comment "Base class for Individual and Organization." .
+sid:Individual a owl:Class ; rdfs:label "Individual" ; rdfs:subClassOf sid:Party ; rdfs:comment "A single human being. Has givenName, familyName, birthDate, gender, nationality." .
+sid:Organization a owl:Class ; rdfs:label "Organization" ; rdfs:subClassOf sid:Party ; rdfs:comment "A group of people identified by shared interests. Has tradingName, organizationType, isLegalEntity, isHeadOffice." .
+sid:RelatedParty a owl:Class ; rdfs:label "Related Party" ; rdfs:comment "A party playing a role in a given context." .
+sid:Agreement a owl:Class ; rdfs:label "Agreement" ; rdfs:subClassOf sid:Entity ; rdfs:comment "A formal negotiated contract between two parties. Includes SLAs, customer price agreements." .
+sid:Account a owl:Class ; rdfs:label "Account" ; rdfs:subClassOf sid:Entity ; rdfs:comment "A financial account for billing and payment tracking." .
+
+# === CUSTOMER DOMAIN ===
+sid:Customer a owl:Class ; rdfs:label "Customer" ; rdfs:subClassOf sid:Entity ; rdfs:comment "A party engaged as customer. Required: engagedParty. Has name, status, statusReason, validFor." .
+sid:BillingAccount a owl:Class ; rdfs:label "Billing Account" ; rdfs:subClassOf sid:Account ; rdfs:comment "Arrangement for receiving and paying bills." .
+sid:PaymentMethod a owl:Class ; rdfs:label "Payment Method" ; rdfs:comment "Credit card, direct debit, voucher." .
+sid:CreditProfile a owl:Class ; rdfs:label "Credit Profile" ; rdfs:comment "Credit score and risk rating for a customer." .
+sid:OrderItem a owl:Class ; rdfs:label "Order Item" ; rdfs:subClassOf sid:Entity ; rdfs:comment "An identified part of an order. Has action (add/modify/delete), quantity, state." .
+sid:OrderPrice a owl:Class ; rdfs:label "Order Price" ; rdfs:comment "Price associated with an order item." .
+sid:Appointment a owl:Class ; rdfs:label "Appointment" ; rdfs:comment "Scheduled appointment for service delivery." .
+
+# === PRODUCT DOMAIN ===
+sid:Product a owl:Class ; rdfs:label "Product" ; rdfs:subClassOf sid:Entity ; rdfs:comment "A product offering procured by a customer. Realized as one or more services and/or resources. Has name, description, isBundle, isCustomerVisible, orderDate, startDate, terminationDate, productSerialNumber." .
+sid:ProductOffering a owl:Class ; rdfs:label "Product Offering" ; rdfs:comment "Orderable entity from provider catalog with pricing. Has name, description, isBundle, isSellable, lifecycleStatus, version." .
+sid:ProductSpecification a owl:Class ; rdfs:label "Product Specification" ; rdfs:comment "Detailed description of a tangible or intangible object made available as a ProductOffering." .
+sid:ProductPrice a owl:Class ; rdfs:label "Product Price" ; rdfs:comment "Amount of money for a ProductOffering when bought, rented, or leased." .
+sid:ProductRelationship a owl:Class ; rdfs:label "Product Relationship" ; rdfs:comment "Relationship between products: bundling or dependency." .
+sid:ProductTerm a owl:Class ; rdfs:label "Product Term" ; rdfs:comment "Commitment period or contract term." .
+sid:ProductOfferingPrice a owl:Class ; rdfs:label "Product Offering Price" ; rdfs:comment "Pricing: recurring, one-time, or usage-based." .
+sid:BundledProductOffering a owl:Class ; rdfs:label "Bundled Product Offering" ; rdfs:comment "A ProductOffering belonging to a grouping made available to market." .
+sid:Category a owl:Class ; rdfs:label "Category" ; rdfs:comment "Groups product offerings, service and resource candidates in logical containers." .
+sid:MarketSegment a owl:Class ; rdfs:label "Market Segment" ; rdfs:comment "Grouping of Parties, GeographicAreas, SalesChannels targeted by offerings." .
+
+# === SERVICE DOMAIN ===
+sid:Service a owl:Class ; rdfs:label "Service" ; rdfs:subClassOf sid:Entity ; rdfs:comment "Base class for Service hierarchy. Either CustomerFacingService or ResourceFacingService. Has name, state, serviceType, category, isBundle, isServiceEnabled, hasStarted, startMode, isStateful, startDate, endDate." .
+sid:CustomerFacingService a owl:Class ; rdfs:label "Customer Facing Service" ; rdfs:subClassOf sid:Service ; rdfs:comment "Service visible and usable by a Customer." .
+sid:ResourceFacingService a owl:Class ; rdfs:label "Resource Facing Service" ; rdfs:subClassOf sid:Service ; rdfs:comment "Service not visible to customer, supports resource management." .
+sid:ServiceSpecification a owl:Class ; rdfs:label "Service Specification" ; rdfs:comment "Blueprint from which a service is instantiated." .
+sid:ServiceOrder a owl:Class ; rdfs:label "Service Order" ; rdfs:subClassOf sid:Entity ; rdfs:comment "Request to perform action on a service (create, modify, delete)." .
+sid:ServiceRelationship a owl:Class ; rdfs:label "Service Relationship" ; rdfs:comment "Links with other services in inventory." .
+sid:ServiceCandidate a owl:Class ; rdfs:label "Service Candidate" ; rdfs:comment "Makes a ServiceSpecification available to a catalog." .
+
+# === RESOURCE DOMAIN ===
+sid:Resource a owl:Class ; rdfs:label "Resource" ; rdfs:subClassOf sid:Entity ; rdfs:comment "Abstract entity for all concrete resources (TPE, EQUIPMENT). Has name, category, administrativeState, operationalState, resourceStatus, usageState, startOperatingDate, endOperatingDate, resourceVersion." .
+sid:PhysicalResource a owl:Class ; rdfs:label "Physical Resource" ; rdfs:subClassOf sid:Resource ; rdfs:comment "Tangible: equipment, ports, cards, shelves." .
+sid:LogicalResource a owl:Class ; rdfs:label "Logical Resource" ; rdfs:subClassOf sid:Resource ; rdfs:comment "Non-tangible: IP addresses, VLANs, bandwidth allocations." .
+sid:ResourceSpecification a owl:Class ; rdfs:label "Resource Specification" ; rdfs:comment "Blueprint from which a resource is instantiated." .
+sid:ResourceRelationship a owl:Class ; rdfs:label "Resource Relationship" ; rdfs:comment "Connectivity, containment, dependency between resources." .
+sid:ResourceCandidate a owl:Class ; rdfs:label "Resource Candidate" ; rdfs:comment "Makes a ResourceSpecification available to a catalog." .
+sid:ResourceOrder a owl:Class ; rdfs:label "Resource Order" ; rdfs:subClassOf sid:Entity ; rdfs:comment "Request to perform action on a resource." .
+
+# === TROUBLE/ALARM DOMAIN ===
+sid:TroubleTicket a owl:Class ; rdfs:label "Trouble Ticket" ; rdfs:subClassOf sid:Entity ; rdfs:comment "Tracking and managing issues identified by customer or system. Used by CRM, network management, fault management." .
+sid:Alarm a owl:Class ; rdfs:label "Alarm" ; rdfs:subClassOf sid:Entity ; rdfs:comment "Alert when resource detects fault or threshold breach. Has alarmType, perceivedSeverity, probableCause, alarmRaisedTime, alarmClearedTime, state." .
+
+# =============================================
+# RELATIONSHIPS (from actual $ref in schemas)
+# =============================================
+
+# Customer domain relationships
+sid:engagedParty a owl:ObjectProperty ; rdfs:label "engaged party" ; rdfs:comment "The party (org or individual) engaged as customer" ; rdfs:domain sid:Customer ; rdfs:range sid:RelatedParty .
+sid:hasAccount a owl:ObjectProperty ; rdfs:label "has account" ; rdfs:domain sid:Customer ; rdfs:range sid:Account .
+sid:hasPaymentMethod a owl:ObjectProperty ; rdfs:label "has payment method" ; rdfs:domain sid:Customer ; rdfs:range sid:PaymentMethod .
+sid:hasContactMedium a owl:ObjectProperty ; rdfs:label "has contact medium" ; rdfs:domain sid:Customer ; rdfs:range sid:ContactMedium .
+sid:hasCreditProfile a owl:ObjectProperty ; rdfs:label "has credit profile" ; rdfs:domain sid:Customer ; rdfs:range sid:CreditProfile .
+sid:hasAgreement a owl:ObjectProperty ; rdfs:label "has agreement" ; rdfs:domain sid:Customer ; rdfs:range sid:Agreement .
+sid:hasCharacteristic a owl:ObjectProperty ; rdfs:label "has characteristic" ; rdfs:domain sid:Entity ; rdfs:range sid:Characteristic .
+sid:validFor a owl:ObjectProperty ; rdfs:label "valid for" ; rdfs:domain sid:Entity ; rdfs:range sid:TimePeriod .
+
+# Product domain relationships
+sid:realizingService a owl:ObjectProperty ; rdfs:label "realizing service" ; rdfs:comment "Services that realize this product" ; rdfs:domain sid:Product ; rdfs:range sid:Service .
+sid:realizingResource a owl:ObjectProperty ; rdfs:label "realizing resource" ; rdfs:comment "Resources that realize this product" ; rdfs:domain sid:Product ; rdfs:range sid:Resource .
+sid:productOffering a owl:ObjectProperty ; rdfs:label "product offering" ; rdfs:comment "The offering this product instantiates" ; rdfs:domain sid:Product ; rdfs:range sid:ProductOffering .
+sid:productSpecification a owl:ObjectProperty ; rdfs:label "product specification" ; rdfs:domain sid:Product ; rdfs:range sid:ProductSpecification .
+sid:hasBillingAccount a owl:ObjectProperty ; rdfs:label "has billing account" ; rdfs:domain sid:Product ; rdfs:range sid:BillingAccount .
+sid:hasProductPrice a owl:ObjectProperty ; rdfs:label "has product price" ; rdfs:domain sid:Product ; rdfs:range sid:ProductPrice .
+sid:hasProductRelationship a owl:ObjectProperty ; rdfs:label "has product relationship" ; rdfs:domain sid:Product ; rdfs:range sid:ProductRelationship .
+sid:hasProductTerm a owl:ObjectProperty ; rdfs:label "has product term" ; rdfs:domain sid:Product ; rdfs:range sid:ProductTerm .
+sid:hasPlace a owl:ObjectProperty ; rdfs:label "has place" ; rdfs:domain sid:Entity ; rdfs:range sid:Place .
+
+# ProductOffering relationships
+sid:hasProductOfferingPrice a owl:ObjectProperty ; rdfs:label "has offering price" ; rdfs:domain sid:ProductOffering ; rdfs:range sid:ProductOfferingPrice .
+sid:hasBundledOffering a owl:ObjectProperty ; rdfs:label "has bundled offering" ; rdfs:domain sid:ProductOffering ; rdfs:range sid:BundledProductOffering .
+sid:hasServiceCandidate a owl:ObjectProperty ; rdfs:label "has service candidate" ; rdfs:domain sid:ProductOffering ; rdfs:range sid:ServiceCandidate .
+sid:hasResourceCandidate a owl:ObjectProperty ; rdfs:label "has resource candidate" ; rdfs:domain sid:ProductOffering ; rdfs:range sid:ResourceCandidate .
+sid:hasCategory a owl:ObjectProperty ; rdfs:label "has category" ; rdfs:domain sid:ProductOffering ; rdfs:range sid:Category .
+sid:hasMarketSegment a owl:ObjectProperty ; rdfs:label "has market segment" ; rdfs:domain sid:ProductOffering ; rdfs:range sid:MarketSegment .
+sid:hasChannel a owl:ObjectProperty ; rdfs:label "has channel" ; rdfs:domain sid:ProductOffering ; rdfs:range sid:Channel .
+sid:hasSLA a owl:ObjectProperty ; rdfs:label "has SLA" ; rdfs:domain sid:ProductOffering ; rdfs:range sid:Agreement .
+sid:offeringProductSpec a owl:ObjectProperty ; rdfs:label "product specification" ; rdfs:domain sid:ProductOffering ; rdfs:range sid:ProductSpecification .
+
+# OrderItem relationships
+sid:orderItemProduct a owl:ObjectProperty ; rdfs:label "product" ; rdfs:comment "The product being ordered" ; rdfs:domain sid:OrderItem ; rdfs:range sid:Product .
+sid:orderItemOffering a owl:ObjectProperty ; rdfs:label "product offering" ; rdfs:domain sid:OrderItem ; rdfs:range sid:ProductOffering .
+sid:orderItemBilling a owl:ObjectProperty ; rdfs:label "billing account" ; rdfs:domain sid:OrderItem ; rdfs:range sid:BillingAccount .
+sid:orderItemAppointment a owl:ObjectProperty ; rdfs:label "appointment" ; rdfs:domain sid:OrderItem ; rdfs:range sid:Appointment .
+sid:hasOrderItem a owl:ObjectProperty ; rdfs:label "has order item" ; rdfs:domain sid:OrderItem ; rdfs:range sid:OrderItem .
+
+# Service domain relationships
+sid:serviceSpecification a owl:ObjectProperty ; rdfs:label "service specification" ; rdfs:domain sid:Service ; rdfs:range sid:ServiceSpecification .
+sid:supportingService a owl:ObjectProperty ; rdfs:label "supporting service" ; rdfs:comment "Services that support this service (CFS to RFS link)" ; rdfs:domain sid:Service ; rdfs:range sid:Service .
+sid:supportingResource a owl:ObjectProperty ; rdfs:label "supporting resource" ; rdfs:comment "Resources supporting this service. Only RFS can have resources." ; rdfs:domain sid:Service ; rdfs:range sid:Resource .
+sid:hasServiceRelationship a owl:ObjectProperty ; rdfs:label "has service relationship" ; rdfs:domain sid:Service ; rdfs:range sid:ServiceRelationship .
+sid:hasServiceOrderItem a owl:ObjectProperty ; rdfs:label "has service order item" ; rdfs:domain sid:Service ; rdfs:range sid:ServiceOrder .
+sid:hasFeature a owl:ObjectProperty ; rdfs:label "has feature" ; rdfs:domain sid:Service ; rdfs:range sid:Feature .
+sid:hasNote a owl:ObjectProperty ; rdfs:label "has note" ; rdfs:domain sid:Entity ; rdfs:range sid:Note .
+sid:relatedParty a owl:ObjectProperty ; rdfs:label "related party" ; rdfs:domain sid:Entity ; rdfs:range sid:RelatedParty .
+
+# Resource domain relationships
+sid:resourceSpecification a owl:ObjectProperty ; rdfs:label "resource specification" ; rdfs:domain sid:Resource ; rdfs:range sid:ResourceSpecification .
+sid:hasResourceRelationship a owl:ObjectProperty ; rdfs:label "has resource relationship" ; rdfs:domain sid:Resource ; rdfs:range sid:ResourceRelationship .
+sid:hasAttachment a owl:ObjectProperty ; rdfs:label "has attachment" ; rdfs:domain sid:Entity ; rdfs:range sid:Attachment .
+
+# Trouble/Alarm relationships
+sid:ticketAffectsService a owl:ObjectProperty ; rdfs:label "affects service" ; rdfs:domain sid:TroubleTicket ; rdfs:range sid:Service .
+sid:ticketRaisedByCustomer a owl:ObjectProperty ; rdfs:label "raised by customer" ; rdfs:domain sid:TroubleTicket ; rdfs:range sid:Customer .
+sid:alarmAffectsResource a owl:ObjectProperty ; rdfs:label "affects resource" ; rdfs:domain sid:Alarm ; rdfs:range sid:Resource .
+sid:alarmTriggersTicket a owl:ObjectProperty ; rdfs:label "triggers ticket" ; rdfs:domain sid:Alarm ; rdfs:range sid:TroubleTicket .
+
+# Organization hierarchy
+sid:organizationChild a owl:ObjectProperty ; rdfs:label "child organization" ; rdfs:domain sid:Organization ; rdfs:range sid:Organization .
+sid:organizationParent a owl:ObjectProperty ; rdfs:label "parent organization" ; rdfs:domain sid:Organization ; rdfs:range sid:Organization .
+
+# Cross-domain core relationships (the TMF SID backbone)
+sid:customerPlacesOrder a owl:ObjectProperty ; rdfs:label "places order" ; rdfs:domain sid:Customer ; rdfs:range sid:OrderItem .
+sid:productRealizedByService a owl:ObjectProperty ; rdfs:label "realized by service" ; rdfs:domain sid:Product ; rdfs:range sid:Service .
+sid:serviceUsesResource a owl:ObjectProperty ; rdfs:label "uses resource" ; rdfs:domain sid:Service ; rdfs:range sid:Resource .
+sid:serviceCandidateSpec a owl:ObjectProperty ; rdfs:label "specification" ; rdfs:domain sid:ServiceCandidate ; rdfs:range sid:ServiceSpecification .
+sid:resourceCandidateSpec a owl:ObjectProperty ; rdfs:label "specification" ; rdfs:domain sid:ResourceCandidate ; rdfs:range sid:ResourceSpecification .

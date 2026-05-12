@@ -1,0 +1,65 @@
+entity_type,id,name,status,related_to,relationship,description
+Customer,cust_001,John Smith,Active,party_001,engagedParty,Residential broadband customer
+Customer,cust_002,Acme Corp,Active,party_002,engagedParty,Enterprise customer with SD-WAN
+Customer,cust_003,Sarah Johnson,Active,party_003,engagedParty,Mobile and broadband bundle
+Customer,cust_004,TechStart Ltd,Suspended,party_004,engagedParty,Startup with cloud connect
+Customer,cust_005,David Williams,Active,party_005,engagedParty,Premium fibre customer
+Individual,party_001,John Smith,Active,,,"Individual, residential"
+Individual,party_003,Sarah Johnson,Active,,,"Individual, residential"
+Individual,party_005,David Williams,Active,,,"Individual, premium"
+Organization,party_002,Acme Corp,Active,,,"Enterprise, manufacturing"
+Organization,party_004,TechStart Ltd,Active,,,"SMB, technology"
+ProductOffering,po_001,BT Fibre 900,Active,,,"900Mbps FTTP broadband"
+ProductOffering,po_002,BT Halo 3+,Active,,,"Converged broadband + mobile"
+ProductOffering,po_003,SD-WAN Managed,Active,,,"Enterprise SD-WAN service"
+ProductOffering,po_004,Cloud Connect AWS,Active,,,"Direct connect to AWS"
+ProductOffering,po_005,EE 5G Unlimited,Active,,,"Unlimited 5G mobile plan"
+ProductOffering,po_006,BT Security Managed,Active,,,"Managed SOC service"
+Product,prod_001,BT Fibre 900 - John,Active,po_001,productOffering,John's broadband instance
+Product,prod_002,SD-WAN - Acme,Active,po_003,productOffering,Acme's SD-WAN instance
+Product,prod_003,BT Halo - Sarah,Active,po_002,productOffering,Sarah's bundle
+Product,prod_004,Cloud Connect - TechStart,Suspended,po_004,productOffering,TechStart AWS connect
+Product,prod_005,EE 5G - David,Active,po_005,productOffering,David's mobile
+Product,prod_006,Security - Acme,Active,po_006,productOffering,Acme's managed security
+Service,svc_001,FTTP_ACCESS_001,Active,prod_001,realizingService,John's fibre access service
+Service,svc_002,SDWAN_SVC_001,Active,prod_002,realizingService,Acme SD-WAN service instance
+Service,svc_003,FTTP_ACCESS_002,Active,prod_003,realizingService,Sarah's fibre access
+Service,svc_004,CLOUD_CONNECT_001,Suspended,prod_004,realizingService,TechStart AWS connection
+Service,svc_005,5G_MOBILE_001,Active,prod_005,realizingService,David's 5G service
+Service,svc_006,MSOC_001,Active,prod_006,realizingService,Acme managed SOC
+Service,svc_007,VOIP_001,Active,prod_003,realizingService,Sarah's voice service
+Service,svc_008,IPTV_001,Active,prod_003,realizingService,Sarah's TV service
+Resource,res_001,OLT_IPSWICH_01,Active,svc_001,supportingResource,Optical Line Terminal Ipswich exchange
+Resource,res_002,ONT_JOHN_01,Active,svc_001,supportingResource,John's premises ONT device
+Resource,res_003,SDWAN_CPE_ACME_01,Active,svc_002,supportingResource,Acme HQ SD-WAN appliance
+Resource,res_004,SDWAN_CPE_ACME_02,Active,svc_002,supportingResource,Acme branch SD-WAN appliance
+Resource,res_005,DX_GW_AWS_01,Suspended,svc_004,supportingResource,Direct Connect gateway to AWS eu-west-2
+Resource,res_006,CELL_5G_LON_042,Active,svc_005,supportingResource,5G cell site London
+Resource,res_007,OLT_SHEFFIELD_01,Active,svc_003,supportingResource,OLT Sheffield exchange
+Resource,res_008,FW_ACME_01,Active,svc_006,supportingResource,Acme firewall managed by SOC
+Resource,res_009,SIEM_PLATFORM,Active,svc_006,supportingResource,Shared SIEM platform
+Resource,res_010,CORE_RTR_LON_01,Active,svc_002,supportingResource,Core router London POP
+Alarm,alm_001,HIGH_CPU_OLT_IPSWICH,Critical,res_001,alarmAffectsResource,CPU utilization >95% on OLT
+Alarm,alm_002,LINK_DOWN_ACME_BR,Major,res_004,alarmAffectsResource,WAN link down at Acme branch
+Alarm,alm_003,5G_CELL_DEGRADED,Minor,res_006,alarmAffectsResource,5G cell throughput degraded
+Alarm,alm_004,FW_POLICY_VIOLATION,Critical,res_008,alarmAffectsResource,Firewall policy violation detected
+TroubleTicket,tt_001,Broadband slow - John,Open,cust_001,ticketRaisedByCustomer,Customer reports slow speeds
+TroubleTicket,tt_002,SD-WAN branch down,InProgress,cust_002,ticketRaisedByCustomer,Branch office connectivity lost
+TroubleTicket,tt_003,Security alert - Acme,Open,cust_002,ticketRaisedByCustomer,SOC detected suspicious activity
+TroubleTicket,tt_001,Broadband slow - John,Open,svc_001,ticketAffectsService,Affects fibre access service
+TroubleTicket,tt_002,SD-WAN branch down,InProgress,svc_002,ticketAffectsService,Affects SD-WAN service
+TroubleTicket,tt_003,Security alert - Acme,Open,svc_006,ticketAffectsService,Affects managed security service
+Alarm,alm_001,HIGH_CPU_OLT_IPSWICH,Critical,tt_001,alarmTriggersTicket,Triggered trouble ticket
+Alarm,alm_002,LINK_DOWN_ACME_BR,Major,tt_002,alarmTriggersTicket,Triggered trouble ticket
+Alarm,alm_004,FW_POLICY_VIOLATION,Critical,tt_003,alarmTriggersTicket,Triggered trouble ticket
+BillingAccount,ba_001,John Smith Billing,Active,cust_001,hasAccount,Monthly DD
+BillingAccount,ba_002,Acme Corp Billing,Active,cust_002,hasAccount,Enterprise invoice
+BillingAccount,ba_003,Sarah Johnson Billing,Active,cust_003,hasAccount,Monthly DD
+Agreement,agr_001,Acme Enterprise Agreement,Active,cust_002,hasAgreement,3-year enterprise contract
+Agreement,agr_002,TechStart Cloud Agreement,Suspended,cust_004,hasAgreement,1-year cloud connect
+ServiceSpecification,ss_001,FTTP Access Spec,Active,svc_001,serviceSpecification,GPON-based FTTP access
+ServiceSpecification,ss_002,SD-WAN Spec,Active,svc_002,serviceSpecification,Managed SD-WAN with Cisco Viptela
+ServiceSpecification,ss_003,Managed SOC Spec,Active,svc_006,serviceSpecification,24x7 SOC with SIEM
+ResourceSpecification,rs_001,OLT Spec - Huawei MA5800,Active,res_001,resourceSpecification,Huawei OLT platform
+ResourceSpecification,rs_002,SD-WAN CPE Spec - Cisco,Active,res_003,resourceSpecification,Cisco Viptela Edge
+ResourceSpecification,rs_003,5G Cell Spec - Ericsson,Active,res_006,resourceSpecification,Ericsson 5G RAN

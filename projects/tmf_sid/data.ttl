@@ -1,0 +1,186 @@
+@prefix sid: <http://kg.local/sid/> .
+@prefix inst: <http://kg.local/data/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# =============================================
+# TMF SID Instance Data — Telco Scenario
+# A realistic dataset showing how the ontology is populated
+# =============================================
+
+# === PARTIES ===
+inst:party_acme a sid:Organization ; rdfs:label "Acme Corp" ; sid:organizationType "Enterprise" ; sid:tradingName "Acme Corporation" ; sid:isLegalEntity true .
+inst:party_globex a sid:Organization ; rdfs:label "Globex Industries" ; sid:organizationType "Enterprise" ; sid:tradingName "Globex" .
+inst:party_initech a sid:Organization ; rdfs:label "Initech Ltd" ; sid:organizationType "SMB" ; sid:tradingName "Initech" .
+inst:party_john a sid:Individual ; rdfs:label "John Smith" ; sid:givenName "John" ; sid:familyName "Smith" ; sid:nationality "British" .
+inst:party_sarah a sid:Individual ; rdfs:label "Sarah Chen" ; sid:givenName "Sarah" ; sid:familyName "Chen" ; sid:nationality "British" .
+inst:party_raj a sid:Individual ; rdfs:label "Raj Patel" ; sid:givenName "Raj" ; sid:familyName "Patel" ; sid:nationality "British" .
+inst:party_maria a sid:Individual ; rdfs:label "Maria Garcia" ; sid:givenName "Maria" ; sid:familyName "Garcia" ; sid:nationality "Spanish" .
+inst:party_bt a sid:Organization ; rdfs:label "BT Group" ; sid:organizationType "ServiceProvider" ; sid:isLegalEntity true ; sid:isHeadOffice true .
+inst:party_openreach a sid:Organization ; rdfs:label "Openreach" ; sid:organizationType "InfrastructureProvider" ; sid:organizationParent inst:party_bt .
+inst:party_ee a sid:Organization ; rdfs:label "EE" ; sid:organizationType "MobileOperator" ; sid:organizationParent inst:party_bt .
+
+# === CUSTOMERS ===
+inst:cust_acme a sid:Customer ; rdfs:label "Acme Corp (Customer)" ; sid:status "Active" ; sid:engagedParty inst:party_acme .
+inst:cust_globex a sid:Customer ; rdfs:label "Globex Industries (Customer)" ; sid:status "Active" ; sid:engagedParty inst:party_globex .
+inst:cust_initech a sid:Customer ; rdfs:label "Initech Ltd (Customer)" ; sid:status "Active" ; sid:engagedParty inst:party_initech .
+inst:cust_john a sid:Customer ; rdfs:label "John Smith (Customer)" ; sid:status "Active" ; sid:engagedParty inst:party_john .
+inst:cust_sarah a sid:Customer ; rdfs:label "Sarah Chen (Customer)" ; sid:status "Active" ; sid:engagedParty inst:party_sarah .
+inst:cust_raj a sid:Customer ; rdfs:label "Raj Patel (Customer)" ; sid:status "Suspended" ; sid:statusReason "Payment overdue" ; sid:engagedParty inst:party_raj .
+
+# === BILLING ACCOUNTS ===
+inst:bill_acme a sid:BillingAccount ; rdfs:label "Acme Enterprise Account" ; sid:status "Active" ; sid:paymentStatus "Current" .
+inst:bill_globex a sid:BillingAccount ; rdfs:label "Globex Account" ; sid:status "Active" ; sid:paymentStatus "Current" .
+inst:bill_john a sid:BillingAccount ; rdfs:label "John Smith Personal" ; sid:status "Active" ; sid:paymentStatus "Current" .
+inst:bill_raj a sid:BillingAccount ; rdfs:label "Raj Patel Account" ; sid:status "Suspended" ; sid:paymentStatus "Overdue" .
+inst:cust_acme sid:hasAccount inst:bill_acme .
+inst:cust_globex sid:hasAccount inst:bill_globex .
+inst:cust_john sid:hasAccount inst:bill_john .
+inst:cust_raj sid:hasAccount inst:bill_raj .
+
+# === PRODUCT OFFERINGS (Catalog) ===
+inst:offer_fttp_900 a sid:ProductOffering ; rdfs:label "Full Fibre 900" ; rdfs:comment "900Mbps FTTP broadband" ; sid:lifecycleStatus "Active" ; sid:isSellable true .
+inst:offer_fttp_150 a sid:ProductOffering ; rdfs:label "Full Fibre 150" ; rdfs:comment "150Mbps FTTP broadband" ; sid:lifecycleStatus "Active" ; sid:isSellable true .
+inst:offer_sdwan a sid:ProductOffering ; rdfs:label "Managed SD-WAN" ; rdfs:comment "Enterprise SD-WAN with managed CPE" ; sid:lifecycleStatus "Active" ; sid:isSellable true .
+inst:offer_cloud_connect a sid:ProductOffering ; rdfs:label "Cloud Connect" ; rdfs:comment "Direct connectivity to AWS/Azure/GCP" ; sid:lifecycleStatus "Active" ; sid:isSellable true .
+inst:offer_managed_security a sid:ProductOffering ; rdfs:label "Managed Security" ; rdfs:comment "24x7 SOC with threat intelligence" ; sid:lifecycleStatus "Active" ; sid:isSellable true .
+inst:offer_5g_business a sid:ProductOffering ; rdfs:label "5G Business Unlimited" ; rdfs:comment "5G mobile with unlimited data" ; sid:lifecycleStatus "Active" ; sid:isSellable true .
+inst:offer_ethernet_10g a sid:ProductOffering ; rdfs:label "Ethernet 10Gbps" ; rdfs:comment "10Gbps dedicated ethernet circuit" ; sid:lifecycleStatus "Active" ; sid:isSellable true .
+inst:offer_uc_teams a sid:ProductOffering ; rdfs:label "Unified Comms (Teams)" ; rdfs:comment "Microsoft Teams calling with SIP trunks" ; sid:lifecycleStatus "Active" ; sid:isSellable true .
+
+# === PRODUCTS (Instances procured by customers) ===
+inst:prod_acme_sdwan a sid:Product ; rdfs:label "Acme SD-WAN" ; sid:status "Active" ; sid:startDate "2023-03-15" ; sid:productOffering inst:offer_sdwan .
+inst:prod_acme_security a sid:Product ; rdfs:label "Acme Managed Security" ; sid:status "Active" ; sid:startDate "2023-03-15" ; sid:productOffering inst:offer_managed_security .
+inst:prod_acme_cloud a sid:Product ; rdfs:label "Acme Cloud Connect (AWS)" ; sid:status "Active" ; sid:startDate "2023-06-01" ; sid:productOffering inst:offer_cloud_connect .
+inst:prod_globex_ethernet a sid:Product ; rdfs:label "Globex 10G Ethernet" ; sid:status "Active" ; sid:startDate "2022-11-01" ; sid:productOffering inst:offer_ethernet_10g .
+inst:prod_globex_uc a sid:Product ; rdfs:label "Globex Teams Calling" ; sid:status "Active" ; sid:startDate "2023-01-10" ; sid:productOffering inst:offer_uc_teams .
+inst:prod_john_fttp a sid:Product ; rdfs:label "John FTTP 900" ; sid:status "Active" ; sid:startDate "2024-01-20" ; sid:productOffering inst:offer_fttp_900 .
+inst:prod_sarah_fttp a sid:Product ; rdfs:label "Sarah FTTP 150" ; sid:status "Active" ; sid:startDate "2023-09-05" ; sid:productOffering inst:offer_fttp_150 .
+inst:prod_raj_5g a sid:Product ; rdfs:label "Raj 5G Business" ; sid:status "Suspended" ; sid:startDate "2023-07-01" ; sid:productOffering inst:offer_5g_business .
+
+# Customer -> Product links
+inst:cust_acme sid:customerPlacesOrder inst:prod_acme_sdwan .
+inst:cust_acme sid:customerPlacesOrder inst:prod_acme_security .
+inst:cust_acme sid:customerPlacesOrder inst:prod_acme_cloud .
+inst:cust_globex sid:customerPlacesOrder inst:prod_globex_ethernet .
+inst:cust_globex sid:customerPlacesOrder inst:prod_globex_uc .
+inst:cust_john sid:customerPlacesOrder inst:prod_john_fttp .
+inst:cust_sarah sid:customerPlacesOrder inst:prod_sarah_fttp .
+inst:cust_raj sid:customerPlacesOrder inst:prod_raj_5g .
+
+# === SERVICES (realized by products) ===
+inst:svc_acme_wan a sid:CustomerFacingService ; rdfs:label "Acme WAN Service" ; sid:state "Active" ; sid:serviceType "SD-WAN" ; sid:category "CustomerFacing" .
+inst:svc_acme_soc a sid:CustomerFacingService ; rdfs:label "Acme SOC Service" ; sid:state "Active" ; sid:serviceType "ManagedSecurity" ; sid:category "CustomerFacing" .
+inst:svc_acme_aws a sid:CustomerFacingService ; rdfs:label "Acme AWS Connect" ; sid:state "Active" ; sid:serviceType "CloudConnect" ; sid:category "CustomerFacing" .
+inst:svc_globex_l2 a sid:CustomerFacingService ; rdfs:label "Globex L2 Ethernet" ; sid:state "Active" ; sid:serviceType "Ethernet" ; sid:category "CustomerFacing" .
+inst:svc_globex_voice a sid:CustomerFacingService ; rdfs:label "Globex Voice Service" ; sid:state "Active" ; sid:serviceType "UCaaS" ; sid:category "CustomerFacing" .
+inst:svc_john_bb a sid:CustomerFacingService ; rdfs:label "John Broadband" ; sid:state "Active" ; sid:serviceType "Broadband" ; sid:category "CustomerFacing" .
+inst:svc_sarah_bb a sid:CustomerFacingService ; rdfs:label "Sarah Broadband" ; sid:state "Active" ; sid:serviceType "Broadband" ; sid:category "CustomerFacing" .
+inst:svc_raj_mobile a sid:CustomerFacingService ; rdfs:label "Raj Mobile Service" ; sid:state "Suspended" ; sid:serviceType "Mobile" ; sid:category "CustomerFacing" .
+
+# Resource-facing services
+inst:svc_rfs_transport_lon a sid:ResourceFacingService ; rdfs:label "London Transport RFS" ; sid:state "Active" ; sid:serviceType "Transport" ; sid:category "ResourceFacing" .
+inst:svc_rfs_transport_man a sid:ResourceFacingService ; rdfs:label "Manchester Transport RFS" ; sid:state "Active" ; sid:serviceType "Transport" ; sid:category "ResourceFacing" .
+inst:svc_rfs_ip_core a sid:ResourceFacingService ; rdfs:label "IP Core RFS" ; sid:state "Active" ; sid:serviceType "IPCore" ; sid:category "ResourceFacing" .
+
+# Product -> Service
+inst:prod_acme_sdwan sid:realizingService inst:svc_acme_wan .
+inst:prod_acme_security sid:realizingService inst:svc_acme_soc .
+inst:prod_acme_cloud sid:realizingService inst:svc_acme_aws .
+inst:prod_globex_ethernet sid:realizingService inst:svc_globex_l2 .
+inst:prod_globex_uc sid:realizingService inst:svc_globex_voice .
+inst:prod_john_fttp sid:realizingService inst:svc_john_bb .
+inst:prod_sarah_fttp sid:realizingService inst:svc_sarah_bb .
+inst:prod_raj_5g sid:realizingService inst:svc_raj_mobile .
+
+# CFS -> RFS (supporting services)
+inst:svc_acme_wan sid:supportingService inst:svc_rfs_transport_lon .
+inst:svc_acme_aws sid:supportingService inst:svc_rfs_ip_core .
+inst:svc_globex_l2 sid:supportingService inst:svc_rfs_transport_man .
+inst:svc_john_bb sid:supportingService inst:svc_rfs_transport_lon .
+inst:svc_sarah_bb sid:supportingService inst:svc_rfs_transport_lon .
+
+# === RESOURCES ===
+# Physical
+inst:res_router_lon_01 a sid:PhysicalResource ; rdfs:label "LON-RTR-01" ; rdfs:comment "Core router London POP" ; sid:resourceStatus "Active" ; sid:administrativeState "Unlocked" ; sid:operationalState "Enabled" .
+inst:res_router_lon_02 a sid:PhysicalResource ; rdfs:label "LON-RTR-02" ; rdfs:comment "Core router London POP backup" ; sid:resourceStatus "Active" ; sid:administrativeState "Unlocked" ; sid:operationalState "Enabled" .
+inst:res_router_man_01 a sid:PhysicalResource ; rdfs:label "MAN-RTR-01" ; rdfs:comment "Core router Manchester POP" ; sid:resourceStatus "Active" ; sid:administrativeState "Unlocked" ; sid:operationalState "Enabled" .
+inst:res_switch_lon_01 a sid:PhysicalResource ; rdfs:label "LON-SW-01" ; rdfs:comment "Aggregation switch London" ; sid:resourceStatus "Active" ; sid:administrativeState "Unlocked" .
+inst:res_olt_lon_01 a sid:PhysicalResource ; rdfs:label "LON-OLT-01" ; rdfs:comment "Optical Line Terminal London exchange" ; sid:resourceStatus "Active" ; sid:administrativeState "Unlocked" .
+inst:res_olt_man_01 a sid:PhysicalResource ; rdfs:label "MAN-OLT-01" ; rdfs:comment "Optical Line Terminal Manchester exchange" ; sid:resourceStatus "Active" ; sid:administrativeState "Unlocked" .
+inst:res_cell_tower_e14 a sid:PhysicalResource ; rdfs:label "CELL-E14-5G" ; rdfs:comment "5G cell tower Canary Wharf" ; sid:resourceStatus "Active" ; sid:administrativeState "Unlocked" .
+inst:res_cell_tower_m1 a sid:PhysicalResource ; rdfs:label "CELL-M1-5G" ; rdfs:comment "5G cell tower Manchester centre" ; sid:resourceStatus "Active" ; sid:administrativeState "Unlocked" .
+inst:res_firewall_01 a sid:PhysicalResource ; rdfs:label "FW-SOC-01" ; rdfs:comment "SOC firewall appliance" ; sid:resourceStatus "Active" .
+inst:res_server_soc a sid:PhysicalResource ; rdfs:label "SOC-SIEM-01" ; rdfs:comment "SIEM server in SOC" ; sid:resourceStatus "Active" .
+
+# Logical
+inst:res_vlan_100 a sid:LogicalResource ; rdfs:label "VLAN-100-ACME" ; rdfs:comment "Acme Corp VLAN" ; sid:resourceStatus "Active" .
+inst:res_vlan_200 a sid:LogicalResource ; rdfs:label "VLAN-200-GLOBEX" ; rdfs:comment "Globex VLAN" ; sid:resourceStatus "Active" .
+inst:res_ip_block_acme a sid:LogicalResource ; rdfs:label "10.100.0.0/24" ; rdfs:comment "Acme IP allocation" ; sid:resourceStatus "Active" .
+inst:res_ip_block_globex a sid:LogicalResource ; rdfs:label "10.200.0.0/24" ; rdfs:comment "Globex IP allocation" ; sid:resourceStatus "Active" .
+inst:res_vpn_acme a sid:LogicalResource ; rdfs:label "VPN-ACME-001" ; rdfs:comment "Acme MPLS VPN instance" ; sid:resourceStatus "Active" .
+inst:res_bearer_john a sid:LogicalResource ; rdfs:label "FTTP-BEARER-JS001" ; rdfs:comment "John Smith FTTP bearer" ; sid:resourceStatus "Active" .
+inst:res_bearer_sarah a sid:LogicalResource ; rdfs:label "FTTP-BEARER-SC001" ; rdfs:comment "Sarah Chen FTTP bearer" ; sid:resourceStatus "Active" .
+inst:res_5g_slice_raj a sid:LogicalResource ; rdfs:label "5G-SLICE-RP001" ; rdfs:comment "Raj 5G network slice" ; sid:resourceStatus "Suspended" .
+
+# Service -> Resource
+inst:svc_rfs_transport_lon sid:supportingResource inst:res_router_lon_01 .
+inst:svc_rfs_transport_lon sid:supportingResource inst:res_router_lon_02 .
+inst:svc_rfs_transport_lon sid:supportingResource inst:res_switch_lon_01 .
+inst:svc_rfs_transport_man sid:supportingResource inst:res_router_man_01 .
+inst:svc_rfs_ip_core sid:supportingResource inst:res_router_lon_01 .
+inst:svc_rfs_ip_core sid:supportingResource inst:res_router_man_01 .
+inst:svc_acme_wan sid:supportingResource inst:res_vlan_100 .
+inst:svc_acme_wan sid:supportingResource inst:res_ip_block_acme .
+inst:svc_acme_wan sid:supportingResource inst:res_vpn_acme .
+inst:svc_acme_soc sid:supportingResource inst:res_firewall_01 .
+inst:svc_acme_soc sid:supportingResource inst:res_server_soc .
+inst:svc_globex_l2 sid:supportingResource inst:res_vlan_200 .
+inst:svc_globex_l2 sid:supportingResource inst:res_ip_block_globex .
+inst:svc_john_bb sid:supportingResource inst:res_olt_lon_01 .
+inst:svc_john_bb sid:supportingResource inst:res_bearer_john .
+inst:svc_sarah_bb sid:supportingResource inst:res_olt_lon_01 .
+inst:svc_sarah_bb sid:supportingResource inst:res_bearer_sarah .
+inst:svc_raj_mobile sid:supportingResource inst:res_cell_tower_e14 .
+inst:svc_raj_mobile sid:supportingResource inst:res_5g_slice_raj .
+
+# Resource relationships (connectivity)
+inst:res_router_lon_01 sid:hasResourceRelationship inst:res_router_lon_02 .
+inst:res_router_lon_01 sid:hasResourceRelationship inst:res_router_man_01 .
+inst:res_router_lon_01 sid:hasResourceRelationship inst:res_switch_lon_01 .
+inst:res_switch_lon_01 sid:hasResourceRelationship inst:res_olt_lon_01 .
+inst:res_router_man_01 sid:hasResourceRelationship inst:res_olt_man_01 .
+
+# === ALARMS ===
+inst:alarm_01 a sid:Alarm ; rdfs:label "High CPU LON-RTR-01" ; sid:alarmType "ProcessingError" ; sid:perceivedSeverity "Major" ; sid:probableCause "CPU threshold exceeded 90%" ; sid:state "Active" ; sid:alarmAffectsResource inst:res_router_lon_01 .
+inst:alarm_02 a sid:Alarm ; rdfs:label "Link Down LON-RTR-01 to MAN-RTR-01" ; sid:alarmType "CommunicationsAlarm" ; sid:perceivedSeverity "Critical" ; sid:probableCause "Fibre cut detected" ; sid:state "Active" ; sid:alarmAffectsResource inst:res_router_lon_01 .
+inst:alarm_03 a sid:Alarm ; rdfs:label "5G Cell Degraded E14" ; sid:alarmType "QualityOfServiceAlarm" ; sid:perceivedSeverity "Minor" ; sid:probableCause "Interference detected" ; sid:state "Active" ; sid:alarmAffectsResource inst:res_cell_tower_e14 .
+inst:alarm_04 a sid:Alarm ; rdfs:label "OLT Port Failure LON" ; sid:alarmType "EquipmentAlarm" ; sid:perceivedSeverity "Major" ; sid:probableCause "Port 7 hardware failure" ; sid:state "Cleared" ; sid:alarmAffectsResource inst:res_olt_lon_01 .
+
+# === TROUBLE TICKETS ===
+inst:ticket_01 a sid:TroubleTicket ; rdfs:label "TT-2024-001: Acme WAN degraded" ; sid:severity "High" ; sid:priority "P2" ; sid:status "InProgress" ; sid:ticketRaisedByCustomer inst:cust_acme ; sid:ticketAffectsService inst:svc_acme_wan .
+inst:ticket_02 a sid:TroubleTicket ; rdfs:label "TT-2024-002: John no broadband" ; sid:severity "Medium" ; sid:priority "P3" ; sid:status "Open" ; sid:ticketRaisedByCustomer inst:cust_john ; sid:ticketAffectsService inst:svc_john_bb .
+inst:ticket_03 a sid:TroubleTicket ; rdfs:label "TT-2024-003: Globex packet loss" ; sid:severity "High" ; sid:priority "P2" ; sid:status "Resolved" ; sid:ticketRaisedByCustomer inst:cust_globex ; sid:ticketAffectsService inst:svc_globex_l2 .
+
+# Alarm -> Ticket
+inst:alarm_02 sid:alarmTriggersTicket inst:ticket_01 .
+inst:alarm_04 sid:alarmTriggersTicket inst:ticket_02 .
+
+# === AGREEMENTS ===
+inst:agree_acme a sid:Agreement ; rdfs:label "Acme Enterprise Agreement" ; sid:agreementType "Enterprise SLA" ; sid:status "Active" ; sid:governs inst:cust_acme .
+inst:agree_globex a sid:Agreement ; rdfs:label "Globex Service Contract" ; sid:agreementType "Business SLA" ; sid:status "Active" ; sid:governs inst:cust_globex .
+
+# === LOCATIONS ===
+inst:loc_london a sid:Place ; rdfs:label "London POP" ; sid:city "London" ; sid:country "UK" .
+inst:loc_manchester a sid:Place ; rdfs:label "Manchester POP" ; sid:city "Manchester" ; sid:country "UK" .
+inst:loc_acme_hq a sid:Place ; rdfs:label "Acme HQ" ; sid:city "London" ; sid:country "UK" ; sid:streetName "100 Bishopsgate" .
+inst:loc_globex_hq a sid:Place ; rdfs:label "Globex HQ" ; sid:city "Manchester" ; sid:country "UK" ; sid:streetName "1 Spinningfields" .
+
+inst:res_router_lon_01 sid:hasPlace inst:loc_london .
+inst:res_router_lon_02 sid:hasPlace inst:loc_london .
+inst:res_router_man_01 sid:hasPlace inst:loc_manchester .
+inst:res_olt_lon_01 sid:hasPlace inst:loc_london .
+inst:res_olt_man_01 sid:hasPlace inst:loc_manchester .
+inst:party_acme sid:has_address inst:loc_acme_hq .
+inst:party_globex sid:has_address inst:loc_globex_hq .

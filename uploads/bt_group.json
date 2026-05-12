@@ -1,0 +1,88 @@
+{
+  "company": {
+    "name": "BT Group plc",
+    "company_number": "01800000",
+    "jurisdiction": "United Kingdom",
+    "registered_address": "1 Braham Street, London, E1 8EE",
+    "incorporation_date": "1984-04-01",
+    "company_type": "Public Limited Company",
+    "status": "Active",
+    "sic_codes": ["6110 - Wired telecommunications activities", "6120 - Wireless telecommunications activities", "6190 - Other telecommunications activities"],
+    "stock_exchange": "London Stock Exchange",
+    "ticker": "BT.A",
+    "ftse_index": "FTSE 100"
+  },
+  "subsidiaries": [
+    {"name": "BT Consumer", "type": "Division", "description": "Broadband, mobile, TV and home phone services for consumers", "brands": ["BT Broadband", "BT Sport", "BT Mobile", "BT TV"]},
+    {"name": "BT Business", "type": "Division", "description": "IT and communications services for businesses and public sector", "brands": ["BT Cloud Voice", "BT One Phone", "BT Managed Services"]},
+    {"name": "BT Enterprise", "type": "Division", "description": "Network and IT services for large enterprises and government", "services": ["SD-WAN", "Cloud Connect", "Security", "Unified Communications"]},
+    {"name": "BT Global", "type": "Division", "description": "Global network and IT services for multinational corporations", "regions": ["Americas", "Europe", "Asia Pacific", "Middle East Africa"]},
+    {"name": "Openreach", "type": "Subsidiary", "description": "UK's digital network infrastructure provider, legally separated", "company_number": "10690039", "services": ["FTTP", "FTTC", "Ethernet", "Dark Fibre"], "network_stats": {"premises_passed_fttp": "14 million", "exchanges": 5600}},
+    {"name": "EE", "type": "Subsidiary", "description": "UK's largest mobile network operator, acquired 2016", "company_number": "02382161", "services": ["4G", "5G", "Mobile Broadband", "IoT"], "network_stats": {"4g_coverage": "99% UK population", "5g_cities": 100}},
+    {"name": "Plusnet", "type": "Subsidiary", "description": "Budget broadband and phone provider", "company_number": "03279013", "headquarters": "Sheffield"},
+    {"name": "BT Security", "type": "Division", "description": "Cybersecurity services and threat intelligence", "services": ["Managed Security", "Threat Intelligence", "Security Consulting", "DDoS Mitigation"]},
+    {"name": "BT Applied Research", "type": "Division", "description": "R&D division at Adastral Park, Ipswich", "focus_areas": ["AI", "Quantum Computing", "Network Automation", "Sustainability"]}
+  ],
+  "key_officers": [
+    {"name": "Dame Allison Kirkby", "role": "Chief Executive Officer", "appointed": "2024-02-01"},
+    {"name": "Simon Lowth", "role": "Chief Financial Officer", "appointed": "2016-07-01"},
+    {"name": "Adam Crozier", "role": "Chairman", "appointed": "2021-12-01"},
+    {"name": "Howard Watson", "role": "Chief Security and Networks Officer"},
+    {"name": "Harmeen Mehta", "role": "Chief Digital and Innovation Officer"},
+    {"name": "Bas Burger", "role": "CEO BT Business"},
+    {"name": "Marc Sherwood-Smith", "role": "CEO BT Enterprise"},
+    {"name": "Clive Selley", "role": "CEO Openreach"},
+    {"name": "Marc Sherwood-Smith", "role": "CEO BT Enterprise"}
+  ],
+  "network_infrastructure": [
+    {"name": "21CN (21st Century Network)", "type": "Core Network", "description": "BT's next-generation IP-based core network"},
+    {"name": "FTTP (Full Fibre)", "type": "Access Network", "description": "Fibre to the Premises, target 25 million premises by 2026"},
+    {"name": "EE 5G Network", "type": "Mobile Network", "description": "5G rollout across 100+ UK cities"},
+    {"name": "Global Network", "type": "International", "description": "Operates in 180 countries, one of world's largest networks"},
+    {"name": "BT Tower", "type": "Infrastructure", "description": "Iconic London telecommunications tower, sold 2023"},
+    {"name": "Adastral Park", "type": "Research Campus", "description": "BT's global R&D headquarters in Ipswich, Suffolk"},
+    {"name": "Submarine Cables", "type": "International", "description": "Investments in multiple submarine cable systems globally"}
+  ],
+  "services": [
+    {"name": "BT Broadband", "category": "Consumer", "type": "Connectivity", "technologies": ["FTTP", "FTTC", "ADSL"]},
+    {"name": "EE Mobile", "category": "Consumer", "type": "Mobile", "technologies": ["4G LTE", "5G NR"]},
+    {"name": "BT Sport", "category": "Consumer", "type": "Media", "description": "Premium sports broadcasting, being merged with Warner Bros Discovery"},
+    {"name": "SD-WAN", "category": "Enterprise", "type": "Networking", "description": "Software-defined wide area networking for enterprises"},
+    {"name": "Cloud Connect", "category": "Enterprise", "type": "Cloud", "partners": ["AWS", "Azure", "Google Cloud"]},
+    {"name": "Managed Security Services", "category": "Enterprise", "type": "Security", "capabilities": ["SOC", "Threat Intelligence", "Incident Response"]},
+    {"name": "Unified Communications", "category": "Enterprise", "type": "Collaboration", "partners": ["Microsoft Teams", "Zoom", "Cisco Webex"]},
+    {"name": "IoT Platform", "category": "Enterprise", "type": "IoT", "description": "Connected devices management and analytics"},
+    {"name": "Ethernet Services", "category": "Wholesale", "type": "Connectivity", "provider": "Openreach"},
+    {"name": "Dark Fibre", "category": "Wholesale", "type": "Infrastructure", "provider": "Openreach"},
+    {"name": "FTTP Wholesale", "category": "Wholesale", "type": "Connectivity", "provider": "Openreach", "description": "Wholesale fibre access for ISPs"}
+  ],
+  "regulatory": [
+    {"body": "Ofcom", "relationship": "Regulated by", "key_obligations": ["Universal Service Obligation", "Openreach legal separation", "Wholesale access requirements"]},
+    {"body": "FCA", "relationship": "Listed company regulated by", "context": "Financial Conduct Authority for stock market listing"},
+    {"body": "ICO", "relationship": "Data protection regulated by", "context": "Information Commissioner's Office for GDPR compliance"}
+  ],
+  "competitors": [
+    {"name": "Virgin Media O2", "areas": ["Broadband", "Mobile", "TV"]},
+    {"name": "Sky", "areas": ["Broadband", "TV"]},
+    {"name": "Vodafone UK", "areas": ["Mobile", "Broadband", "Enterprise"]},
+    {"name": "Three UK", "areas": ["Mobile"]},
+    {"name": "TalkTalk", "areas": ["Broadband"]},
+    {"name": "CityFibre", "areas": ["FTTP Infrastructure"]},
+    {"name": "Colt Technology Services", "areas": ["Enterprise Networking"]}
+  ],
+  "financials_2024": {
+    "revenue": "20.8 billion GBP",
+    "adjusted_ebitda": "8.1 billion GBP",
+    "capex": "5.0 billion GBP",
+    "employees": 99600,
+    "customers_consumer": "9.4 million broadband",
+    "customers_mobile": "34 million EE connections"
+  },
+  "strategic_priorities": [
+    {"name": "Full Fibre Rollout", "description": "25 million premises passed by 2026 via Openreach FTTP"},
+    {"name": "5G Leadership", "description": "Largest 5G network in UK via EE"},
+    {"name": "Cost Transformation", "description": "Target 3 billion GBP gross annualised cost savings by 2025"},
+    {"name": "Digital Transformation", "description": "Simplify products, digitise customer journeys, AI-driven operations"},
+    {"name": "Sustainability", "description": "Net zero carbon emissions by 2031, 100% renewable electricity"}
+  ]
+}

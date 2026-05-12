@@ -1,0 +1,23 @@
+---
+title: "Security"
+source_pdf: "wellarchitected-framework.pdf"
+pdf_page: 25
+---
+
+# Security
+
+The Security pillar encompasses the ability to protect data, systems, and assets to take advantage
+of cloud technologies to improve your security.
+The security pillar provides an overview of design principles, best practices, and questions. You can
+find prescriptive guidance on implementation in the Security Pillar whitepaper.
+
+
+# See PERF04-BP03 Choose appropriate
+
+dedicated connectivity or VPN for your
+workload
+
+# See PERF04-BP03 Choose appropriate
+
+dedicated connectivity or VPN for your
+workload

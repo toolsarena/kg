@@ -1,0 +1,62 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix kg: <http://kg.local/ontology#> .
+
+# --- Classes ---
+kg:Concept a owl:Class ;
+    rdfs:label "Concept" ;
+    rdfs:comment "A named concept extracted from documents" .
+
+kg:Service a owl:Class ;
+    rdfs:subClassOf kg:Concept ;
+    rdfs:label "Service" .
+
+kg:Decision a owl:Class ;
+    rdfs:subClassOf kg:Concept ;
+    rdfs:label "Architectural Decision" .
+
+kg:Team a owl:Class ;
+    rdfs:subClassOf kg:Concept ;
+    rdfs:label "Team or Owner" .
+
+kg:Document a owl:Class ;
+    rdfs:label "Source Document" .
+
+kg:Community a owl:Class ;
+    rdfs:label "Community / Cluster of related concepts" .
+
+# --- Properties ---
+kg:depends_on a owl:ObjectProperty ;
+    rdfs:label "depends on" ;
+    rdfs:domain kg:Concept ;
+    rdfs:range kg:Concept .
+
+kg:relates_to a owl:ObjectProperty ;
+    rdfs:label "relates to" ;
+    rdfs:domain kg:Concept ;
+    rdfs:range kg:Concept .
+
+kg:owned_by a owl:ObjectProperty ;
+    rdfs:label "owned by" ;
+    rdfs:domain kg:Concept ;
+    rdfs:range kg:Team .
+
+kg:rationale a owl:DatatypeProperty ;
+    rdfs:label "rationale" ;
+    rdfs:domain kg:Decision .
+
+kg:source_doc a owl:ObjectProperty ;
+    rdfs:label "extracted from" ;
+    rdfs:domain kg:Concept ;
+    rdfs:range kg:Document .
+
+kg:member_of a owl:ObjectProperty ;
+    rdfs:label "member of community" ;
+    rdfs:domain kg:Concept ;
+    rdfs:range kg:Community .
+
+kg:confidence a owl:DatatypeProperty ;
+    rdfs:label "extraction confidence" ;
+    rdfs:comment "EXTRACTED, INFERRED, or AMBIGUOUS" .

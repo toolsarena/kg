@@ -1,0 +1,60 @@
+@prefix kg: <http://kg.local/ontology#> .
+@prefix kgr: <http://kg.local/resource/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+kgr:accountpaymentmethod a kg:Concept ; skos:prefLabel "AccountPaymentMethod" .
+kgr:accountpaymentmethod rdfs:comment "Reference an internal account that could be billed directly to perform the payment." .
+kgr:accountpaymentmethod rdfs:subClassOf kgr:paymentmethod .
+kgr:accountref a kg:Concept ; skos:prefLabel "Accountref" .
+kgr:accountref rdfs:comment "Referenced from AccountPaymentMethod" .
+kgr:accumulatedbalance a kg:Concept ; skos:prefLabel "AccumulatedBalance" .
+kgr:accumulatedbalance rdfs:comment "Represents and tracks the aggregated amount remained or owed in certain account which is owned by certain customer for a set of buckets." .
+kgr:accumulatedbalance rdfs:subClassOf kgr:entity .
+kgr:bucketref a kg:Concept ; skos:prefLabel "Bucketref" .
+kgr:bucketref rdfs:comment "Referenced from AccumulatedBalance" .
+kgr:logicalresourceref a kg:Concept ; skos:prefLabel "Logicalresourceref" .
+kgr:logicalresourceref rdfs:comment "Referenced from AccumulatedBalance" .
+kgr:partyaccountref a kg:Concept ; skos:prefLabel "Partyaccountref" .
+kgr:partyaccountref rdfs:comment "Referenced from AccumulatedBalance" .
+kgr:productref a kg:Concept ; skos:prefLabel "Productref" .
+kgr:productref rdfs:comment "Referenced from AccumulatedBalance" .
+kgr:relatedparty a kg:Concept ; skos:prefLabel "Relatedparty" .
+kgr:relatedparty rdfs:comment "Referenced from AccumulatedBalance" .
+kgr:_quantity a kg:Concept ; skos:prefLabel " Quantity" .
+kgr:_quantity rdfs:comment "Referenced from AccumulatedBalance" .
+kgr:actionstatustype a kg:Concept ; skos:prefLabel "ActionStatusType" .
+kgr:actionstatustype rdfs:comment "Valid values for the Action Status Type" .
+kgr:adjustbalance a kg:Concept ; skos:prefLabel "AdjustBalance" .
+kgr:adjustbalance rdfs:comment "The AdjustBalance resource allows adjustments to be made to the original BalanceTopup e.g. increment the amount, alter the recharge periodicity. Alternatively, an adjustment can be made to an outstand" .
+kgr:adjustbalance rdfs:subClassOf kgr:balanceaction .
+kgr:reservebalanceref a kg:Concept ; skos:prefLabel "Reservebalanceref" .
+kgr:reservebalanceref rdfs:comment "Referenced from AdjustBalance" .
+kgr:appliedbillingrate a kg:Concept ; skos:prefLabel "AppliedBillingRate" .
+kgr:appliedbillingrate rdfs:comment "An applied billing rate presented on a bill. It is created before or during the billing process" .
+kgr:appliedbillingrate rdfs:subClassOf kgr:entity .
+kgr:money a kg:Concept ; skos:prefLabel "Money" .
+kgr:money rdfs:comment "Referenced from AppliedBillingRate" .
+kgr:appliedbillingtaxrate a kg:Concept ; skos:prefLabel "Appliedbillingtaxrate" .
+kgr:appliedbillingtaxrate rdfs:comment "Referenced from AppliedBillingRate" .
+kgr:billref a kg:Concept ; skos:prefLabel "Billref" .
+kgr:billref rdfs:comment "Referenced from AppliedBillingRate" .
+kgr:appliedbillingratecharacteristic a kg:Concept ; skos:prefLabel "Appliedbillingratecharacteristic" .
+kgr:appliedbillingratecharacteristic rdfs:comment "Referenced from AppliedBillingRate" .
+kgr:appliedbillingratecharacteristic a kg:Concept ; skos:prefLabel "AppliedBillingRateCharacteristic" .
+kgr:appliedbillingratecharacteristic rdfs:comment "An applied billing rate has dynamic characteristics according to the its type (characteristics are based on the service type, line of business or on others parameters)" .
+kgr:appliedbillingratecharacteristic rdfs:subClassOf kgr:entity .
+kgr:accountpaymentmethod kg:billedaccount kgr:accountref .
+kgr:accumulatedbalance kg:bucket kgr:bucketref .
+kgr:accumulatedbalance kg:logicalresource kgr:logicalresourceref .
+kgr:accumulatedbalance kg:partyaccount kgr:partyaccountref .
+kgr:accumulatedbalance kg:product kgr:productref .
+kgr:accumulatedbalance kg:relatedparty kgr:relatedparty .
+kgr:accumulatedbalance kg:totalbalance kgr:_quantity .
+kgr:adjustbalance kg:reservebalance kgr:reservebalanceref .
+kgr:appliedbillingrate kg:taxexcludedamount kgr:money .
+kgr:appliedbillingrate kg:taxincludedamount kgr:money .
+kgr:appliedbillingrate kg:appliedtax kgr:appliedbillingtaxrate .
+kgr:appliedbillingrate kg:bill kgr:billref .
+kgr:appliedbillingrate kg:characteristic kgr:appliedbillingratecharacteristic .

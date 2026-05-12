@@ -1,0 +1,215 @@
+@prefix kg: <http://kg.local/ontology#> .
+@prefix kgr: <http://kg.local/resource/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+# Generated from structured data: Structured Data
+# 29 rows, 4 columns
+
+kgr:structured_data a kg:Project ; skos:prefLabel "Structured Data" .
+
+# --- Resource Type groups ---
+kgr:fte a kg:Group ; skos:prefLabel "FTE" ; kg:groupType "Resource Type" .
+kgr:fte kg:partOf kgr:structured_data .
+kgr:sub_con a kg:Group ; skos:prefLabel "Sub-Con" ; kg:groupType "Resource Type" .
+kgr:sub_con kg:partOf kgr:structured_data .
+
+# --- Area groups ---
+kgr:architecture a kg:Group ; skos:prefLabel "Architecture" ; kg:groupType "Area" .
+kgr:architecture kg:partOf kgr:structured_data .
+kgr:business a kg:Group ; skos:prefLabel "Business" ; kg:groupType "Area" .
+kgr:business kg:partOf kgr:structured_data .
+kgr:business_digital a kg:Group ; skos:prefLabel "Business Digital" ; kg:groupType "Area" .
+kgr:business_digital kg:partOf kgr:structured_data .
+kgr:delivery_governance a kg:Group ; skos:prefLabel "Delivery Governance" ; kg:groupType "Area" .
+kgr:delivery_governance kg:partOf kgr:structured_data .
+kgr:engineering a kg:Group ; skos:prefLabel "Engineering" ; kg:groupType "Area" .
+kgr:engineering kg:partOf kgr:structured_data .
+kgr:finance_partner___d_ai a kg:Group ; skos:prefLabel "Finance Partner - D&AI" ; kg:groupType "Area" .
+kgr:finance_partner___d_ai kg:partOf kgr:structured_data .
+kgr:finance_partner___digital a kg:Group ; skos:prefLabel "Finance Partner - Digital" ; kg:groupType "Area" .
+kgr:finance_partner___digital kg:partOf kgr:structured_data .
+kgr:product a kg:Group ; skos:prefLabel "Product" ; kg:groupType "Area" .
+kgr:product kg:partOf kgr:structured_data .
+kgr:qlik a kg:Group ; skos:prefLabel "Qlik" ; kg:groupType "Area" .
+kgr:qlik kg:partOf kgr:structured_data .
+kgr:testing a kg:Group ; skos:prefLabel "Testing" ; kg:groupType "Area" .
+kgr:testing kg:partOf kgr:structured_data .
+
+# --- People entities ---
+kgr:satish_kamakoti a kg:Entity ; skos:prefLabel "Satish Kamakoti" .
+kgr:satish_kamakoti kg:belongs_to_resource_type kgr:fte .
+kgr:satish_kamakoti kg:belongs_to_area kgr:product .
+kgr:roadmap a kg:Activity ; skos:prefLabel "Roadmap" .
+kgr:satish_kamakoti kg:does_activity kgr:roadmap .
+kgr:backlog a kg:Activity ; skos:prefLabel "Backlog" .
+kgr:satish_kamakoti kg:does_activity kgr:backlog .
+kgr:product_ownership a kg:Activity ; skos:prefLabel "Product Ownership" .
+kgr:satish_kamakoti kg:does_activity kgr:product_ownership .
+kgr:soren_chatterjee a kg:Entity ; skos:prefLabel "Soren Chatterjee" .
+kgr:soren_chatterjee kg:belongs_to_resource_type kgr:fte .
+kgr:soren_chatterjee kg:belongs_to_area kgr:product .
+kgr:roadmap a kg:Activity ; skos:prefLabel "Roadmap" .
+kgr:soren_chatterjee kg:does_activity kgr:roadmap .
+kgr:backlog a kg:Activity ; skos:prefLabel "Backlog" .
+kgr:soren_chatterjee kg:does_activity kgr:backlog .
+kgr:product_ownership a kg:Activity ; skos:prefLabel "Product Ownership" .
+kgr:soren_chatterjee kg:does_activity kgr:product_ownership .
+kgr:uma_devi a kg:Entity ; skos:prefLabel "Uma Devi" .
+kgr:uma_devi kg:belongs_to_resource_type kgr:fte .
+kgr:uma_devi kg:belongs_to_area kgr:delivery_governance .
+kgr:release_management a kg:Activity ; skos:prefLabel "Release Management" .
+kgr:uma_devi kg:does_activity kgr:release_management .
+kgr:jira a kg:Activity ; skos:prefLabel "JIRA" .
+kgr:uma_devi kg:does_activity kgr:jira .
+kgr:hemanth_adapa a kg:Entity ; skos:prefLabel "Hemanth Adapa" .
+kgr:hemanth_adapa kg:belongs_to_resource_type kgr:fte .
+kgr:hemanth_adapa kg:belongs_to_area kgr:product .
+kgr:overall_delivery_accountability a kg:Activity ; skos:prefLabel "Overall Delivery Accountability" .
+kgr:hemanth_adapa kg:does_activity kgr:overall_delivery_accountability .
+kgr:ghanshyam a kg:Entity ; skos:prefLabel "Ghanshyam" .
+kgr:ghanshyam kg:belongs_to_resource_type kgr:fte .
+kgr:ghanshyam kg:belongs_to_area kgr:engineering .
+kgr:feature_development a kg:Activity ; skos:prefLabel "Feature Development" .
+kgr:ghanshyam kg:does_activity kgr:feature_development .
+kgr:code_delivery a kg:Activity ; skos:prefLabel "Code Delivery" .
+kgr:ghanshyam kg:does_activity kgr:code_delivery .
+kgr:deployment a kg:Activity ; skos:prefLabel "Deployment" .
+kgr:ghanshyam kg:does_activity kgr:deployment .
+kgr:suveccha_mukherjee a kg:Entity ; skos:prefLabel "Suveccha Mukherjee" .
+kgr:suveccha_mukherjee kg:belongs_to_resource_type kgr:sub_con .
+kgr:suveccha_mukherjee kg:belongs_to_area kgr:engineering .
+kgr:feature_development a kg:Activity ; skos:prefLabel "Feature Development" .
+kgr:suveccha_mukherjee kg:does_activity kgr:feature_development .
+kgr:code_delivery a kg:Activity ; skos:prefLabel "Code Delivery" .
+kgr:suveccha_mukherjee kg:does_activity kgr:code_delivery .
+kgr:deployment a kg:Activity ; skos:prefLabel "Deployment" .
+kgr:suveccha_mukherjee kg:does_activity kgr:deployment .
+kgr:surabhi_pant a kg:Entity ; skos:prefLabel "Surabhi Pant" .
+kgr:surabhi_pant kg:belongs_to_resource_type kgr:fte .
+kgr:surabhi_pant kg:belongs_to_area kgr:engineering .
+kgr:feature_development a kg:Activity ; skos:prefLabel "Feature Development" .
+kgr:surabhi_pant kg:does_activity kgr:feature_development .
+kgr:code_delivery a kg:Activity ; skos:prefLabel "Code Delivery" .
+kgr:surabhi_pant kg:does_activity kgr:code_delivery .
+kgr:deployment a kg:Activity ; skos:prefLabel "Deployment" .
+kgr:surabhi_pant kg:does_activity kgr:deployment .
+kgr:ettla_kiranmayi a kg:Entity ; skos:prefLabel "Ettla Kiranmayi" .
+kgr:ettla_kiranmayi kg:belongs_to_resource_type kgr:fte .
+kgr:ettla_kiranmayi kg:belongs_to_area kgr:engineering .
+kgr:feature_development a kg:Activity ; skos:prefLabel "Feature Development" .
+kgr:ettla_kiranmayi kg:does_activity kgr:feature_development .
+kgr:code_delivery a kg:Activity ; skos:prefLabel "Code Delivery" .
+kgr:ettla_kiranmayi kg:does_activity kgr:code_delivery .
+kgr:deployment a kg:Activity ; skos:prefLabel "Deployment" .
+kgr:ettla_kiranmayi kg:does_activity kgr:deployment .
+kgr:varun_kumar a kg:Entity ; skos:prefLabel "Varun Kumar" .
+kgr:varun_kumar kg:belongs_to_resource_type kgr:fte .
+kgr:varun_kumar kg:belongs_to_area kgr:architecture .
+kgr:solution_design a kg:Activity ; skos:prefLabel "Solution Design" .
+kgr:varun_kumar kg:does_activity kgr:solution_design .
+kgr:wiki_confluence_update a kg:Activity ; skos:prefLabel "Wiki Confluence update" .
+kgr:varun_kumar kg:does_activity kgr:wiki_confluence_update .
+kgr:business_collab_on_techincal_requirements a kg:Activity ; skos:prefLabel "Business collab on techincal requirements" .
+kgr:varun_kumar kg:does_activity kgr:business_collab_on_techincal_requirements .
+kgr:pradipta_chakrabarty a kg:Entity ; skos:prefLabel "Pradipta Chakrabarty" .
+kgr:pradipta_chakrabarty kg:belongs_to_resource_type kgr:sub_con .
+kgr:pradipta_chakrabarty kg:belongs_to_area kgr:architecture .
+kgr:solution_design a kg:Activity ; skos:prefLabel "Solution Design" .
+kgr:pradipta_chakrabarty kg:does_activity kgr:solution_design .
+kgr:wiki_confluence_update a kg:Activity ; skos:prefLabel "Wiki Confluence update" .
+kgr:pradipta_chakrabarty kg:does_activity kgr:wiki_confluence_update .
+kgr:business_collab_on_techincal_requirements a kg:Activity ; skos:prefLabel "Business collab on techincal requirements" .
+kgr:pradipta_chakrabarty kg:does_activity kgr:business_collab_on_techincal_requirements .
+kgr:minaxi_basak a kg:Entity ; skos:prefLabel "Minaxi Basak" .
+kgr:minaxi_basak kg:belongs_to_resource_type kgr:sub_con .
+kgr:minaxi_basak kg:belongs_to_area kgr:architecture .
+kgr:solution_design a kg:Activity ; skos:prefLabel "Solution Design" .
+kgr:minaxi_basak kg:does_activity kgr:solution_design .
+kgr:wiki_confluence_update a kg:Activity ; skos:prefLabel "Wiki Confluence update" .
+kgr:minaxi_basak kg:does_activity kgr:wiki_confluence_update .
+kgr:business_collab_on_techincal_requirements a kg:Activity ; skos:prefLabel "Business collab on techincal requirements" .
+kgr:minaxi_basak kg:does_activity kgr:business_collab_on_techincal_requirements .
+kgr:souvik_ray a kg:Entity ; skos:prefLabel "Souvik Ray" .
+kgr:souvik_ray kg:belongs_to_resource_type kgr:sub_con .
+kgr:souvik_ray kg:belongs_to_area kgr:architecture .
+kgr:solution_design a kg:Activity ; skos:prefLabel "Solution Design" .
+kgr:souvik_ray kg:does_activity kgr:solution_design .
+kgr:wiki_confluence_update a kg:Activity ; skos:prefLabel "Wiki Confluence update" .
+kgr:souvik_ray kg:does_activity kgr:wiki_confluence_update .
+kgr:business_collab_on_techincal_requirements a kg:Activity ; skos:prefLabel "Business collab on techincal requirements" .
+kgr:souvik_ray kg:does_activity kgr:business_collab_on_techincal_requirements .
+kgr:naveen_jonnala a kg:Entity ; skos:prefLabel "Naveen Jonnala" .
+kgr:naveen_jonnala kg:belongs_to_resource_type kgr:sub_con .
+kgr:naveen_jonnala kg:belongs_to_area kgr:business_digital .
+kgr:solution_architect a kg:Activity ; skos:prefLabel "Solution Architect" .
+kgr:naveen_jonnala kg:does_activity kgr:solution_architect .
+kgr:digital_systems a kg:Activity ; skos:prefLabel "Digital systems" .
+kgr:naveen_jonnala kg:does_activity kgr:digital_systems .
+kgr:shruti_kapoor a kg:Entity ; skos:prefLabel "Shruti Kapoor" .
+kgr:shruti_kapoor kg:belongs_to_resource_type kgr:sub_con .
+kgr:shruti_kapoor kg:belongs_to_area kgr:business_digital .
+kgr:technical_delivery a kg:Activity ; skos:prefLabel "Technical Delivery" .
+kgr:shruti_kapoor kg:does_activity kgr:technical_delivery .
+kgr:digital_systems a kg:Activity ; skos:prefLabel "Digital systems" .
+kgr:shruti_kapoor kg:does_activity kgr:digital_systems .
+kgr:abhishek_gowda a kg:Entity ; skos:prefLabel "Abhishek Gowda" .
+kgr:abhishek_gowda kg:belongs_to_resource_type kgr:sub_con .
+kgr:abhishek_gowda kg:belongs_to_area kgr:testing .
+kgr:testing_of_the_features a kg:Activity ; skos:prefLabel "Testing of the Features" .
+kgr:abhishek_gowda kg:does_activity kgr:testing_of_the_features .
+kgr:sagar_govindarao_pawar a kg:Entity ; skos:prefLabel "Sagar Govindarao Pawar" .
+kgr:sagar_govindarao_pawar kg:belongs_to_resource_type kgr:sub_con .
+kgr:sagar_govindarao_pawar kg:belongs_to_area kgr:qlik .
+kgr:qlik_development a kg:Activity ; skos:prefLabel "Qlik Development" .
+kgr:sagar_govindarao_pawar kg:does_activity kgr:qlik_development .
+kgr:pv2 a kg:Activity ; skos:prefLabel "PV2" .
+kgr:sagar_govindarao_pawar kg:does_activity kgr:pv2 .
+kgr:jasmeet_kaur a kg:Entity ; skos:prefLabel "Jasmeet Kaur" .
+kgr:jasmeet_kaur kg:belongs_to_resource_type kgr:sub_con .
+kgr:jasmeet_kaur kg:belongs_to_area kgr:qlik .
+kgr:qlik_development a kg:Activity ; skos:prefLabel "Qlik Development" .
+kgr:jasmeet_kaur kg:does_activity kgr:qlik_development .
+kgr:pv6 a kg:Activity ; skos:prefLabel "PV6" .
+kgr:jasmeet_kaur kg:does_activity kgr:pv6 .
+kgr:emily_bennetto a kg:Entity ; skos:prefLabel "Emily Bennetto" .
+kgr:emily_bennetto kg:belongs_to_resource_type kgr:fte .
+kgr:emily_bennetto kg:belongs_to_area kgr:finance_partner___d_ai .
+kgr:business_stakeholder_alignment a kg:Activity ; skos:prefLabel "Business Stakeholder Alignment" .
+kgr:emily_bennetto kg:does_activity kgr:business_stakeholder_alignment .
+kgr:resource_tracker a kg:Activity ; skos:prefLabel "Resource Tracker" .
+kgr:emily_bennetto kg:does_activity kgr:resource_tracker .
+kgr:laura_buckingham a kg:Entity ; skos:prefLabel "Laura Buckingham" .
+kgr:laura_buckingham kg:belongs_to_resource_type kgr:fte .
+kgr:laura_buckingham kg:belongs_to_area kgr:finance_partner___d_ai .
+kgr:business_stakeholder_alignment a kg:Activity ; skos:prefLabel "Business Stakeholder Alignment" .
+kgr:laura_buckingham kg:does_activity kgr:business_stakeholder_alignment .
+kgr:rmt a kg:Activity ; skos:prefLabel "RMT" .
+kgr:laura_buckingham kg:does_activity kgr:rmt .
+kgr:kay_mcginn a kg:Entity ; skos:prefLabel "Kay McGinn" .
+kgr:kay_mcginn kg:belongs_to_resource_type kgr:sub_con .
+kgr:kay_mcginn kg:belongs_to_area kgr:finance_partner___digital .
+kgr:technical_delivery a kg:Activity ; skos:prefLabel "Technical Delivery" .
+kgr:kay_mcginn kg:does_activity kgr:technical_delivery .
+kgr:budget_management_interface_with_business a kg:Activity ; skos:prefLabel "Budget Management Interface with Business" .
+kgr:kay_mcginn kg:does_activity kgr:budget_management_interface_with_business .
+kgr:nicola_richards a kg:Entity ; skos:prefLabel "Nicola Richards" .
+kgr:nicola_richards kg:belongs_to_area kgr:business .
+kgr:revenue_controls a kg:Activity ; skos:prefLabel "Revenue Controls" .
+kgr:nicola_richards kg:does_activity kgr:revenue_controls .
+kgr:business_sponsor_for_dar a kg:Activity ; skos:prefLabel "Business Sponsor for DAR" .
+kgr:nicola_richards kg:does_activity kgr:business_sponsor_for_dar .
+kgr:john_ayre a kg:Entity ; skos:prefLabel "John Ayre" .
+kgr:john_ayre kg:belongs_to_area kgr:business_digital .
+kgr:contract_life_cycle_management a kg:Activity ; skos:prefLabel "Contract life cycle management" .
+kgr:john_ayre kg:does_activity kgr:contract_life_cycle_management .
+kgr:mark_currid a kg:Entity ; skos:prefLabel "Mark Currid" .
+kgr:mark_currid kg:belongs_to_area kgr:business_digital .
+kgr:engineering_manager a kg:Activity ; skos:prefLabel "Engineering Manager" .
+kgr:mark_currid kg:does_activity kgr:engineering_manager .
+kgr:noel_smyth a kg:Entity ; skos:prefLabel "Noel Smyth" .
+kgr:noel_smyth kg:belongs_to_area kgr:business_digital .
+kgr:engineering_manager a kg:Activity ; skos:prefLabel "Engineering Manager" .
+kgr:noel_smyth kg:does_activity kgr:engineering_manager .

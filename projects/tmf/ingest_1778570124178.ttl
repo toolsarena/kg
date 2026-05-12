@@ -1,0 +1,12 @@
+@prefix kg: <http://kg.local/ontology#> .
+@prefix kgr: <http://kg.local/resource/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+kgr:accountpaymentmethod a kg:Concept ; skos:prefLabel "AccountPaymentMethod" .
+kgr:accountpaymentmethod rdfs:comment "Reference an internal account that could be billed directly to perform the payment." .
+kgr:accountpaymentmethod rdfs:subClassOf kgr:paymentmethod .
+kgr:accountref a kg:Concept ; skos:prefLabel "Accountref" .
+kgr:accountref rdfs:comment "Referenced from AccountPaymentMethod" .
+kgr:accountpaymentmethod kg:billedaccount kgr:accountref .

@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KG Explorer - New Model</title>
+<script src="/static/force-graph.min.js"></script>
+<script src="/static/3d-force-graph.min.js"></script>
+<style>
+:root {
+  --bg: #0a0a12; --bg2: #12121e; --bg3: #1a1a2e; --border: #2a2a4e;
+  --text: #c9d1d9; --text2: #8b949e; --accent: #58a6ff; --accent2: #1f6feb;
+  --green: #3fb950; --red: #f85149; --orange: #d29922; --purple: #bc8cff;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; overflow:hidden; height:100vh; }
+
+/* Layout */
+#app { display:flex; height:100vh; }
+#sidebar { width:340px; background:var(--bg2); border-right:1px solid var(--border); display:flex; flex-direction:column; overflow:hidden; flex-shrink:0; z-index:10; }
+#graph-container { flex:1; position:relative; overflow:hidden; }
+#graph-render { width:100%; height:100%; position:absolute; top:0; left:0; }
+#chat-panel { width:380px; min-width:380px; flex-shrink:0; background:var(--bg2); border-left:1px solid var(--border); display:flex; flex-direction:column; overflow:hidden; }
+#chat-panel.hidden { width:0; min-width:0; flex-basis:0; border:none; overflow:hidden; padding:0; }
+#chat-panel.hidden > * { display:none !important; }
+
+/* Sidebar sections */
+.section { padding:12px 14px; border-bottom:1px solid var(--border); }
+.section h3 { font-size:11px; color:var(--text2); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px; }
+input[type=text], select, textarea { width:100%; padding:8px 10px; background:var(--bg); border:1px solid var(--border); color:var(--text); border-radius:6px; font-size:13px; outline:none; }
+input:focus, textarea:focus { border-color:var(--accent); }
+button { padding:6px 12px; background:var(--bg3); border:1px solid var(--border); color:var(--text); border-radius:6px; cursor:pointer; font-size:12px; transition:all 0.15s; }
+button:hover { background:var(--border); }
+button.active, button.primary { background:var(--accent2); border-color:var(--accent2); color:#fff; }
+
+/* Search results */
+#search-results { max-height:200px; overflow-y:auto; }
+.search-item { padding:6px 8px; cursor:pointer; border-radius:4px; font-size:12px; display:flex; justify-content:space-between; align-items:center; }
+.search-item:hover { background:var(--bg3); }
+.search-item .type { font-size:10px; color:var(--text2); background:var(--bg); padding:2px 6px; border-radius:3px; }
+
+/* Node detail */
+#detail { display:none; }
+#detail.visible { display:block; }
+#detail h2 { font-size:15px; color:#fff; margin-bottom:4px; }
+#detail .meta { font-size:12px; color:var(--text2); margin:2px 0; }
+#detail .desc { font-size:12px; color:var(--text); margin:6px 0; line-height:1.5; }
+.conn-list { max-height:250px; overflow-y:auto; }
+.conn-item { padding:4px 6px; font-size:12px; cursor:pointer; border-radius:4px; display:flex; gap:6px; align-items:center; border-left:3px solid transparent; }
+.conn-item:hover { background:var(--bg3); }
+.conn-item .dir { color:var(--accent); font-size:10px; min-width:14px; }
+.conn-item .rel { color:var(--text2); font-size:10px; }
+
+/* Filters */
+.filter-tags { display:flex; flex-wrap:wrap; gap:4px; }
+.ftag { padding:3px 8px; border-radius:10px; font-size:10px; cursor:pointer; border:1px solid var(--border); transition:all 0.15s; }
+.ftag.on { border-color:var(--accent); color:var(--accent); }
+.ftag.off { opacity:0.35; }
+
+/* Depth slider */
+.slider-row { display:flex; align-items:center; gap:8px; }
+.slider-row input[type=range] { flex:1; accent-color:var(--accent); }
+.slider-row .val { font-size:13px; color:var(--accent); font-weight:600; min-width:24px; text-align:center; }
+
+/* Toolbar */
+#toolbar { position:absolute; top:12px; left:12px; display:flex; gap:6px; z-index:5; }
+#mode-badge { position:absolute; top:12px; right:12px; z-index:5; padding:4px 10px; border-radius:4px; font-size:11px; }
+#mode-badge.gpu { background:#1a4d1a; color:var(--green); }
+#mode-badge.cpu { background:#4d3a1a; color:var(--orange); }
+
+/* Stats bar */
+#stats-bar { padding:8px 14px; font-size:11px; color:var(--text2); border-top:1px solid var(--border); margin-top:auto; }
+
+/* Chat */
+#chat-messages { flex:1; overflow-y:auto; padding:12px; }
+.chat-msg { margin-bottom:12px; }
+.chat-msg.user { text-align:right; }
+.chat-msg .bubble { display:inline-block; max-width:90%; padding:8px 12px; border-radius:12px; font-size:13px; line-height:1.5; text-align:left; }
+.chat-msg.user .bubble { background:var(--accent2); color:#fff; }
+.chat-msg.assistant .bubble { background:var(--bg3); color:var(--text); }
+#chat-input-row { padding:10px; border-top:1px solid var(--border); display:flex; gap:6px; }
+#chat-input-row input { flex:1; }
+
+/* Path finder */
+#path-result { max-height:120px; overflow-y:auto; font-size:12px; }
+.path-step { display:inline-block; padding:2px 6px; background:var(--bg3); border-radius:4px; margin:2px; cursor:pointer; font-size:11px; }
+.path-step:hover { background:var(--accent2); color:#fff; }
+.path-arrow { color:var(--text2); font-size:10px; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width:6px; }
+::-webkit-scrollbar-track { background:var(--bg); }
+::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- Sidebar -->
+<div id="sidebar">
+  <div class="section" style="padding:14px;display:flex;align-items:center;gap:8px;">
+    <span style="font-size:20px;">🔬</span>
+    <span style="font-size:16px;font-weight:600;color:var(--accent);">KG Explorer - New Model</span>
+  </div>
+
+  <!-- Search -->
+  <div class="section">
+    <h3>Search</h3>
+    <input type="text" id="search-input" placeholder="Search nodes..." autocomplete="off">
+    <div id="search-results"></div>
+  </div>
+
+  <!-- Drill-down -->
+  <div class="section">
+    <h3>Drill-Down</h3>
+    <div class="slider-row">
+      <span style="font-size:12px;color:var(--text2);">Hops</span>
+      <input type="range" id="hop-slider" min="1" max="15" value="2">
+      <span class="val" id="hop-val">2</span>
+    </div>
+    <div style="margin-top:6px;display:flex;gap:4px;">
+      <button id="btn-expand" disabled>Expand selected</button>
+      <button id="btn-reset">Show all</button>
+    </div>
+  </div>
+
+  <!-- Path finder -->
+  <div class="section">
+    <h3>Path Finder</h3>
+    <div style="display:flex;gap:4px;">
+      <input type="text" id="path-from" placeholder="From node..." style="flex:1;">
+      <input type="text" id="path-to" placeholder="To node..." style="flex:1;">
+      <button id="btn-path">Go</button>
+    </div>
+    <div id="path-result" style="margin-top:6px;"></div>
+  </div>
+
+  <!-- Filters -->
+  <div class="section">
+    <h3>Node Types</h3>
+    <div id="type-filters" class="filter-tags"></div>
+  </div>
+
+  <!-- Node detail -->
+  <div class="section" style="flex:1;overflow-y:auto;">
+    <div id="detail">
+      <h2 id="d-label"></h2>
+      <div class="meta" id="d-type"></div>
+      <div class="desc" id="d-desc"></div>
+      <h3 style="margin-top:10px;">Connections</h3>
+      <div class="conn-list" id="d-conns"></div>
+    </div>
+    <div id="no-detail" style="color:var(--text2);font-size:12px;font-style:italic;">Click a node to inspect</div>
+  </div>
+
+  <!-- Stats -->
+  <div id="stats-bar">Loading...</div>
+</div>
+
+<!-- Graph -->
+<div id="graph-container">
+  <div id="toolbar">
+    <button onclick="toggle3D()" id="btn-3d">3D</button>
+    <button onclick="togglePhysics()" id="btn-physics" class="active">Physics</button>
+    <button onclick="fitGraph()">Fit</button>
+    <button onclick="toggleChat()" id="btn-chat" class="active">💬 Chat</button>
+  </div>
+  <div id="mode-badge"></div>
+  <div id="graph-render"></div>
+</div>
+
+<!-- Chat panel -->
+<div id="chat-panel" class="">
+  <!-- LLM Settings -->
+  <div class="section" style="display:flex;justify-content:space-between;align-items:center;">
+    <h3 style="margin:0;">LLM Chat</h3>
+    <div style="display:flex;gap:4px;">
+      <button onclick="toggleLLMSettings()" id="btn-llm-settings" style="font-size:12px;">⚙</button>
+      <button onclick="toggleChat()" style="font-size:16px;background:none;border:none;color:var(--text2);cursor:pointer;">✕</button>
+    </div>
+  </div>
+
+  <!-- LLM Config Panel -->
+  <div id="llm-settings" class="section">
+    <div style="margin-bottom:8px;">
+      <label style="font-size:11px;color:var(--text2);">Provider</label>
+      <select id="llm-provider" onchange="onProviderChange()">
+        <option value="ollama">Ollama (local)</option>
+        <option value="bedrock">AWS Bedrock</option>
+        <option value="openai">OpenAI-compatible</option>
+      </select>
+    </div>
+    <div style="margin-bottom:8px;">
+      <label style="font-size:11px;color:var(--text2);">Model</label>
+      <input type="text" id="llm-model" value="qwen2.5-coder:7b">
+    </div>
+    <div style="margin-bottom:8px;" id="llm-url-row">
+      <label style="font-size:11px;color:var(--text2);">URL</label>
+      <input type="text" id="llm-url" value="http://localhost:11434">
+    </div>
+    <div style="margin-bottom:8px;display:none;" id="llm-region-row">
+      <label style="font-size:11px;color:var(--text2);">Region</label>
+      <input type="text" id="llm-region" value="us-east-1">
+    </div>
+    <div style="margin-bottom:8px;display:none;" id="llm-key-row">
+      <label style="font-size:11px;color:var(--text2);">API Key</label>
+      <input type="password" id="llm-key" placeholder="sk-...">
+    </div>
+    <div style="margin-bottom:8px;">
+      <label style="font-size:11px;color:var(--text2);">Temperature</label>
+      <input type="range" id="llm-temp" min="0" max="1" step="0.05" value="0.1" style="width:100%;accent-color:var(--accent);">
+    </div>
+    <div style="display:flex;gap:6px;">
+      <button onclick="saveLLMConfig()" class="primary" style="flex:1;">Save</button>
+      <button onclick="testLLM()" id="btn-test-llm" style="flex:1;">Test Connection</button>
+    </div>
+    <div id="llm-status" style="margin-top:6px;font-size:11px;"></div>
+  </div>
+
+  <!-- Chat mode toggle -->
+  <div class="section" style="padding:8px 14px;display:flex;gap:4px;">
+    <button id="btn-mode-context" class="active" onclick="setChatMode('context')" style="flex:1;font-size:11px;">Context Q&A</button>
+    <button id="btn-mode-sparql" onclick="setChatMode('sparql')" style="flex:1;font-size:11px;">SPARQL Agent</button>
+  </div>
+
+  <div id="chat-messages"></div>
+  <div id="chat-input-row">
+    <input type="text" id="chat-input" placeholder="Ask about the graph...">
+    <button class="primary" onclick="sendChat()">Send</button>
+  </div>
+</div>
+
+</div>
+
+<script>
+// ============================================================
+// STATE
+// ============================================================
+let allNodes = [], allEdges = [], nodeMap = {};
+let selectedNode = null, is3D = false, physicsOn = true;
+let graph2D = null, graph3D = null;
+let activeTypes = new Set();
+let gpuAvailable = false;
+
+// Color palette per type
+const TYPE_COLORS = {
+  BestPractice:'#3fb950', Concept:'#58a6ff', Service:'#f0883e', Document:'#8b949e',
+  Pillar:'#bc8cff', Process:'#d29922', Role:'#f85149', Decision:'#ff7b72',
+  Team:'#79c0ff', unknown:'#484f58'
+};
+const TYPE_SHAPES = {
+  Service:'hexagon', Pillar:'diamond', Process:'square', Role:'triangle',
+  BestPractice:'circle', Concept:'circle', Document:'circle'
+};
+
+// ============================================================
+// GPU DETECTION
+// ============================================================
+function detectGPU() {
+  try {
+    const c = document.createElement('canvas');
+    const gl = c.getContext('webgl2') || c.getContext('webgl');
+    if (!gl) return false;
+    const dbg = gl.getExtension('WEBGL_debug_renderer_info');
+    const renderer = dbg ? gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) : '';
+    const isReal = renderer && !(/swiftshader|llvmpipe|mesa/i.test(renderer));
+    console.log('GPU:', renderer, isReal ? '(hardware)' : '(software)');
+    return isReal;
+  } catch(e) { return false; }
+}
+
+// ============================================================
+// INIT
+// ============================================================
+async function init() {
+  gpuAvailable = detectGPU();
+  const badge = document.getElementById('mode-badge');
+  badge.textContent = gpuAvailable ? '⚡ GPU (WebGL)' : '🖥 CPU (Canvas)';
+  badge.className = gpuAvailable ? 'gpu' : 'cpu';
+
+  const resp = await fetch('/api/new-graph');
+  const data = await resp.json();
+  allNodes = data.nodes;
+  allEdges = data.edges;
+  allNodes.forEach(n => nodeMap[n.id] = n);
+
+  // Build type filters
+  const types = {};
+  allNodes.forEach(n => types[n.type] = (types[n.type]||0)+1);
+  activeTypes = new Set(Object.keys(types));
+  buildTypeFilters(types);
+
+  // Stats
+  const statsResp = await fetch('/api/stats');
+  const stats = await statsResp.json();
+  document.getElementById('stats-bar').textContent =
+    `${stats.triples} triples · ${stats.nodes} nodes · ${stats.edges} edges · ${Object.keys(stats.types).length} types`;
+
+  renderGraph(allNodes, allEdges);
+  setupEvents();
+
+  // Ensure chat panel stays visible after graph renders
+  if (chatOpen) document.getElementById('chat-panel').classList.remove('hidden');
+}
+
+// ============================================================
+// GRAPH RENDERING
+// ============================================================
+function renderGraph(nodes, edges) {
+  const wrapper = document.getElementById('graph-container');
+  const container = document.getElementById('graph-render');
+  // Clear previous
+  if (graph2D) { graph2D._destructor && graph2D._destructor(); graph2D = null; }
+  if (graph3D) { graph3D._destructor && graph3D._destructor(); graph3D = null; }
+  container.innerHTML = '';
+
+  const w = wrapper.clientWidth;
+  const h = wrapper.clientHeight;
+  const filtered = filterData(nodes, edges);
+  const gData = { nodes: filtered.nodes.map(n => ({...n})), links: filtered.edges.map(e => ({source:e.source, target:e.target, relation:e.relation})) };
+
+  if (is3D) {
+    graph3D = ForceGraph3D()(container)
+      .graphData(gData)
+      .nodeLabel(n => `${n.label} (${n.type})`)
+      .nodeColor(n => TYPE_COLORS[n.type] || TYPE_COLORS.unknown)
+      .nodeVal(n => n.type === 'Pillar' ? 8 : n.type === 'Service' ? 4 : 2)
+      .linkDirectionalArrowLength(3)
+      .linkColor(() => 'rgba(255,255,255,0.1)')
+      .linkWidth(0.5)
+      .backgroundColor('#0a0a12')
+      .onNodeClick(n => selectNode(n.id))
+      .width(w)
+      .height(h);
+    if (!physicsOn) setTimeout(() => graph3D.d3Force('charge', null), 3000);
+  } else {
+    graph2D = ForceGraph()(container)
+      .graphData(gData)
+      .nodeLabel(n => `${n.label} (${n.type})`)
+      .nodeColor(n => TYPE_COLORS[n.type] || TYPE_COLORS.unknown)
+      .nodeVal(n => n.type === 'Pillar' ? 12 : n.type === 'Service' ? 6 : 3)
+      .nodeCanvasObject((node, ctx, globalScale) => {
+        const size = node.type === 'Pillar' ? 8 : node.type === 'Service' ? 5 : 3;
+        const color = TYPE_COLORS[node.type] || TYPE_COLORS.unknown;
+
+        // Node circle
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, size, 0, 2 * Math.PI);
+        ctx.fillStyle = selectedNode === node.id ? '#fff' : color;
+        ctx.fill();
+        if (selectedNode === node.id) {
+          ctx.strokeStyle = color;
+          ctx.lineWidth = 2;
+          ctx.stroke();
+        }
+
+        // Label (only if zoomed enough or important)
+        if (globalScale > 1.5 || node.type === 'Pillar' || node.type === 'Service' || selectedNode === node.id) {
+          ctx.font = `${Math.max(10/globalScale, 2)}px sans-serif`;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'top';
+          ctx.fillStyle = 'rgba(255,255,255,0.8)';
+          ctx.fillText(node.label, node.x, node.y + size + 2);
+        }
+      })
+      .nodeCanvasObjectMode(() => 'replace')
+      .linkDirectionalArrowLength(4)
+      .linkColor(() => 'rgba(88,166,255,0.12)')
+      .linkWidth(0.5)
+      .backgroundColor('#0a0a12')
+      .onNodeClick(n => selectNode(n.id))
+      .onBackgroundClick(() => clearSelection())
+      .width(w)
+      .height(h);
+
+    if (!physicsOn) setTimeout(() => { graph2D.d3Force('charge').strength(0); graph2D.d3ReheatSimulation(); }, 3000);
+  }
+}
+
+function filterData(nodes, edges) {
+  const fn = nodes.filter(n => activeTypes.has(n.type));
+  const ids = new Set(fn.map(n => n.id));
+  const fe = edges.filter(e => ids.has(e.source) && ids.has(e.target));
+  return { nodes: fn, edges: fe };
+}
+
+// ============================================================
+// INTERACTIONS
+// ============================================================
+function selectNode(id) {
+  selectedNode = id;
+  document.getElementById('btn-expand').disabled = false;
+  showDetail(id);
+  refreshGraph();
+}
+
+function clearSelection() {
+  selectedNode = null;
+  document.getElementById('btn-expand').disabled = true;
+  document.getElementById('detail').classList.remove('visible');
+  document.getElementById('no-detail').style.display = '';
+  refreshGraph();
+}
+
+async function showDetail(id) {
+  const resp = await fetch(`/api/neighbors?node_id=${encodeURIComponent(id)}`);
+  const data = await resp.json();
+  if (data.error) return;
+
+  document.getElementById('no-detail').style.display = 'none';
+  const det = document.getElementById('detail');
+  det.classList.add('visible');
+  document.getElementById('d-label').textContent = data.node.label;
+  document.getElementById('d-type').textContent = `Type: ${data.node.type}`;
+  document.getElementById('d-desc').textContent = data.node.description || '';
+
+  const conns = document.getElementById('d-conns');
+  const all = [...data.outgoing.map(c => ({...c, dir:'→'})), ...data.incoming.map(c => ({...c, dir:'←'}))];
+  conns.innerHTML = all.map(c => `
+    <div class="conn-item" onclick="drillTo('${c.id}')" style="border-left-color:${TYPE_COLORS[c.type]||TYPE_COLORS.unknown}">
+      <span class="dir">${c.dir}</span>
+      <span>${c.label || c.id}</span>
+      <span class="rel">${c.relation}</span>
+    </div>
+  `).join('');
+}
+
+function drillTo(id) {
+  selectNode(id);
+  // Center on node
+  const g = is3D ? graph3D : graph2D;
+  if (g) {
+    const node = g.graphData().nodes.find(n => n.id === id);
+    if (node) {
+      if (is3D) g.cameraPosition({x:node.x, y:node.y, z:node.z+200}, node, 1000);
+      else g.centerAt(node.x, node.y, 500).zoom(3, 500);
+    }
+  }
+}
+
+async function expandSelected() {
+  if (!selectedNode) return;
+  const hops = parseInt(document.getElementById('hop-slider').value);
+  const resp = await fetch(`/api/expand?node_id=${encodeURIComponent(selectedNode)}&hops=${hops}`);
+  const data = await resp.json();
+  if (data.error) return;
+  renderGraph(data.nodes, data.edges);
+  setTimeout(() => {
+    const g = is3D ? graph3D : graph2D;
+    if (g) {
+      const node = g.graphData().nodes.find(n => n.id === selectedNode);
+      if (node && !is3D) g.centerAt(node.x, node.y, 500);
+    }
+  }, 500);
+}
+
+function refreshGraph() {
+  const g = is3D ? graph3D : graph2D;
+  if (g && !is3D) g.nodeColor(n => selectedNode === n.id ? '#fff' : (TYPE_COLORS[n.type] || TYPE_COLORS.unknown));
+}
+
+// ============================================================
+// FILTERS
+// ============================================================
+function buildTypeFilters(types) {
+  const el = document.getElementById('type-filters');
+  el.innerHTML = Object.entries(types).sort((a,b) => b[1]-a[1]).map(([t, c]) =>
+    `<span class="ftag on" data-type="${t}" style="color:${TYPE_COLORS[t]||TYPE_COLORS.unknown};border-color:${TYPE_COLORS[t]||TYPE_COLORS.unknown}" onclick="toggleType('${t}', this)">${t} (${c})</span>`
+  ).join('');
+}
+
+function toggleType(type, el) {
+  if (activeTypes.has(type)) { activeTypes.delete(type); el.classList.replace('on','off'); }
+  else { activeTypes.add(type); el.classList.replace('off','on'); }
+  renderGraph(allNodes, allEdges);
+}
+
+// ============================================================
+// SEARCH
+// ============================================================
+let searchTimeout;
+function setupEvents() {
+  document.getElementById('search-input').addEventListener('input', e => {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => doSearch(e.target.value), 200);
+  });
+  document.getElementById('hop-slider').addEventListener('input', e => {
+    document.getElementById('hop-val').textContent = e.target.value;
+  });
+  document.getElementById('btn-expand').addEventListener('click', expandSelected);
+  document.getElementById('btn-reset').addEventListener('click', () => { clearSelection(); renderGraph(allNodes, allEdges); });
+  document.getElementById('btn-path').addEventListener('click', findPath);
+  document.getElementById('chat-input').addEventListener('keydown', e => { if (e.key === 'Enter') sendChat(); });
+  window.addEventListener('resize', () => {
+    const w = document.getElementById('graph-container');
+    const g = is3D ? graph3D : graph2D;
+    if (g) { g.width(w.clientWidth); g.height(w.clientHeight); }
+  });
+}
+
+async function doSearch(q) {
+  const el = document.getElementById('search-results');
+  if (!q || q.length < 2) { el.innerHTML = ''; return; }
+  const resp = await fetch(`/api/search?q=${encodeURIComponent(q)}`);
+  const results = await resp.json();
+  el.innerHTML = results.map(r => `
+    <div class="search-item" onclick="drillTo('${r.id}')">
+      <span>${r.label}</span>
+      <span class="type" style="color:${TYPE_COLORS[r.type]||TYPE_COLORS.unknown}">${r.type}</span>
+    </div>
+  `).join('');
+}
+
+// ============================================================
+// PATH FINDER
+// ============================================================
+async function findPath() {
+  const from = document.getElementById('path-from').value.trim();
+  const to = document.getElementById('path-to').value.trim();
+  if (!from || !to) return;
+  // Resolve names to IDs
+  const fromR = await fetch(`/api/search?q=${encodeURIComponent(from)}&limit=1`).then(r=>r.json());
+  const toR = await fetch(`/api/search?q=${encodeURIComponent(to)}&limit=1`).then(r=>r.json());
+  if (!fromR.length || !toR.length) { document.getElementById('path-result').innerHTML = '<span style="color:var(--red)">Node not found</span>'; return; }
+  const resp = await fetch(`/api/path?source=${fromR[0].id}&target=${toR[0].id}`);
+  const data = await resp.json();
+  const el = document.getElementById('path-result');
+  if (!data.path.length) { el.innerHTML = '<span style="color:var(--text2)">No path found</span>'; return; }
+  el.innerHTML = data.path.map((id, i) => {
+    const n = nodeMap[id] || {label:id};
+    return (i > 0 ? '<span class="path-arrow">→</span>' : '') +
+      `<span class="path-step" onclick="drillTo('${id}')">${n.label}</span>`;
+  }).join('');
+  // Render subgraph
+  renderGraph(data.nodes, data.edges);
+}
+
+// ============================================================
+// CONTROLS
+// ============================================================
+function toggle3D() {
+  is3D = !is3D;
+  document.getElementById('btn-3d').classList.toggle('active', is3D);
+  renderGraph(allNodes, allEdges);
+}
+
+function togglePhysics() {
+  physicsOn = !physicsOn;
+  document.getElementById('btn-physics').classList.toggle('active', physicsOn);
+  const g = is3D ? graph3D : graph2D;
+  if (g) {
+    if (is3D) { /* 3D handles differently */ }
+    else {
+      if (physicsOn) g.d3ReheatSimulation();
+      else g.cooldownTicks(0);
+    }
+  }
+}
+
+function fitGraph() {
+  if (is3D && graph3D) graph3D.zoomToFit(500);
+  else if (graph2D) graph2D.zoomToFit(500, 40);
+}
+
+// ============================================================
+// CHAT + LLM CONFIG
+// ============================================================
+let chatMode = 'context';
+
+let chatOpen = true;
+function toggleChat() {
+  chatOpen = !chatOpen;
+  const panel = document.getElementById('chat-panel');
+  if (chatOpen) {
+    panel.classList.remove('hidden');
+  } else {
+    panel.classList.add('hidden');
+  }
+  document.getElementById('btn-chat').classList.toggle('active', chatOpen);
+}
+
+function toggleLLMSettings() {
+  const el = document.getElementById('llm-settings');
+  el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+
+function onProviderChange() {
+  const p = document.getElementById('llm-provider').value;
+  document.getElementById('llm-url-row').style.display = (p==='ollama'||p==='openai') ? '' : 'none';
+  document.getElementById('llm-region-row').style.display = p==='bedrock' ? '' : 'none';
+  document.getElementById('llm-key-row').style.display = p==='openai' ? '' : 'none';
+  const m = document.getElementById('llm-model');
+  if (p==='ollama') { m.value='qwen2.5-coder:7b'; document.getElementById('llm-url').value='http://localhost:11434'; }
+  else if (p==='bedrock') m.value='anthropic.claude-3-haiku-20240307-v1:0';
+  else if (p==='openai') m.value='gpt-4o-mini';
+}
+
+async function saveLLMConfig() {
+  const cfg = { provider:document.getElementById('llm-provider').value, model:document.getElementById('llm-model').value, base_url:document.getElementById('llm-url').value, temperature:parseFloat(document.getElementById('llm-temp').value), region:document.getElementById('llm-region').value };
+  const key = document.getElementById('llm-key').value;
+  if (key) cfg.api_key = key;
+  await fetch('/api/llm/config',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(cfg)});
+  showLLMStatus('Saved ✓','var(--green)');
+}
+
+async function testLLM() {
+  const btn = document.getElementById('btn-test-llm');
+  btn.textContent='Testing...'; btn.disabled=true;
+  try {
+    const resp = await fetch('/api/llm/test',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'});
+    const data = await resp.json();
+    if (data.status==='ok') showLLMStatus('Connected ✓ — "'+data.response+'"','var(--green)');
+    else showLLMStatus('Failed: '+data.error,'var(--red)');
+  } catch(e) { showLLMStatus('Error: '+e.message,'var(--red)'); }
+  btn.textContent='Test Connection'; btn.disabled=false;
+}
+
+function showLLMStatus(msg,color) {
+  const el=document.getElementById('llm-status'); el.textContent=msg; el.style.color=color;
+  setTimeout(()=>el.textContent='',5000);
+}
+
+async function loadLLMConfig() {
+  try {
+    const resp=await fetch('/api/llm/config'); const cfg=await resp.json();
+    document.getElementById('llm-provider').value=cfg.provider||'ollama';
+    document.getElementById('llm-model').value=cfg.model||'';
+    document.getElementById('llm-url').value=cfg.base_url||'http://localhost:11434';
+    document.getElementById('llm-temp').value=cfg.temperature||0.1;
+    document.getElementById('llm-region').value=cfg.region||'us-east-1';
+    onProviderChange();
+  } catch(e) {}
+}
+
+function setChatMode(mode) {
+  chatMode=mode;
+  document.getElementById('btn-mode-context').classList.toggle('active',mode==='context');
+  document.getElementById('btn-mode-sparql').classList.toggle('active',mode==='sparql');
+  document.getElementById('chat-input').placeholder = mode==='sparql' ? 'Ask (generates SPARQL)...' : 'Ask about the graph...';
+}
+
+async function sendChat() {
+  const input = document.getElementById('chat-input');
+  const q = input.value.trim();
+  if (!q) return;
+  input.value = '';
+  addChatMsg(q, 'user');
+  addChatMsg('Thinking...', 'assistant', 'thinking');
+
+  const endpoint = chatMode==='sparql' ? '/api/ask/sparql' : '/api/ask';
+  try {
+    const resp = await fetch(endpoint, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({question:q})
+    });
+    const data = await resp.json();
+    document.getElementById('thinking')?.remove();
+    if (data.error && !data.answer) {
+      addChatMsg('Error: '+data.error+(data.sparql?'\n\nSPARQL:\n'+data.sparql:''), 'assistant');
+      return;
+    }
+    let msg = data.answer||'';
+    if (data.sparql) msg += '\n\n📋 SPARQL:\n'+data.sparql;
+    if (data.count!==undefined) msg += '\n('+data.count+' results)';
+    addChatMsg(msg, 'assistant');
+    if (data.context_nodes) data.context_nodes.forEach(id => {
+      const gg = is3D ? graph3D : graph2D;
+      if (gg) { const node=gg.graphData().nodes.find(n=>n.id===id); if(node&&!is3D) gg.centerAt(node.x,node.y,500); }
+    });
+  } catch(e) {
+    document.getElementById('thinking')?.remove();
+    addChatMsg('Error: '+e.message, 'assistant');
+  }
+}
+
+function addChatMsg(text, role, id) {
+  const el = document.getElementById('chat-messages');
+  const div = document.createElement('div');
+  div.className = `chat-msg ${role}`;
+  if (id) div.id = id;
+  div.innerHTML = `<div class="bubble">${text.replace(/\n/g, '<br>')}</div>`;
+  el.appendChild(div);
+  el.scrollTop = el.scrollHeight;
+}
+
+// ============================================================
+// BOOT
+// ============================================================
+init();
+loadLLMConfig();
+</script>
+</body>
+</html>
+

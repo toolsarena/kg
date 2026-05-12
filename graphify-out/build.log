@@ -1,0 +1,349 @@
+Using 200/4044 files for build
+Step 1/6: Detecting files...
+  Found 200 files, ~28340 words
+Step 2/6: AST extraction...
+  AST: 0 nodes, 0 edges
+Step 3/6: Semantic extraction (LLM)...
+  [1/200] doc_0.md
+  WARNING: Failed on doc_0.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [2/200] doc_1.md
+  WARNING: Failed on doc_1.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [3/200] doc_10.md
+  WARNING: Failed on doc_10.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [4/200] doc_100.md
+  WARNING: Failed on doc_100.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [5/200] doc_101.md
+  WARNING: Failed on doc_101.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [6/200] doc_102.md
+  WARNING: Failed on doc_102.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [7/200] doc_103.md
+  [8/200] doc_104.md
+  WARNING: Failed on doc_104.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [9/200] doc_105.md
+  WARNING: Failed on doc_105.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [10/200] doc_106.md
+  [11/200] doc_107.md
+  [12/200] doc_108.md
+  [13/200] doc_109.md
+  [14/200] doc_11.md
+  [15/200] doc_110.md
+  [16/200] doc_111.md
+  WARNING: Failed on doc_111.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [17/200] doc_112.md
+  [18/200] doc_113.md
+  WARNING: Failed on doc_113.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [19/200] doc_114.md
+  [20/200] doc_115.md
+  [21/200] doc_116.md
+  [22/200] doc_117.md
+  [23/200] doc_118.md
+  [24/200] doc_119.md
+  WARNING: Failed on doc_119.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [25/200] doc_12.md
+  WARNING: Failed on doc_12.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [26/200] doc_120.md
+  WARNING: Failed on doc_120.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [27/200] doc_121.md
+  WARNING: Failed on doc_121.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [28/200] doc_122.md
+  WARNING: Failed on doc_122.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [29/200] doc_123.md
+  WARNING: Failed on doc_123.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [30/200] doc_124.md
+  WARNING: Failed on doc_124.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [31/200] doc_125.md
+  [32/200] doc_126.md
+  WARNING: Failed on doc_126.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [33/200] doc_127.md
+  WARNING: Failed on doc_127.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [34/200] doc_128.md
+  WARNING: Failed on doc_128.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [35/200] doc_129.md
+  [36/200] doc_13.md
+  WARNING: Failed on doc_13.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [37/200] doc_130.md
+  [38/200] doc_131.md
+  [39/200] doc_132.md
+  [40/200] doc_133.md
+  [41/200] doc_134.md
+  [42/200] doc_135.md
+  WARNING: Failed on doc_135.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [43/200] doc_136.md
+  [44/200] doc_137.md
+  [45/200] doc_138.md
+  [46/200] doc_139.md
+  WARNING: Failed on doc_139.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [47/200] doc_14.md
+  WARNING: Failed on doc_14.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [48/200] doc_140.md
+  [49/200] doc_141.md
+  WARNING: Failed on doc_141.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [50/200] doc_142.md
+  WARNING: Failed on doc_142.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [51/200] doc_143.md
+  WARNING: Failed on doc_143.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [52/200] doc_144.md
+  [53/200] doc_145.md
+  [54/200] doc_146.md
+  WARNING: Failed on doc_146.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [55/200] doc_147.md
+  [56/200] doc_148.md
+  [57/200] doc_149.md
+  [58/200] doc_15.md
+  [59/200] doc_150.md
+  [60/200] doc_151.md
+  WARNING: Failed on doc_151.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [61/200] doc_152.md
+  [62/200] doc_153.md
+  WARNING: Failed on doc_153.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [63/200] doc_154.md
+  [64/200] doc_155.md
+  [65/200] doc_156.md
+  WARNING: Failed on doc_156.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [66/200] doc_157.md
+  WARNING: Failed on doc_157.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [67/200] doc_158.md
+  [68/200] doc_159.md
+  [69/200] doc_16.md
+  WARNING: Failed on doc_16.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [70/200] doc_160.md
+  [71/200] doc_161.md
+  [72/200] doc_162.md
+  [73/200] doc_163.md
+  WARNING: Failed on doc_163.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [74/200] doc_164.md
+  [75/200] doc_165.md
+  [76/200] doc_166.md
+  WARNING: Failed on doc_166.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [77/200] doc_167.md
+  WARNING: Failed on doc_167.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [78/200] doc_168.md
+  [79/200] doc_169.md
+  WARNING: Failed on doc_169.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [80/200] doc_17.md
+  WARNING: Failed on doc_17.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [81/200] doc_170.md
+  [82/200] doc_171.md
+  WARNING: Failed on doc_171.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [83/200] doc_172.md
+  WARNING: Failed on doc_172.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [84/200] doc_173.md
+  [85/200] doc_174.md
+  [86/200] doc_175.md
+  [87/200] doc_176.md
+  WARNING: Failed on doc_176.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [88/200] doc_177.md
+  [89/200] doc_178.md
+  [90/200] doc_179.md
+  [91/200] doc_18.md
+  [92/200] doc_180.md
+  [93/200] doc_181.md
+  [94/200] doc_182.md
+  [95/200] doc_183.md
+  WARNING: Failed on doc_183.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [96/200] doc_184.md
+  WARNING: Failed on doc_184.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [97/200] doc_185.md
+  WARNING: Failed on doc_185.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [98/200] doc_186.md
+  WARNING: Failed on doc_186.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [99/200] doc_187.md
+  [100/200] doc_188.md
+  [101/200] doc_189.md
+  WARNING: Failed on doc_189.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [102/200] doc_19.md
+  WARNING: Failed on doc_19.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [103/200] doc_190.md
+  WARNING: Failed on doc_190.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [104/200] doc_191.md
+  WARNING: Failed on doc_191.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [105/200] doc_192.md
+  WARNING: Failed on doc_192.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [106/200] doc_193.md
+  WARNING: Failed on doc_193.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [107/200] doc_194.md
+  WARNING: Failed on doc_194.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [108/200] doc_195.md
+  WARNING: Failed on doc_195.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [109/200] doc_196.md
+  [110/200] doc_197.md
+  WARNING: Failed on doc_197.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [111/200] doc_198.md
+  [112/200] doc_199.md
+  WARNING: Failed on doc_199.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [113/200] doc_2.md
+  [114/200] doc_20.md
+  WARNING: Failed on doc_20.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [115/200] doc_21.md
+  [116/200] doc_22.md
+  [117/200] doc_23.md
+  [118/200] doc_24.md
+  [119/200] doc_25.md
+  [120/200] doc_26.md
+  [121/200] doc_27.md
+  [122/200] doc_28.md
+  [123/200] doc_29.md
+  [124/200] doc_3.md
+  [125/200] doc_30.md
+  [126/200] doc_31.md
+  [127/200] doc_32.md
+  [128/200] doc_33.md
+  [129/200] doc_34.md
+  [130/200] doc_35.md
+  [131/200] doc_36.md
+  [132/200] doc_37.md
+  [133/200] doc_38.md
+  [134/200] doc_39.md
+  [135/200] doc_4.md
+  [136/200] doc_40.md
+  [137/200] doc_41.md
+  [138/200] doc_42.md
+  [139/200] doc_43.md
+  [140/200] doc_44.md
+  [141/200] doc_45.md
+  [142/200] doc_46.md
+  [143/200] doc_47.md
+  [144/200] doc_48.md
+  [145/200] doc_49.md
+  [146/200] doc_5.md
+  [147/200] doc_50.md
+  [148/200] doc_51.md
+  [149/200] doc_52.md
+  [150/200] doc_53.md
+  [151/200] doc_54.md
+  [152/200] doc_55.md
+  [153/200] doc_56.md
+  [154/200] doc_57.md
+  [155/200] doc_58.md
+  WARNING: Failed on doc_58.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [156/200] doc_59.md
+  WARNING: Failed on doc_59.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [157/200] doc_6.md
+  [158/200] doc_60.md
+  [159/200] doc_61.md
+  [160/200] doc_62.md
+  [161/200] doc_63.md
+  WARNING: Failed on doc_63.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [162/200] doc_64.md
+  [163/200] doc_65.md
+  [164/200] doc_66.md
+  [165/200] doc_67.md
+  [166/200] doc_68.md
+  [167/200] doc_69.md
+  [168/200] doc_7.md
+  WARNING: Failed on doc_7.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [169/200] doc_70.md
+  WARNING: Failed on doc_70.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [170/200] doc_71.md
+  [171/200] doc_72.md
+  WARNING: Failed on doc_72.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [172/200] doc_73.md
+  [173/200] doc_74.md
+  WARNING: Failed on doc_74.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [174/200] doc_75.md
+  [175/200] doc_76.md
+  WARNING: Failed on doc_76.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [176/200] doc_77.md
+  WARNING: Failed on doc_77.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [177/200] doc_78.md
+  WARNING: Failed on doc_78.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [178/200] doc_79.md
+  [179/200] doc_8.md
+  [180/200] doc_80.md
+  [181/200] doc_81.md
+  [182/200] doc_82.md
+  [183/200] doc_83.md
+  [184/200] doc_84.md
+  [185/200] doc_85.md
+  [186/200] doc_86.md
+  [187/200] doc_87.md
+  WARNING: Failed on doc_87.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [188/200] doc_88.md
+  WARNING: Failed on doc_88.md: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+  [189/200] doc_89.md
+  [190/200] doc_9.md
+  [191/200] doc_90.md
+  [192/200] doc_91.md
+  [193/200] doc_92.md
+  [194/200] doc_93.md
+  [195/200] doc_94.md
+  [196/200] doc_95.md
+  [197/200] doc_96.md
+  [198/200] doc_97.md
+  [199/200] doc_98.md
+  [200/200] doc_99.md
+  Semantic: 617 nodes, 467 edges
+Step 4/6: Merging & building graph...
+[graphify] Extraction warning (467 issues): Edge 0 missing required field 'source_file'
+  Graph: 389 nodes, 363 edges
+Step 5/6: Community detection...
+  63 communities detected
+    [0] Cloud Services and Tools (33 nodes)
+    [1] Cloud Security and Management (24 nodes)
+    [2] Data Management & Security (21 nodes)
+    [3] Cloud Services (17 nodes)
+    [4] Cloud Security & Operations (15 nodes)
+    [5] Customer Engagement Strategy (14 nodes)
+    [6] AWS Security and Compliance (14 nodes)
+    [7] DevOps (12 nodes)
+    [8] Incident Handling Cluster (12 nodes)
+    [9] AWS Security & Governance (11 nodes)
+    [10] Cloud Services & DevOps (10 nodes)
+    [11] Document Management (10 nodes)
+    [12] DevOps Practices (9 nodes)
+    [13] Monitoring & Logging (8 nodes)
+    [14] System Reliability and Recovery (7 nodes)
+    [15] IAM & Security (7 nodes)
+    [16] CloudWatch Suite (7 nodes)
+    [17] DevOps Culture (6 nodes)
+    [18] Network Security & Monitoring (6 nodes)
+    [19] DNS Routing (6 nodes)
+    [20] AWS Management Tools (6 nodes)
+    [21] Learning & Improvement Cluster (6 nodes)
+    [22] Feedback Management (6 nodes)
+    [23] Continuous Integration/Continuous Deployment (CI/CD) Testing (5 nodes)
+    [24] Cloud Security & Management (5 nodes)
+    [25] ITIL Practices (5 nodes)
+    [26] DevOps Tools (5 nodes)
+    [27] API Operations (5 nodes)
+    [28] Cloud Security and Networking (5 nodes)
+    [29] DevOps Training Cluster (5 nodes)
+    [30] DevOps Tools (4 nodes)
+    [31] Auto Scaling (4 nodes)
+    [32] Container and Storage Management (4 nodes)
+    [33] AWS Database Services (4 nodes)
+    [34] Cloud Operations (4 nodes)
+    [35] Disaster Recovery Planning (4 nodes)
+    [36] Cloud Financial Management (4 nodes)
+    [37] IAM Attributes (3 nodes)
+    [38] IAM Policies (3 nodes)
+    [39] Event-driven Architecture (3 nodes)
+    [40] IAM Security (3 nodes)
+    [41] Incident Management (3 nodes)
+    [42] Unique ID Clusters (3 nodes)
+    [43] Incident Prevention Strategies (3 nodes)
+    [44] Identity and Access Management (3 nodes)
+    [45] Identity Management Cluster (3 nodes)
+    [46] Human Resources Management (3 nodes)
+    [47] Security & Compliance (2 nodes)
+    [48] DevOps Tools (2 nodes)
+    [49] Monitoring (2 nodes)
+    [50] Incident Management (2 nodes)
+    [51] Incident Response Automation (2 nodes)
+    [52] DevOps Practices (2 nodes)
+    [53] Cloud Governance (2 nodes)
+    [54] Business Analytics Dashboard (2 nodes)
+    [55] Incident Management (2 nodes)
+    [56] Stakeholder Engagement (2 nodes)
+    [57] Workload Insights (2 nodes)
+    [58] Cloud Governance Tools (2 nodes)
+    [59] Glacier Storage Solutions (2 nodes)
+    [60] ACM (1 nodes)
+    [61] Elastic File System (1 nodes)
+    [62] SynthMon (1 nodes)
+Step 6/6: Exporting...
+
+Done! Outputs in graphify-out/
+  graph.html  - interactive visualization
+  graph.json  - raw graph data
+  GRAPH_REPORT.md - audit report

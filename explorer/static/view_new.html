@@ -1,0 +1,924 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>KG Explorer - New Model</title>
+<script src="/static/force-graph.min.js"></script>
+<script src="/static/3d-force-graph.min.js"></script>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:#080810; color:#e0e0e0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; overflow:hidden; height:100vh; display:flex; flex-direction:column; }
+#content-row { display:flex; flex:1; overflow:hidden; }
+#sidebar { width:300px; min-width:300px; flex-shrink:0; background:rgba(18,18,30,0.98); border-right:1px solid rgba(255,255,255,0.06); display:flex; flex-direction:column; overflow:hidden; }
+#sidebar .section { padding:12px 14px; border-bottom:1px solid rgba(255,255,255,0.06); }
+#sidebar .section h3 { font-size:10px; color:#6e7681; text-transform:uppercase; letter-spacing:1px; margin-bottom:8px; }
+#sidebar input[type=text], #sidebar select { width:100%; padding:7px 10px; background:#0a0a12; border:1px solid rgba(255,255,255,0.1); color:#e0e0e0; border-radius:6px; font-size:12px; outline:none; }
+#sidebar input:focus { border-color:#58a6ff; }
+#sidebar button { padding:5px 10px; background:rgba(22,27,34,0.9); border:1px solid rgba(255,255,255,0.1); color:#e0e0e0; border-radius:5px; cursor:pointer; font-size:11px; transition:all 0.15s; }
+#sidebar button:hover { background:rgba(88,166,255,0.15); }
+#graph-area { flex:1; position:relative; overflow:hidden; }
+#graph { width:100%; height:100%; position:absolute; top:0; left:0; }
+#chat-sidebar { width:340px; min-width:340px; flex-shrink:0; background:rgba(22,27,34,0.97); border-left:1px solid rgba(255,255,255,0.08); display:flex; flex-direction:column; overflow:hidden; }
+#chat-sidebar.hidden { width:0; min-width:0; border:none; overflow:hidden; display:none; }
+
+/* Top bar */
+#top-bar { height:48px; background:rgba(8,8,16,0.95); border-bottom:1px solid rgba(255,255,255,0.06); display:flex; align-items:center; padding:0 20px; flex-shrink:0; }
+#top-bar .title { font-size:15px; font-weight:600; color:#58a6ff; }
+#top-bar .stats { margin-left:auto; font-size:12px; color:#6e7681; }
+#gpu-badge { padding:4px 10px; border-radius:4px; font-size:11px; margin-left:12px; }
+#gpu-badge.gpu { background:#1a4d1a; color:#3fb950; }
+#gpu-badge.cpu { background:#4d3a1a; color:#d29922; }
+
+#search-results { max-height:200px; overflow-y:auto; margin-top:4px; }
+#search-results .item { padding:6px 8px; cursor:pointer; font-size:11px; display:flex; justify-content:space-between; border-radius:4px; }
+#search-results .item:hover { background:rgba(88,166,255,0.1); }
+#search-results .item .dot { width:8px; height:8px; border-radius:50%; margin-right:6px; flex-shrink:0; margin-top:3px; }
+
+/* Node detail */
+#detail { display:none; }
+#detail.visible { display:block; }
+#detail h2 { font-size:13px; color:#fff; margin-bottom:4px; }
+#detail .type-badge { display:inline-block; padding:2px 8px; border-radius:4px; font-size:10px; margin-bottom:6px; }
+#detail .desc { font-size:11px; color:#8b949e; line-height:1.4; margin-bottom:8px; }
+#detail .conn-title { font-size:10px; color:#6e7681; text-transform:uppercase; letter-spacing:1px; margin:8px 0 4px; }
+#detail .conn { padding:4px 6px; font-size:11px; cursor:pointer; border-radius:4px; margin:2px 0; display:flex; align-items:center; gap:5px; }
+#detail .conn:hover { background:rgba(88,166,255,0.1); }
+#detail .conn .arrow { color:#58a6ff; font-size:10px; }
+#detail .conn .rel { color:#6e7681; font-size:10px; margin-left:auto; }
+#detail .conns { max-height:250px; overflow-y:auto; }
+#no-detail { color:#6e7681; font-size:11px; font-style:italic; }
+
+/* Toolbar */
+#toolbar { position:absolute; top:12px; left:12px; display:flex; gap:6px; z-index:5; }
+#toolbar button { padding:6px 12px; background:rgba(22,27,34,0.9); border:1px solid rgba(255,255,255,0.1); color:#e0e0e0; border-radius:6px; cursor:pointer; font-size:11px; backdrop-filter:blur(10px); transition:all 0.15s; }
+#toolbar button:hover { background:rgba(88,166,255,0.15); border-color:rgba(88,166,255,0.3); }
+#toolbar button.active { background:rgba(88,166,255,0.2); border-color:#58a6ff; color:#58a6ff; }
+.filter-tags { display:flex; flex-wrap:wrap; gap:4px; }
+.ftag { padding:3px 8px; border-radius:10px; font-size:10px; cursor:pointer; transition:all 0.15s; }
+.ftag.off { opacity:0.35; }
+
+/* Chat sidebar buttons */
+#chat-sidebar button { transition:all 0.15s; }
+#chat-sidebar button.active { background:#1f6feb !important; border-color:#1f6feb !important; color:#fff !important; }
+#chat-sidebar button:hover { opacity:0.85; }
+
+/* Legend */
+/* Stats bar */
+#stats-bar { height:28px; background:rgba(8,8,16,0.9); border-top:1px solid rgba(255,255,255,0.06); display:flex; align-items:center; padding:0 16px; font-size:11px; color:#6e7681; flex-shrink:0; }
+#legend { position:absolute; bottom:36px; right:16px; background:rgba(22,27,34,0.9); border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:12px; z-index:10; backdrop-filter:blur(10px); }
+#legend .item { display:flex; align-items:center; gap:8px; padding:3px 0; font-size:11px; color:#8b949e; cursor:pointer; }
+#legend .item:hover { color:#e0e0e0; }
+#legend .item .dot { width:10px; height:10px; border-radius:50%; }
+
+/* Depth indicator */
+#depth-indicator { position:absolute; top:12px; left:50%; transform:translateX(-50%); background:rgba(22,27,34,0.9); border:1px solid rgba(255,255,255,0.08); border-radius:20px; padding:6px 16px; font-size:11px; color:#58a6ff; z-index:10; display:none; backdrop-filter:blur(10px); }
+/* Scrollbar */
+::-webkit-scrollbar { width:5px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:rgba(255,255,255,0.1); border-radius:3px; }
+</style>
+</head>
+<body>
+<div id="top-bar">
+  <span class="title">KG Explorer</span>
+  <span class="stats" id="stats"></span>
+  <span id="gpu-badge"></span>
+</div>
+
+<div id="content-row">
+<!-- Left Sidebar -->
+<div id="sidebar">
+  <div class="section" style="padding:14px;display:flex;align-items:center;gap:8px;">
+    <span style="font-size:18px;">🔬</span>
+    <span style="font-size:14px;font-weight:600;color:#58a6ff;">KG Explorer</span>
+  </div>
+
+  <div class="section">
+    <h3>Search</h3>
+    <input type="text" id="search" placeholder="Search nodes..." autocomplete="off">
+    <div id="search-results"></div>
+  </div>
+
+  <div class="section">
+    <h3>Drill-Down</h3>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="font-size:11px;color:#6e7681;">Hops</span>
+      <input type="range" id="hop-slider" min="1" max="15" value="2" style="flex:1;accent-color:#58a6ff;"  oninput="document.getElementById('hop-val').textContent=this.value">
+      <span id="hop-val" style="font-size:12px;color:#58a6ff;font-weight:600;min-width:18px;text-align:center;">2</span>
+    </div>
+    <div style="margin-top:6px;display:flex;gap:4px;">
+      <button onclick="expandSelected()" id="btn-expand" disabled style="flex:1;">Expand selected</button>
+      <button onclick="resetView()" style="flex:1;">Show all</button>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Path Finder</h3>
+    <div style="display:flex;gap:4px;">
+      <input type="text" id="path-from" placeholder="From node..." style="flex:1;">
+      <input type="text" id="path-to" placeholder="To node..." style="flex:1;">
+      <button onclick="findPath()">Go</button>
+    </div>
+    <div id="path-result" style="margin-top:6px;font-size:11px;color:#58a6ff;"></div>
+  </div>
+
+  <div class="section">
+    <h3>Node Types</h3>
+    <div id="type-filters" class="filter-tags"></div>
+  </div>
+
+  <div class="section" style="flex:1;overflow-y:auto;">
+    <div id="detail">
+      <h2 id="d-name"></h2>
+      <span class="type-badge" id="d-type"></span>
+      <div class="desc" id="d-desc"></div>
+      <div class="conn-title">Connections</div>
+      <div class="conns" id="d-conns"></div>
+    </div>
+    <div id="no-detail">Click a node to inspect</div>
+  </div>
+
+  <div id="stats-bar-sidebar" style="padding:8px 14px;font-size:11px;color:#6e7681;border-top:1px solid rgba(255,255,255,0.06);margin-top:auto;">Loading...</div>
+</div>
+
+<!-- Graph Area -->
+<div id="graph-area">
+
+<div id="toolbar">
+  <button onclick="toggle3D()" id="btn-3d">3D</button>
+  <button onclick="togglePhysics()" id="btn-physics" class="active">Physics</button>
+  <button onclick="fitAll()">Fit</button>
+  <button onclick="toggleChat()" id="btn-chat">💬 Chat</button>
+  <button onclick="showStats()">Stats</button>
+</div>
+
+<div id="depth-indicator"></div>
+
+<!-- Stats Modal -->
+<div id="stats-modal" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(22,27,34,0.98);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:20px;z-index:20;backdrop-filter:blur(10px);display:none;min-width:300px;">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+    <span style="font-size:14px;font-weight:600;color:#58a6ff;">Graph Stats</span>
+    <button onclick="document.getElementById('stats-modal').style.display='none'" style="background:none;border:none;color:#6e7681;cursor:pointer;font-size:16px;">x</button>
+  </div>
+  <div id="stats-content" style="font-size:12px;line-height:2;color:#c9d1d9;"></div>
+</div>
+
+<div id="legend"></div>
+
+<div id="graph"></div>
+</div><!-- /graph-area -->
+
+<!-- Chat Sidebar -->
+<div id="chat-sidebar" class="hidden">
+  <div style="padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;justify-content:space-between;align-items:center;">
+    <span style="font-size:13px;font-weight:600;color:#58a6ff;">Chat</span>
+    <div style="display:flex;gap:4px;">
+      <button onclick="toggleLLMSettings()" style="font-size:10px;padding:4px 8px;">Settings</button>
+      <button onclick="setChatMode('context')" id="btn-ctx" class="active" style="font-size:10px;padding:4px 8px;">Context</button>
+      <button onclick="setChatMode('sparql')" id="btn-spq" style="font-size:10px;padding:4px 8px;">SPARQL</button>
+      <button onclick="toggleChat()" style="background:none;border:none;color:#6e7681;cursor:pointer;font-size:16px;">x</button>
+    </div>
+  </div>
+  <!-- LLM Settings -->
+  <div id="llm-settings" style="display:none;padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.06);">
+    <div style="margin-bottom:6px;">
+      <label style="font-size:10px;color:#6e7681;">Provider</label>
+      <select id="llm-provider" onchange="onProviderChange()" style="width:100%;padding:5px 8px;background:#0a0a10;border:1px solid rgba(255,255,255,0.1);color:#e0e0e0;border-radius:4px;font-size:11px;">
+        <option value="ollama">Ollama (local)</option>
+        <option value="bedrock">AWS Bedrock</option>
+        <option value="openai">OpenAI-compatible</option>
+      </select>
+    </div>
+    <div style="margin-bottom:6px;">
+      <label style="font-size:10px;color:#6e7681;">Model</label>
+      <input type="text" id="llm-model" value="qwen2.5:1.5b" style="width:100%;padding:5px 8px;background:#0a0a10;border:1px solid rgba(255,255,255,0.1);color:#e0e0e0;border-radius:4px;font-size:11px;">
+    </div>
+    <div style="margin-bottom:6px;" id="llm-url-row">
+      <label style="font-size:10px;color:#6e7681;">URL</label>
+      <input type="text" id="llm-url" value="http://localhost:11434" style="width:100%;padding:5px 8px;background:#0a0a10;border:1px solid rgba(255,255,255,0.1);color:#e0e0e0;border-radius:4px;font-size:11px;">
+    </div>
+    <div style="margin-bottom:6px;display:none;" id="llm-region-row">
+      <label style="font-size:10px;color:#6e7681;">Region</label>
+      <input type="text" id="llm-region" value="us-east-1" style="width:100%;padding:5px 8px;background:#0a0a10;border:1px solid rgba(255,255,255,0.1);color:#e0e0e0;border-radius:4px;font-size:11px;">
+    </div>
+    <div style="margin-bottom:6px;display:none;" id="llm-key-row">
+      <label style="font-size:10px;color:#6e7681;">API Key</label>
+      <input type="password" id="llm-key" placeholder="sk-..." style="width:100%;padding:5px 8px;background:#0a0a10;border:1px solid rgba(255,255,255,0.1);color:#e0e0e0;border-radius:4px;font-size:11px;">
+    </div>
+    <div style="margin-bottom:6px;">
+      <label style="font-size:10px;color:#6e7681;">Temperature: <span id="temp-val">0.1</span></label>
+      <input type="range" id="llm-temp" min="0" max="1" step="0.05" value="0.1" style="width:100%;accent-color:#58a6ff;" oninput="document.getElementById('temp-val').textContent=this.value">
+    </div>
+    <div style="display:flex;gap:4px;">
+      <button onclick="saveLLMConfig()" style="flex:1;font-size:10px;padding:5px;background:#1f6feb;border-color:#1f6feb;color:#fff;">Save</button>
+      <button onclick="testLLM()" id="btn-test" style="flex:1;font-size:10px;padding:5px;">Test</button>
+    </div>
+    <div id="llm-status" style="margin-top:4px;font-size:10px;"></div>
+  </div>
+  <div id="chat-messages" style="flex:1;overflow-y:auto;padding:12px;"></div>
+  <div style="padding:10px;border-top:1px solid rgba(255,255,255,0.06);display:flex;gap:6px;">
+    <input type="text" id="chat-input" placeholder="Ask about the graph..." style="flex:1;padding:8px 10px;background:rgba(10,10,16,0.8);border:1px solid rgba(255,255,255,0.1);color:#e0e0e0;border-radius:6px;font-size:12px;outline:none;">
+    <button onclick="sendChat()" style="padding:8px 12px;background:#1f6feb;border:1px solid #1f6feb;color:#fff;border-radius:6px;cursor:pointer;font-size:12px;">Send</button>
+  </div>
+</div><!-- /chat-sidebar -->
+</div><!-- /content-row -->
+<div id="stats-bar"></div>
+
+<script>
+// ============================================================
+// STATE
+// ============================================================
+var allNodes = [], allEdges = [], nodeMap = {}, adjOut = {}, adjIn = {};
+var selectedNode = null;
+var focusedNodes = null; // set of node IDs currently visible
+var drillDepth = 0;
+var drillHistory = [];
+var physicsOn = true;
+var graph = null;
+
+// Auto-color palette â€” vibrant, distinct
+var DOMAIN_COLORS = {
+  'Party': '#f0883e', 'Individual': '#f0883e', 'Organization': '#f0883e', 'RelatedParty': '#f0883e',
+  'Customer': '#e6194b', 'BillingAccount': '#e6194b', 'PaymentMethod': '#e6194b', 'CreditProfile': '#e6194b', 'OrderItem': '#e6194b', 'Appointment': '#e6194b',
+  'Product': '#3cb44b', 'ProductOffering': '#3cb44b', 'ProductSpecification': '#3cb44b', 'ProductPrice': '#3cb44b', 'BundledProductOffering': '#3cb44b', 'ProductOfferingPrice': '#3cb44b', 'Category': '#3cb44b', 'ProductRelationship': '#3cb44b', 'ProductTerm': '#3cb44b',
+  'Service': '#4363d8', 'ServiceSpecification': '#4363d8', 'ServiceOrder': '#4363d8', 'CustomerFacingService': '#4363d8', 'ResourceFacingService': '#4363d8', 'ServiceRelationship': '#4363d8', 'ServiceCandidate': '#4363d8',
+  'Resource': '#911eb4', 'PhysicalResource': '#911eb4', 'LogicalResource': '#911eb4', 'ResourceSpecification': '#911eb4', 'ResourceRelationship': '#911eb4', 'ResourceCandidate': '#911eb4', 'ResourceOrder': '#911eb4',
+  'TroubleTicket': '#f85149', 'Alarm': '#f85149',
+  'Agreement': '#42d4f4', 'Account': '#42d4f4',
+  'Entity': '#6e7681', 'TimePeriod': '#6e7681', 'Characteristic': '#6e7681', 'ContactMedium': '#6e7681', 'Note': '#6e7681', 'Feature': '#6e7681', 'Place': '#6e7681', 'Attachment': '#6e7681', 'Channel': '#6e7681', 'MarketSegment': '#6e7681',
+};
+var DEFAULT_COLOR = '#8b949e';
+
+function getColor(node) {
+  return DOMAIN_COLORS[node.label] || DOMAIN_COLORS[node.type] || DEFAULT_COLOR;
+}
+
+// ============================================================
+// INIT
+// ============================================================
+function detectGPU() {
+  try {
+    var c = document.createElement('canvas');
+    var gl = c.getContext('webgl2') || c.getContext('webgl');
+    if (!gl) return false;
+    var dbg = gl.getExtension('WEBGL_debug_renderer_info');
+    var renderer = dbg ? gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) : '';
+    return renderer && !(/swiftshader|llvmpipe|mesa/i.test(renderer));
+  } catch(e) { return false; }
+}
+
+async function init() {
+  var hasGPU = detectGPU();
+  var badge = document.getElementById('gpu-badge');
+  if (hasGPU) {
+    badge.textContent = '⚡ GPU detected';
+    badge.className = 'gpu';
+  } else {
+    badge.textContent = '🖥 CPU only (no GPU)';
+    badge.className = 'cpu';
+  }
+
+  var resp = await fetch('/api/new-graph');
+  var data = await resp.json();
+  allNodes = data.nodes || [];
+  allEdges = data.edges || [];
+
+  // Build indexes
+  allNodes.forEach(function(n) {
+    nodeMap[n.id] = n;
+    n.color = getColor(n);
+    n.degree = 0;
+  });
+  allEdges.forEach(function(e) {
+    if (!adjOut[e.source]) adjOut[e.source] = [];
+    if (!adjIn[e.target]) adjIn[e.target] = [];
+    adjOut[e.source].push(e);
+    adjIn[e.target].push(e);
+    if (nodeMap[e.source]) nodeMap[e.source].degree = (nodeMap[e.source].degree||0) + 1;
+    if (nodeMap[e.target]) nodeMap[e.target].degree = (nodeMap[e.target].degree||0) + 1;
+  });
+
+  document.getElementById('stats').textContent = allNodes.length + ' nodes · ' + allEdges.length + ' edges';
+
+  if (allNodes.length === 0) {
+    document.getElementById('stats-bar-sidebar').textContent = 'No graph data. Build an ontology first.';
+    document.getElementById('graph').innerHTML = '<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#6e7681;font-size:14px;text-align:center;">No graph data yet.<br><br><span style="font-size:12px;">Build an ontology from the Studio to see it here.</span></div>';
+    return;
+  }
+  fetch('/api/stats').then(function(r){return r.json();}).then(function(s){
+    var txt = s.triples+' triples · '+s.nodes+' nodes · '+s.edges+' edges · '+Object.keys(s.types).length+' types';
+    document.getElementById('stats-bar').textContent = txt;
+    document.getElementById('stats-bar-sidebar').textContent = txt;
+  }).catch(function(){});
+  buildLegend();
+  buildTypeFilters();
+  renderGraph(allNodes, allEdges);
+  setupSearch();
+}
+
+// ============================================================
+// RENDER
+// ============================================================
+function renderGraph(nodes, edges) {
+  var container = document.getElementById('graph');
+  var area = document.getElementById('graph-area');
+  if (graph) { container.innerHTML = ''; graph = null; }
+
+  var gData = {
+    nodes: nodes.map(function(n) { return Object.assign({}, n); }),
+    links: edges.map(function(e) { return {source:e.source, target:e.target, relation:e.relation}; })
+  };
+
+  if (is3D) {
+    graph = ForceGraph3D()(container)
+      .graphData(gData)
+      .nodeLabel(function(n) { return n.label + ' (' + (n.type||'') + ')'; })
+      .nodeColor(function(n) { return n.color || DEFAULT_COLOR; })
+      .nodeVal(function(n) { return 2 + Math.sqrt(n.degree || 1); })
+      .linkDirectionalArrowLength(3)
+      .linkColor(function() { return 'rgba(88,166,255,0.2)'; })
+      .linkWidth(0.5)
+      .backgroundColor('#080810')
+      .onNodeClick(function(n) { drillInto(n.id); })
+      .onNodeRightClick(function(n) { focusNode(n.id); })
+      .width(area.clientWidth || window.innerWidth - 640)
+      .height(area.clientHeight || window.innerHeight - 76);
+    if (!physicsOn) setTimeout(function(){ graph.d3Force('charge', null); }, 3000);
+    return;
+  }
+
+  graph = ForceGraph()(container)
+    .graphData(gData)
+    .nodeCanvasObject(function(node, ctx, globalScale) {
+      var size = 3 + Math.sqrt(node.degree || 1) * 2;
+      var color = node.color || DEFAULT_COLOR;
+      var isSelected = selectedNode === node.id;
+      var isDrillPath = focusedNodes && focusedNodes.has(node.id);
+      var isNeighbor = false;
+      if (selectedNode && !isDrillPath) {
+        var outs = adjOut[selectedNode] || [];
+        var ins = adjIn[selectedNode] || [];
+        for (var i=0;i<outs.length;i++) { if (outs[i].target===node.id) { isNeighbor=true; break; } }
+        if (!isNeighbor) for (var i=0;i<ins.length;i++) { if (ins[i].source===node.id) { isNeighbor=true; break; } }
+      }
+      var isFaded = focusedNodes && !isDrillPath && !isNeighbor;
+      var alpha = isFaded ? 0.06 : (isDrillPath ? 1 : 0.5);
+
+      ctx.globalAlpha = alpha;
+
+      // Glow for selected
+      if (isSelected) {
+        ctx.shadowColor = color;
+        ctx.shadowBlur = 20;
+      }
+
+      // Node circle
+      ctx.beginPath();
+      ctx.arc(node.x, node.y, size, 0, 2 * Math.PI);
+      ctx.fillStyle = isSelected ? '#ffffff' : color;
+      ctx.fill();
+
+      if (isSelected) {
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+      }
+
+      // Label
+      if (!isFaded && (globalScale > 1.2 || isSelected || isDrillPath || size > 6)) {
+        ctx.font = (isSelected ? 'bold ' : '') + Math.max(11/globalScale, 3) + 'px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'top';
+        ctx.fillStyle = isSelected ? '#ffffff' : 'rgba(255,255,255,0.7)';
+        ctx.fillText(node.label, node.x, node.y + size + 3);
+      }
+
+      ctx.globalAlpha = 1;
+    })
+    .nodeCanvasObjectMode(function() { return 'replace'; })
+    .linkColor(function(link) {
+      if (focusedNodes) {
+        var srcIn = focusedNodes.has(typeof link.source === 'object' ? link.source.id : link.source);
+        var tgtIn = focusedNodes.has(typeof link.target === 'object' ? link.target.id : link.target);
+        return (srcIn && tgtIn) ? 'rgba(88,166,255,0.4)' : 'rgba(88,166,255,0.02)';
+      }
+      return 'rgba(88,166,255,0.12)';
+    })
+    .linkWidth(function(link) {
+      if (!focusedNodes) return 0.5;
+      var srcIn = focusedNodes.has(typeof link.source === 'object' ? link.source.id : link.source);
+      var tgtIn = focusedNodes.has(typeof link.target === 'object' ? link.target.id : link.target);
+      return (srcIn && tgtIn) ? 1.5 : 0.2;
+    })
+    .linkDirectionalArrowLength(3)
+    .linkDirectionalArrowRelPos(0.8)
+    .linkLabel(function(link) { return link.relation; })
+    .backgroundColor('#080810')
+    .onNodeClick(function(node) { drillInto(node.id); })
+    .onNodeRightClick(function(node) { drillInto(node.id); })
+    .onBackgroundClick(function() { resetFocus(); })
+    .width(area.clientWidth || window.innerWidth - 640)
+    .height(area.clientHeight || window.innerHeight - 76)
+    .cooldownTicks(100);
+
+  graph.d3Force('charge').strength(-120);
+  graph.d3Force('link').distance(60);
+
+  // Auto-fit after simulation settles
+  setTimeout(function() { if (graph) graph.zoomToFit(400, 40); }, 1500);
+}
+
+// ============================================================
+// FOCUS â€” click a node, everything else fades
+// ============================================================
+function focusNode(id) {
+  selectedNode = id;
+  document.getElementById('btn-expand').disabled = false;
+  var neighbors = new Set([id]);
+  (adjOut[id] || []).forEach(function(e) { neighbors.add(e.target); });
+  (adjIn[id] || []).forEach(function(e) { neighbors.add(e.source); });
+  focusedNodes = neighbors;
+
+  showDetail(id);
+  if (!is3D) graph.nodeCanvasObject(graph.nodeCanvasObject());
+
+  var node = graph.graphData().nodes.find(function(n) { return n.id === id; });
+  if (node) {
+    if (is3D) {
+      graph.cameraPosition({x:node.x, y:node.y, z:node.z+150}, node, 600);
+    } else {
+      graph.centerAt(node.x, node.y, 600);
+      graph.zoom(2.5, 600);
+    }
+  }
+}
+
+function resetFocus() {
+  selectedNode = null;
+  focusedNodes = null;
+  document.getElementById('btn-expand').disabled = true;
+  document.getElementById('detail').classList.remove('visible');
+  document.getElementById('no-detail').style.display = '';
+  if (!is3D) graph.nodeCanvasObject(graph.nodeCanvasObject());
+}
+
+// ============================================================
+// DRILL-DOWN â€” right-click to expand deeper
+// ============================================================
+function drillInto(id) {
+  var hops = parseInt(document.getElementById('hop-slider').value);
+  drillHistory.push(id);
+  drillDepth++;
+  document.getElementById('depth-indicator').style.display = '';
+  document.getElementById('depth-indicator').textContent = 'Depth: ' + drillDepth + ' | Hops: ' + hops + ' | Click to keep drilling | Reset to come back';
+
+  // Expand N hops from this node
+  var visited = new Set([id]);
+  var frontier = [id];
+  for (var h = 0; h < hops; h++) {
+    var next = [];
+    frontier.forEach(function(nid) {
+      (adjOut[nid] || []).forEach(function(e) { if (!visited.has(e.target)) { visited.add(e.target); next.push(e.target); } });
+      (adjIn[nid] || []).forEach(function(e) { if (!visited.has(e.source)) { visited.add(e.source); next.push(e.source); } });
+    });
+    frontier = next;
+  }
+
+  // Merge with existing focused nodes
+  if (!focusedNodes) focusedNodes = new Set();
+  visited.forEach(function(n) { focusedNodes.add(n); });
+
+  selectedNode = id;
+  showDetail(id);
+  if (!is3D) graph.nodeCanvasObject(graph.nodeCanvasObject());
+
+  var node = graph.graphData().nodes.find(function(n) { return n.id === id; });
+  if (node) {
+    if (is3D) {
+      graph.cameraPosition({x:node.x, y:node.y, z:node.z+200}, node, 1000);
+    } else {
+      graph.centerAt(node.x, node.y, 800);
+      graph.zoom(3, 800);
+    }
+  }
+}
+
+// ============================================================
+// DETAIL PANEL
+// ============================================================
+function showDetail(id) {
+  var node = nodeMap[id];
+  if (!node) return;
+  document.getElementById('no-detail').style.display = 'none';
+  var det = document.getElementById('detail');
+  det.classList.add('visible');
+  document.getElementById('d-name').textContent = node.label;
+  var badge = document.getElementById('d-type');
+  badge.textContent = node.type || 'unknown';
+  badge.style.background = node.color;
+  badge.style.color = '#fff';
+  document.getElementById('d-desc').textContent = node.description || '';
+
+  var conns = [];
+  (adjOut[id] || []).forEach(function(e) {
+    var t = nodeMap[e.target];
+    if (t) conns.push({id: e.target, label: t.label, rel: e.relation, dir: 'out', color: t.color});
+  });
+  (adjIn[id] || []).forEach(function(e) {
+    var s = nodeMap[e.source];
+    if (s) conns.push({id: e.source, label: s.label, rel: e.relation, dir: 'in', color: s.color});
+  });
+
+  var html = conns.map(function(c) {
+    var arrow = c.dir === 'out' ? 'â†’' : 'â†';
+    return '<div class="conn" onclick="drillInto(\'' + c.id + '\')">' +
+      '<span class="arrow">' + arrow + '</span>' +
+      '<span style="color:' + c.color + '">' + c.label + '</span>' +
+      '<span class="rel">' + c.rel + '</span></div>';
+  }).join('');
+  document.getElementById('d-conns').innerHTML = html || '<span style="color:#6e7681;font-size:11px;">No connections</span>';
+}
+
+// ============================================================
+// SEARCH
+// ============================================================
+function setupSearch() {
+  var input = document.getElementById('search');
+  var results = document.getElementById('search-results');
+  var timeout;
+  input.addEventListener('input', function() {
+    clearTimeout(timeout);
+    timeout = setTimeout(function() {
+      var q = input.value.toLowerCase();
+      if (q.length < 2) { results.innerHTML = ''; return; }
+      var matches = allNodes.filter(function(n) {
+        return n.label.toLowerCase().indexOf(q) > -1 || n.id.toLowerCase().indexOf(q) > -1;
+      }).slice(0, 15);
+      if (!matches.length) { results.innerHTML = ''; return; }
+      results.innerHTML = matches.map(function(n) {
+        return '<div class="item" onclick="focusNode(\'' + n.id + '\')">' +
+          '<span style="display:flex;align-items:center;"><span class="dot" style="background:' + n.color + '"></span>' + n.label + '</span>' +
+          '<span style="color:#6e7681;font-size:10px;">' + (n.type||'') + '</span></div>';
+      }).join('');
+    }, 150);
+  });
+}
+
+// ============================================================
+// LEGEND
+// ============================================================
+function buildLegend() {
+  var domains = {};
+  allNodes.forEach(function(n) { domains[n.color] = domains[n.color] || {color: n.color, labels: new Set()}; domains[n.color].labels.add(n.label); });
+  // Group by color, pick representative label
+  var domainNames = {
+    '#f0883e': 'Party', '#e6194b': 'Customer', '#3cb44b': 'Product',
+    '#4363d8': 'Service', '#911eb4': 'Resource', '#f85149': 'Trouble/Alarm',
+    '#42d4f4': 'Agreement', '#6e7681': 'Common'
+  };
+  var el = document.getElementById('legend');
+  var html = '';
+  Object.keys(domainNames).forEach(function(color) {
+    if (domains[color]) {
+      html += '<div class="item" onclick="filterByColor(\'' + color + '\')"><span class="dot" style="background:' + color + '"></span>' + domainNames[color] + ' (' + domains[color].labels.size + ')</div>';
+    }
+  });
+  el.innerHTML = html;
+}
+
+function filterByColor(color) {
+  var ids = new Set();
+  allNodes.forEach(function(n) { if (n.color === color) ids.add(n.id); });
+  focusedNodes = ids;
+  selectedNode = null;
+  graph.nodeCanvasObject(graph.nodeCanvasObject());
+}
+
+// ============================================================
+// CONTROLS
+// ============================================================
+function expandSelected() {
+  if (!selectedNode) return;
+  drillInto(selectedNode);
+}
+
+function resetView() {
+  selectedNode = null;
+  focusedNodes = null;
+  drillDepth = 0;
+  drillHistory = [];
+  document.getElementById('btn-expand').disabled = true;
+  document.getElementById('detail').classList.remove('visible');
+  document.getElementById('no-detail').style.display = '';
+  document.getElementById('depth-indicator').style.display = 'none';
+  renderGraph(allNodes, allEdges);
+  setTimeout(function() { graph.zoomToFit(400, 40); }, 300);
+}
+
+function togglePhysics() {
+  physicsOn = !physicsOn;
+  document.getElementById('btn-physics').classList.toggle('active', physicsOn);
+  if (is3D) {
+    if (physicsOn) graph.d3ReheatSimulation();
+    else graph.d3Force('charge', null);
+  } else {
+    if (physicsOn) graph.d3ReheatSimulation();
+    else graph.cooldownTicks(0);
+  }
+}
+
+function fitAll() {
+  if (graph) graph.zoomToFit(400, 40);
+}
+
+// ============================================================
+// CHAT + SPARQL
+// ============================================================
+var chatMode = 'context';
+var chatVisible = false;
+
+function toggleChat() {
+  chatVisible = !chatVisible;
+  document.getElementById('chat-sidebar').classList.toggle('hidden', !chatVisible);
+  document.getElementById('btn-chat').classList.toggle('active', chatVisible);
+  setTimeout(function(){ var c=document.getElementById('graph-area'); if(graph){graph.width(c.clientWidth);graph.height(c.clientHeight);} }, 250);
+}
+
+function setChatMode(mode) {
+  chatMode = mode;
+  var ctx = document.getElementById('btn-ctx');
+  var spq = document.getElementById('btn-spq');
+  ctx.className = mode==='context' ? 'active' : '';
+  spq.className = mode==='sparql' ? 'active' : '';
+  document.getElementById('chat-input').placeholder = mode==='sparql' ? 'Ask (SPARQL agent)...' : 'Ask about the graph...';
+}
+
+async function sendChat() {
+  var input = document.getElementById('chat-input');
+  var q = input.value.trim();
+  if (!q) return;
+  input.value = '';
+  addChatMsg(q, 'user');
+  addChatMsg('Thinking...', 'assistant', 'thinking');
+
+  var endpoint = chatMode==='sparql' ? '/api/ask/sparql' : '/api/ask/project';
+  try {
+    var resp = await fetch(endpoint, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({question:q}) });
+    var data = await resp.json();
+    var el = document.getElementById('thinking');
+    if (el) el.remove();
+    if (data.error && !data.answer) {
+      addChatMsg('Error: ' + data.error, 'assistant');
+      return;
+    }
+    var msg = data.answer || '';
+    if (data.sparql) msg += '\n\nSPARQL:\n' + data.sparql;
+    if (data.count !== undefined) msg += '\n(' + data.count + ' results)';
+    addChatMsg(msg, 'assistant');
+  } catch(e) {
+    var el = document.getElementById('thinking');
+    if (el) el.remove();
+    addChatMsg('Error: ' + e.message, 'assistant');
+  }
+}
+
+function addChatMsg(text, role, id) {
+  var el = document.getElementById('chat-messages');
+  var div = document.createElement('div');
+  div.style.marginBottom = '10px';
+  div.style.textAlign = role==='user' ? 'right' : 'left';
+  if (id) div.id = id;
+  var bubble = document.createElement('div');
+  bubble.style.cssText = 'display:inline-block;max-width:85%;padding:10px 14px;border-radius:12px;font-size:12px;line-height:1.6;text-align:left;white-space:pre-wrap;word-break:break-word;';
+  if (role==='user') {
+    bubble.style.background = '#1f6feb';
+    bubble.style.color = '#ffffff';
+  } else {
+    bubble.style.background = 'rgba(30,30,50,0.9)';
+    bubble.style.color = '#c9d1d9';
+    bubble.style.border = '1px solid rgba(255,255,255,0.06)';
+  }
+  bubble.textContent = text;
+  div.appendChild(bubble);
+  el.appendChild(div);
+  el.scrollTop = el.scrollHeight;
+}
+
+document.getElementById('chat-input').addEventListener('keydown', function(e) { if (e.key==='Enter') sendChat(); });
+
+function toggleLLMSettings() {
+  var el = document.getElementById('llm-settings');
+  el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+
+function onProviderChange() {
+  var p = document.getElementById('llm-provider').value;
+  document.getElementById('llm-url-row').style.display = (p==='ollama'||p==='openai') ? '' : 'none';
+  document.getElementById('llm-region-row').style.display = p==='bedrock' ? '' : 'none';
+  document.getElementById('llm-key-row').style.display = p==='openai' ? '' : 'none';
+  var m = document.getElementById('llm-model');
+  if (p==='ollama') { m.value='qwen2.5:1.5b'; document.getElementById('llm-url').value='http://localhost:11434'; }
+  else if (p==='bedrock') m.value='anthropic.claude-3-haiku-20240307-v1:0';
+  else if (p==='openai') m.value='gpt-4o-mini';
+}
+
+async function saveLLMConfig() {
+  var cfg = { provider:document.getElementById('llm-provider').value, model:document.getElementById('llm-model').value, base_url:document.getElementById('llm-url').value, temperature:parseFloat(document.getElementById('llm-temp').value), region:document.getElementById('llm-region').value };
+  var key = document.getElementById('llm-key').value;
+  if (key) cfg.api_key = key;
+  await fetch('/api/llm/config',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(cfg)});
+  document.getElementById('llm-status').textContent = 'Saved!';
+  document.getElementById('llm-status').style.color = '#3fb950';
+  setTimeout(function(){ document.getElementById('llm-status').textContent=''; }, 3000);
+}
+
+async function testLLM() {
+  var btn = document.getElementById('btn-test');
+  btn.textContent = 'Testing...';
+  btn.disabled = true;
+  var secs = 0;
+  var timer = setInterval(function(){ secs++; btn.textContent='Testing... '+secs+'s'; }, 1000);
+  try {
+    var resp = await fetch('/api/llm/test',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'});
+    clearInterval(timer);
+    var data = await resp.json();
+    var el = document.getElementById('llm-status');
+    if (data.status==='ok') { el.textContent='Connected! "'+data.response+'"'; el.style.color='#3fb950'; }
+    else { el.textContent='Failed: '+data.error; el.style.color='#f85149'; }
+  } catch(e) { clearInterval(timer); document.getElementById('llm-status').textContent='Error: '+e.message; document.getElementById('llm-status').style.color='#f85149'; }
+  btn.textContent = 'Test';
+  btn.disabled = false;
+}
+
+async function loadLLMConfig() {
+  try {
+    var resp = await fetch('/api/llm/config');
+    var cfg = await resp.json();
+    document.getElementById('llm-provider').value = cfg.provider || 'ollama';
+    document.getElementById('llm-model').value = cfg.model || '';
+    document.getElementById('llm-url').value = cfg.base_url || 'http://localhost:11434';
+    document.getElementById('llm-temp').value = cfg.temperature || 0.1;
+    document.getElementById('temp-val').textContent = cfg.temperature || 0.1;
+    if (cfg.region) document.getElementById('llm-region').value = cfg.region;
+    onProviderChange();
+  } catch(e) {}
+}
+loadLLMConfig();
+
+// ============================================================
+// HOP-BASED DRILL
+// ============================================================
+function drillWithHops(id) {
+  var hops = parseInt(document.getElementById('hop-slider').value);
+  drillHistory.push(id);
+  drillDepth++;
+  document.getElementById('depth-indicator').style.display = '';
+  document.getElementById('depth-indicator').textContent = 'Depth: ' + drillDepth + ' | Hops: ' + hops + ' | Reset to come back';
+
+  // Expand N hops from this node
+  var visited = new Set([id]);
+  var frontier = [id];
+  for (var h = 0; h < hops; h++) {
+    var next = [];
+    frontier.forEach(function(nid) {
+      (adjOut[nid] || []).forEach(function(e) { if (!visited.has(e.target)) { visited.add(e.target); next.push(e.target); } });
+      (adjIn[nid] || []).forEach(function(e) { if (!visited.has(e.source)) { visited.add(e.source); next.push(e.source); } });
+    });
+    frontier = next;
+  }
+
+  // Merge with existing focused nodes
+  if (!focusedNodes) focusedNodes = new Set();
+  visited.forEach(function(n) { focusedNodes.add(n); });
+
+  selectedNode = id;
+  showDetail(id);
+  graph.nodeCanvasObject(graph.nodeCanvasObject());
+
+  var node = graph.graphData().nodes.find(function(n) { return n.id === id; });
+  if (node) {
+    graph.centerAt(node.x, node.y, 800);
+    graph.zoom(3, 800);
+  }
+}
+
+// ============================================================
+// 3D TOGGLE
+// ============================================================
+var is3D = false;
+function toggle3D() {
+  is3D = !is3D;
+  document.getElementById('btn-3d').classList.toggle('active', is3D);
+  renderGraph(allNodes, allEdges);
+}
+
+// ============================================================
+// PATH FINDER
+// ============================================================
+async function findPath() {
+  var from = document.getElementById('path-from').value.trim();
+  var to = document.getElementById('path-to').value.trim();
+  if (!from || !to) return;
+  // Find node IDs by label match
+  var fromNode = allNodes.find(function(n) { return n.label.toLowerCase().indexOf(from.toLowerCase()) > -1; });
+  var toNode = allNodes.find(function(n) { return n.label.toLowerCase().indexOf(to.toLowerCase()) > -1; });
+  if (!fromNode || !toNode) { document.getElementById('path-result').textContent = 'Node not found'; return; }
+  // BFS
+  var visited = {};
+  visited[fromNode.id] = null;
+  var queue = [fromNode.id];
+  var found = false;
+  while (queue.length > 0) {
+    var current = queue.shift();
+    if (current === toNode.id) { found = true; break; }
+    var neighbors = [];
+    (adjOut[current] || []).forEach(function(e) { neighbors.push(e.target); });
+    (adjIn[current] || []).forEach(function(e) { neighbors.push(e.source); });
+    for (var i = 0; i < neighbors.length; i++) {
+      if (!(neighbors[i] in visited)) {
+        visited[neighbors[i]] = current;
+        queue.push(neighbors[i]);
+      }
+    }
+  }
+  if (!found) { document.getElementById('path-result').textContent = 'No path found'; return; }
+  // Reconstruct path
+  var path = [];
+  var cur = toNode.id;
+  while (cur !== null) { path.unshift(cur); cur = visited[cur]; }
+  // Highlight path
+  focusedNodes = new Set(path);
+  selectedNode = fromNode.id;
+  graph.nodeCanvasObject(graph.nodeCanvasObject());
+  document.getElementById('path-result').textContent = path.map(function(id) { return (nodeMap[id]||{}).label||id; }).join(' -> ');
+  // Center on midpoint
+  var midNode = graph.graphData().nodes.find(function(n) { return n.id === path[Math.floor(path.length/2)]; });
+  if (midNode) { graph.centerAt(midNode.x, midNode.y, 600); graph.zoom(2, 600); }
+}
+
+// ============================================================
+// TYPE FILTERS
+// ============================================================
+var activeTypes = new Set();
+
+function buildTypeFilters() {
+  var types = {};
+  allNodes.forEach(function(n) { types[n.type] = (types[n.type]||0) + 1; });
+  if (activeTypes.size === 0) Object.keys(types).forEach(function(t) { activeTypes.add(t); });
+  var el = document.getElementById('type-filters');
+  el.innerHTML = Object.entries(types).sort(function(a,b){ return b[1]-a[1]; }).map(function(entry) {
+    var t = entry[0], c = entry[1];
+    var isOn = activeTypes.has(t);
+    var color = DOMAIN_COLORS[t] || DEFAULT_COLOR;
+    return '<span class="ftag ' + (isOn?'on':'off') + '" style="border:1px solid ' + (isOn?color:'#333') + ';color:' + (isOn?color:'#555') + ';" onclick="toggleTypeFilter(\''+t+'\')">' + t + ' (' + c + ')</span>';
+  }).join('');
+}
+
+function toggleTypeFilter(type) {
+  if (activeTypes.has(type)) activeTypes.delete(type);
+  else activeTypes.add(type);
+  buildTypeFilters();
+  var visible = new Set();
+  allNodes.forEach(function(n) { if (activeTypes.has(n.type)) visible.add(n.id); });
+  focusedNodes = visible.size < allNodes.length ? visible : null;
+  graph.nodeCanvasObject(graph.nodeCanvasObject());
+}
+
+// ============================================================
+// STATS / GOD NODES
+// ============================================================
+function showStats() {
+  var types = {};
+  var relations = {};
+  allNodes.forEach(function(n) { types[n.type] = (types[n.type]||0)+1; });
+  allEdges.forEach(function(e) { relations[e.relation] = (relations[e.relation]||0)+1; });
+  // God nodes (top 5 by degree)
+  var sorted = allNodes.slice().sort(function(a,b) { return (b.degree||0)-(a.degree||0); });
+  var gods = sorted.slice(0,5);
+
+  var html = '<b>Nodes:</b> ' + allNodes.length + ' | <b>Edges:</b> ' + allEdges.length + '<br><br>';
+  html += '<b>Types:</b><br>';
+  Object.entries(types).sort(function(a,b){return b[1]-a[1];}).forEach(function(e) { html += '&nbsp;&nbsp;' + e[0] + ': ' + e[1] + '<br>'; });
+  html += '<br><b>Top Relations:</b><br>';
+  Object.entries(relations).sort(function(a,b){return b[1]-a[1];}).slice(0,8).forEach(function(e) { html += '&nbsp;&nbsp;' + e[0] + ': ' + e[1] + '<br>'; });
+  html += '<br><b>God Nodes (most connected):</b><br>';
+  gods.forEach(function(n) { html += '&nbsp;&nbsp;<span style="color:'+n.color+'">' + n.label + '</span> (' + (n.degree||0) + ' edges)<br>'; });
+
+  document.getElementById('stats-content').innerHTML = html;
+  document.getElementById('stats-modal').style.display = 'block';
+}
+
+// ============================================================
+// BOOT
+// ============================================================
+init();
+window.addEventListener('resize', function() {
+  var c = document.getElementById('graph-area');
+  if (graph) { graph.width(c.clientWidth); graph.height(c.clientHeight); }
+});
+</script>
+</body>
+</html>
+
+

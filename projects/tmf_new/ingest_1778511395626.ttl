@@ -1,0 +1,12 @@
+@prefix kg: <http://kg.local/ontology#> .
+@prefix kgr: <http://kg.local/resource/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+kgr:abstractenvironment a kg:Concept ; skos:prefLabel "AbstractEnvironment" .
+kgr:abstractenvironment rdfs:comment "A managed abstract environment resource" .
+kgr:abstractenvironment rdfs:subClassOf kgr:managedartifact .
+kgr:abstractenvironmentdefinition a kg:Concept ; skos:prefLabel "Abstractenvironmentdefinition" .
+kgr:abstractenvironmentdefinition rdfs:comment "Referenced from AbstractEnvironment" .
+kgr:abstractenvironment kg:abstractenvironmentdefinition kgr:abstractenvironmentdefinition .

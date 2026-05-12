@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KG Studio</title>
+<style>
+:root {
+  --bg: #0a0a12; --bg2: #12121e; --bg3: #1a1a2e; --border: #2a2a4e;
+  --text: #c9d1d9; --text2: #8b949e; --accent: #58a6ff; --accent2: #1f6feb;
+  --green: #3fb950; --red: #f85149; --orange: #d29922; --purple: #bc8cff;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; height:100vh; overflow:hidden; display:flex; flex-direction:column; }
+#topbar { height:48px; background:var(--bg2); border-bottom:1px solid var(--border); display:flex; align-items:center; padding:0 16px; gap:12px; }
+#topbar .logo { font-size:16px; font-weight:600; color:var(--accent); }
+#topbar .tabs { display:flex; gap:2px; margin-left:32px; }
+.tab-btn { padding:8px 20px; background:none; border:none; color:var(--text2); font-size:13px; cursor:pointer; border-bottom:2px solid transparent; }
+.tab-btn:hover { color:var(--text); }
+.tab-btn.active { color:var(--accent); border-bottom-color:var(--accent); }
+#tab-content { flex:1; overflow:hidden; position:relative; }
+.tab-pane { display:none; width:100%; height:100%; }
+.tab-pane.active { display:block; }
+#tab-model { display:none; height:100%; }
+#tab-model.active { display:flex; }
+#tab-ingest { padding:24px; overflow-y:auto; }
+.card { background:var(--bg2); border:1px solid var(--border); border-radius:8px; padding:16px; margin-bottom:16px; }
+.card h3 { font-size:12px; color:var(--text2); text-transform:uppercase; letter-spacing:1px; margin-bottom:10px; }
+input[type=text], select, textarea { width:100%; padding:8px 10px; background:var(--bg); border:1px solid var(--border); color:var(--text); border-radius:6px; font-size:13px; outline:none; }
+input:focus, textarea:focus { border-color:var(--accent); }
+button { padding:8px 16px; background:var(--bg3); border:1px solid var(--border); color:var(--text); border-radius:6px; cursor:pointer; font-size:13px; }
+button:hover { background:var(--border); }
+button.primary { background:var(--accent2); border-color:var(--accent2); color:#fff; }
+.drop-zone { border:2px dashed var(--border); border-radius:8px; padding:40px; text-align:center; color:var(--text2); cursor:pointer; }
+.drop-zone:hover { border-color:var(--accent); color:var(--accent); }
+.entity-item { padding:8px 10px; border-radius:6px; margin:4px 0; font-size:12px; display:flex; justify-content:space-between; align-items:center; background:var(--bg); border:1px solid var(--border); }
+.section { padding:12px 14px; border-bottom:1px solid var(--border); }
+.section h3 { font-size:11px; color:var(--text2); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px; }
+.model-sidebar { width:360px; flex-shrink:0; background:var(--bg2); border-right:1px solid var(--border); display:flex; flex-direction:column; overflow:hidden; }
+.model-canvas { flex:1; position:relative; }
+.model-ttl { width:360px; flex-shrink:0; background:var(--bg2); border-left:1px solid var(--border); display:flex; flex-direction:column; }
+.model-chat { flex:1; overflow-y:auto; padding:12px; }
+.model-chat-input { padding:10px; border-top:1px solid var(--border); display:flex; gap:6px; }
+.model-chat-input input { flex:1; }
+.chat-msg { margin-bottom:10px; }
+.chat-msg.user { text-align:right; }
+.chat-msg .bubble { display:inline-block; max-width:90%; padding:8px 12px; border-radius:12px; font-size:13px; line-height:1.5; text-align:left; }
+.chat-msg.user .bubble { background:var(--accent2); color:#fff; }
+.chat-msg.assistant .bubble { background:var(--bg3); color:var(--text); }
+.canvas-node { position:absolute; padding:8px 14px; border-radius:8px; border:2px solid var(--accent); background:var(--bg2); color:var(--text); font-size:12px; cursor:move; user-select:none; z-index:2; }
+.ttl-preview { flex:1; overflow-y:auto; padding:12px; font-family:'Fira Code',monospace; font-size:11px; color:var(--green); white-space:pre-wrap; background:var(--bg); }
+#tab-explore iframe { border:none; }
+#explore-toolbar button { padding:6px 14px; font-size:12px; }
+#explore-toolbar button.primary { background:var(--accent2); border-color:var(--accent2); color:#fff; }
+</style>
+</head>
+<body>
+<div id="topbar">
+  <div class="logo">&#x1f52c; KG Studio</div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('ingest')">&#x1f4e5; Ingest</button>
+    <button class="tab-btn" onclick="switchTab('model')">&#x1f9e0; Model</button>
+    <button class="tab-btn" onclick="switchTab('explore')">&#x1f50d; Explore</button>
+  </div>
+  <div style="margin-left:auto;display:flex;align-items:center;gap:8px;">
+    <select id="project-select" onchange="loadProject(this.value)" style="padding:4px 8px;background:var(--bg);border:1px solid var(--border);color:var(--text);border-radius:4px;font-size:12px;">
+      <option value="">-- Select Project --</option>
+    </select>
+    <select id="ontology-select" onchange="selectOntologyFromDropdown(this.value)" style="padding:4px 8px;background:var(--bg);border:1px solid var(--border);color:var(--text);border-radius:4px;font-size:12px;">
+      <option value="">-- Ontology --</option>
+    </select>
+    <button onclick="createProject()" style="padding:4px 10px;font-size:11px;">+ New Project</button>
+    <button onclick="mergeAndBuild()" style="padding:4px 10px;font-size:11px;">Merge & Build</button>
+  </div>
+</div>
+<div id="project-files" style="background:var(--bg2);border-bottom:1px solid var(--border);padding:4px 16px;font-size:12px;max-height:80px;overflow-y:auto;overflow-x:hidden;"></div>
+
+<div id="tab-content">
+
+<!-- INGEST TAB -->
+<div id="tab-ingest" class="tab-pane active">
+  <div style="display:flex;gap:24px;height:calc(100vh - 96px);">
+    <div style="width:400px;flex-shrink:0;display:flex;flex-direction:column;gap:16px;">
+      <div class="card">
+        <h3>Upload Files</h3>
+        <div class="drop-zone" id="drop-zone" onclick="document.getElementById('file-input').click()">
+          Drop files here or click to browse<br><span style="font-size:11px;color:var(--text2);">PDF, CSV, JSON, Markdown, TTL, Text</span>
+        </div>
+        <input type="file" id="file-input" style="display:none" multiple accept=".pdf,.csv,.json,.jsonld,.ttl,.owl,.rdf,.md,.txt,.html">
+      </div>
+      <div class="card">
+        <h3>Paste Text</h3>
+        <textarea id="paste-text" rows="5" placeholder="Paste any text here..."></textarea>
+        <button onclick="ingestText()" style="margin-top:8px;">Extract Entities</button>
+      </div>
+      <div class="card">
+        <h3>Tabular Data → Graph</h3>
+        <textarea id="structured-text" rows="5" placeholder="Paste table data (CSV, TSV, or tab-separated with headers)..."></textarea>
+        <input type="text" id="structured-title" placeholder="Title for the graph (optional)" style="margin-top:6px;">
+        <button class="primary" onclick="buildStructuredGraph()" style="margin-top:8px;">Build Graph</button>
+      </div>
+      <div class="card" id="ingest-status" style="display:none;">
+        <h3>Result</h3>
+        <div id="ingest-status-content"></div>
+      </div>
+    </div>
+    <div style="flex:1;background:var(--bg2);border-radius:8px;border:1px solid var(--border);padding:16px;overflow-y:auto;">
+      <h3 style="font-size:12px;color:var(--text2);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">Extracted Entities Preview</h3>
+      <div id="entity-preview" style="color:var(--text2);font-size:12px;font-style:italic;">Upload a file or paste text to see extracted entities</div>
+      <div style="margin-top:12px;display:none;" id="commit-bar">
+        <button class="primary" onclick="commitEntities()">Add to Graph</button>
+        <span id="commit-count" style="margin-left:8px;font-size:12px;color:var(--text2);"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODEL TAB -->
+<div id="tab-model" class="tab-pane">
+  <div class="model-sidebar">
+    <div class="section" style="display:flex;gap:4px;">
+      <button class="primary" id="btn-path-a" onclick="setModelMode('conversation')" style="flex:1;font-size:11px;">&#x1f4ac; LLM Assist</button>
+      <button id="btn-path-b" onclick="setModelMode('upload')" style="flex:1;font-size:11px;">&#x1f4c4; Upload TTL</button>
+    </div>
+    <div class="section" id="model-files-section">
+      <h3>Project Files</h3>
+      <div id="model-file-list" style="max-height:120px;overflow-y:auto;"></div>
+    </div>
+    <div id="model-conversation" class="model-chat">
+      <div class="chat-msg assistant">
+        <div class="bubble">I'm your ontology co-pilot. Describe your domain and I'll help you model it.<br><br>Try: "I want to model an incident management system"</div>
+      </div>
+    </div>
+    <div class="model-chat-input">
+      <input type="text" id="model-chat-input" placeholder="Describe your domain...">
+      <button class="primary" onclick="sendModelChat()">Send</button>
+    </div>
+    <div id="model-upload" style="display:none;padding:14px;flex:1;overflow-y:auto;">
+      <div class="drop-zone" onclick="document.getElementById('ttl-file-input').click()" style="margin-bottom:12px;">Drop .ttl file here</div>
+      <input type="file" id="ttl-file-input" style="display:none" accept=".ttl,.owl,.rdf">
+      <textarea id="ttl-paste" rows="10" placeholder="Or paste TTL here..." style="margin-bottom:8px;font-family:monospace;font-size:11px;"></textarea>
+      <div style="display:flex;gap:6px;">
+        <button onclick="validateTTL()" style="flex:1;">Validate</button>
+        <button class="primary" onclick="buildGraphFromUpload()" style="flex:1;">Build Graph</button>
+      </div>
+      <div id="ttl-status" style="margin-top:8px;font-size:12px;"></div>
+    </div>
+  </div>
+  <div class="model-canvas" id="model-canvas">
+    <div style="position:absolute;top:12px;left:12px;z-index:5;display:flex;gap:6px;">
+      <button onclick="addCanvasClass()">+ Class</button>
+      <button onclick="aiSuggest()">&#x1f916; AI Suggest</button>
+      <button onclick="clearCanvas()">Clear</button>
+    </div>
+    <div id="canvas-area" style="width:100%;height:100%;position:relative;overflow:hidden;"></div>
+  </div>
+  <div class="model-ttl">
+    <div class="section">
+      <h3>Live TTL</h3>
+      <div style="display:flex;gap:4px;">
+        <button onclick="copyTTL()" style="flex:1;font-size:11px;">Copy</button>
+        <button onclick="downloadTTL()" style="flex:1;font-size:11px;">Download</button>
+      </div>
+      <button class="primary" onclick="buildGraph()" style="width:100%;margin-top:8px;padding:12px;font-size:14px;">Build Graph</button>
+    </div>
+    <div class="ttl-preview" id="ttl-live">@prefix kg: &lt;http://kg.local/ontology#&gt; .
+@prefix owl: &lt;http://www.w3.org/2002/07/owl#&gt; .
+
+# Add classes on the canvas to generate TTL</div>
+  </div>
+</div>
+
+<!-- EXPLORE TAB -->
+<div id="tab-explore" class="tab-pane">
+  <div id="explore-toolbar" style="display:flex;align-items:center;gap:10px;padding:8px 16px;background:var(--bg2);border-bottom:1px solid var(--border);">
+    <button class="primary" onclick="exploreBuildActive()" id="explore-build-btn">&#x1f528; Build</button>
+    <button onclick="exploreMergeAndBuild()" id="explore-merge-btn">&#x1f500; Merge &amp; Build</button>
+    <div style="margin-left:16px;display:flex;gap:2px;background:var(--bg);border-radius:4px;padding:2px;">
+      <button onclick="setGraphView('nodes')" id="view-nodes-btn" class="primary" style="padding:4px 10px;font-size:11px;border-radius:3px;">&#x25CF; Nodes</button>
+      <button onclick="setGraphView('mindmap')" id="view-mindmap-btn" style="padding:4px 10px;font-size:11px;border-radius:3px;">&#x25A0; Mind Map</button>
+      <button onclick="setGraphView('tree')" id="view-tree-btn" style="padding:4px 10px;font-size:11px;border-radius:3px;">&#x25BD; Tree</button>
+    </div>
+    <button onclick="exportGraphHTML()" style="padding:4px 10px;font-size:11px;margin-left:8px;">&#x1f4e4; Export HTML</button>
+    <span id="explore-scope" style="margin-left:12px;font-size:12px;color:var(--text2);">No graph loaded</span>
+    <span id="explore-status" style="margin-left:auto;font-size:11px;color:var(--text2);"></span>
+  </div>
+  <div id="explore-graph-container" style="width:100%;height:calc(100% - 44px);position:relative;background:#080810;"></div>
+</div>
+
+</div>
+
+<script src="/static/force-graph.min.js"></script>
+<script>
+// TAB SWITCHING
+function switchTab(tab) {
+  document.querySelectorAll('.tab-pane').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.getElementById('tab-' + tab).classList.add('active');
+  var btns = document.querySelectorAll('.tab-btn');
+  for (var i = 0; i < btns.length; i++) {
+    if (btns[i].getAttribute('onclick') === "switchTab('" + tab + "')") btns[i].classList.add('active');
+  }
+}
+
+// INGEST
+var extractedEntities = [];
+var dropZone = document.getElementById('drop-zone');
+dropZone.addEventListener('dragover', function(e) { e.preventDefault(); });
+dropZone.addEventListener('drop', function(e) { e.preventDefault(); handleFiles(e.dataTransfer.files); });
+document.getElementById('file-input').addEventListener('change', function(e) { handleFiles(e.target.files); });
+
+async function handleFiles(files) {
+  var allEntities = [];
+  for (var i = 0; i < files.length; i++) {
+    var form = new FormData();
+    form.append('file', files[i]);
+    var resp = await fetch('/api/ingest/upload', { method: 'POST', body: form });
+    var data = await resp.json();
+    if (data.entities) allEntities = allEntities.concat(data.entities);
+  }
+  showIngestStatus('Extracted ' + allEntities.length + ' entities', 'var(--green)');
+  if (allEntities.length) showEntityPreview(allEntities);
+}
+
+async function ingestText() {
+  var text = document.getElementById('paste-text').value;
+  if (!text) return;
+  var resp = await fetch('/api/ingest/text', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({text: text}) });
+  var data = await resp.json();
+  showIngestStatus('Extracted ' + (data.entities ? data.entities.length : 0) + ' entities', 'var(--green)');
+  if (data.entities) showEntityPreview(data.entities);
+}
+
+function showIngestStatus(msg, color) {
+  document.getElementById('ingest-status').style.display = 'block';
+  document.getElementById('ingest-status-content').innerHTML = '<span style="color:' + color + '">' + msg + '</span>';
+}
+
+function showEntityPreview(entities) {
+  extractedEntities = entities;
+  var el = document.getElementById('entity-preview');
+  el.innerHTML = entities.map(function(e, i) {
+    return '<div class="entity-item"><label style="display:flex;align-items:center;gap:8px;cursor:pointer;"><input type="checkbox" checked data-idx="' + i + '"><span>' + e.label + '</span></label><span style="font-size:10px;color:var(--text2);">' + e.type + '</span></div>';
+  }).join('');
+  document.getElementById('commit-bar').style.display = 'block';
+  document.getElementById('commit-count').textContent = entities.length + ' entities (all selected)';
+}
+
+async function commitEntities() {
+  if (!currentProject) {
+    alert('Select a project first from the dropdown above.');
+    return;
+  }
+  // Use ALL entities by default (user can deselect if they want)
+  var checked = document.querySelectorAll('#entity-preview input[type=checkbox]:checked');
+  var selected = checked.length > 0
+    ? Array.from(checked).map(function(cb) { return extractedEntities[parseInt(cb.dataset.idx)]; })
+    : extractedEntities;
+
+  // Commit entities to project — backend generates TTL and saves to project
+  var filename = 'ingest_' + Date.now() + '.ttl';
+  var commitResp = await fetch('/api/ingest/commit', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ entities: selected, project_id: currentProject, filename: filename })
+  });
+  var commitData = await commitResp.json();
+  if (commitData.error) { alert('Commit error: ' + commitData.error); return; }
+
+  // Set the new file as active ontology
+  var savedFile = commitData.saved_to || filename;
+  activeOntology = savedFile;
+
+  // Navigate to Model tab with the new file as active
+  switchTab('model');
+  setModelMode('conversation');
+
+  // Load the committed TTL into the editor
+  if (commitData.ttl) {
+    document.getElementById('ttl-live').textContent = commitData.ttl;
+    document.getElementById('ttl-paste').value = commitData.ttl;
+  }
+
+  // Pre-fill the chat with context about what was ingested
+  var entityText = selected.map(function(e) { return e.label + ' (' + e.type + ')' + (e.description ? ': ' + e.description : ''); }).join('\n');
+  addModelMsg('I ingested data with these entities (saved as ' + savedFile + '):\n\n' + entityText + '\n\nHelp me refine this RDF ontology.', 'user');
+  addModelMsg('Thinking...', 'assistant', 'model-thinking');
+
+  // Call LLM to start building, passing project context
+  var payload = {
+    message: 'Build an RDF/TTL ontology from these entities:\n' + entityText,
+    session_id: currentProject,
+    project_id: currentProject,
+    active_file: savedFile
+  };
+  var resp = await fetch('/api/model/conversation', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(payload) });
+  var data = await resp.json();
+  var el = document.getElementById('model-thinking');
+  if (el) el.remove();
+  addModelMsg(data.response || 'No response', 'assistant');
+  if (data.ttl) document.getElementById('ttl-live').textContent = data.ttl;
+  if (data.ontology && data.ontology.classes) {
+    canvasClasses = data.ontology.classes;
+    canvasRelationships = data.ontology.relationships || [];
+    renderCanvas();
+    updateTTLPreview();
+  }
+
+  // Refresh project file list to show the new file
+  await loadProject(currentProject);
+
+  // Auto-build graph so user sees it immediately in Explore tab
+  if (data.ttl || commitData.ttl) {
+    try {
+      await fetch('/api/projects/' + currentProject + '/build', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({filename: savedFile})
+      });
+      document.getElementById('explore-iframe').src = '/view-new?t=' + Date.now();
+      document.getElementById('explore-scope').innerHTML = '&#x1f4c4; Viewing: <strong style="color:var(--accent);">' + savedFile + '</strong>';
+    } catch(e) { /* non-critical */ }
+  }
+}
+
+// MODEL TAB
+var modelMode = 'conversation';
+var canvasClasses = [];
+var canvasRelationships = [];
+
+function setModelMode(mode) {
+  modelMode = mode;
+  document.getElementById('model-conversation').style.display = mode === 'conversation' ? '' : 'none';
+  document.querySelector('.model-chat-input').style.display = mode === 'conversation' ? '' : 'none';
+  document.getElementById('model-upload').style.display = mode === 'upload' ? '' : 'none';
+  document.getElementById('btn-path-a').classList.toggle('primary', mode === 'conversation');
+  document.getElementById('btn-path-b').classList.toggle('primary', mode === 'upload');
+}
+
+async function sendModelChat() {
+  var input = document.getElementById('model-chat-input');
+  var msg = input.value.trim();
+  if (!msg) return;
+  input.value = '';
+  addModelMsg(msg, 'user');
+  addModelMsg('Thinking...', 'assistant', 'model-thinking');
+  var payload = { message: msg, session_id: currentProject || 'default' };
+  if (currentProject) payload.project_id = currentProject;
+  if (activeOntology) payload.active_file = activeOntology;
+  var resp = await fetch('/api/model/conversation', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(payload) });
+  var data = await resp.json();
+  var el = document.getElementById('model-thinking');
+  if (el) el.remove();
+  addModelMsg(data.response || 'No response', 'assistant');
+  if (data.ontology && data.ontology.classes) {
+    canvasClasses = data.ontology.classes;
+    canvasRelationships = data.ontology.relationships || [];
+    renderCanvas();
+    updateTTLPreview();
+  }
+  if (data.ttl) document.getElementById('ttl-live').textContent = data.ttl;
+}
+
+document.getElementById('model-chat-input').addEventListener('keydown', function(e) { if (e.key === 'Enter') sendModelChat(); });
+
+function addModelMsg(text, role, id) {
+  var el = document.getElementById('model-conversation');
+  var div = document.createElement('div');
+  div.className = 'chat-msg ' + role;
+  if (id) div.id = id;
+  div.innerHTML = '<div class="bubble">' + text.replace(/\n/g, '<br>') + '</div>';
+  el.appendChild(div);
+  el.scrollTop = el.scrollHeight;
+}
+
+document.getElementById('ttl-file-input').addEventListener('change', async function(e) {
+  var file = e.target.files[0];
+  if (file) document.getElementById('ttl-paste').value = await file.text();
+});
+
+async function validateTTL() {
+  var ttl = document.getElementById('ttl-paste').value;
+  var resp = await fetch('/api/model/validate', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ttl: ttl}) });
+  var data = await resp.json();
+  var el = document.getElementById('ttl-status');
+  if (data.valid) el.innerHTML = '<span style="color:var(--green)">Valid - ' + data.triples + ' triples</span>';
+  else el.innerHTML = '<span style="color:var(--red)">Invalid: ' + data.error + '</span>';
+}
+
+// VISUAL CANVAS
+var dragNode = null, dragOffset = {x:0, y:0};
+
+function addCanvasClass() {
+  var name = prompt('Class name:');
+  if (!name) return;
+  canvasClasses.push({ id: name.toLowerCase().replace(/[^a-z0-9]/g, '_'), label: name, description: '', properties: [], x: 100 + Math.random() * 400, y: 100 + Math.random() * 300 });
+  renderCanvas();
+  updateTTLPreview();
+}
+
+function renderCanvas() {
+  var area = document.getElementById('canvas-area');
+  area.querySelectorAll('.canvas-node, svg').forEach(function(el) { el.remove(); });
+  canvasClasses.forEach(function(cls, i) {
+    var div = document.createElement('div');
+    div.className = 'canvas-node';
+    div.textContent = cls.label;
+    div.style.left = (cls.x || 100 + i * 150) + 'px';
+    div.style.top = (cls.y || 100 + i * 80) + 'px';
+    div.addEventListener('mousedown', function(e) { dragNode = i; dragOffset = { x: e.clientX - (cls.x||0), y: e.clientY - (cls.y||0) }; e.preventDefault(); });
+    area.appendChild(div);
+  });
+  if (canvasRelationships.length) {
+    var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;';
+    canvasRelationships.forEach(function(rel) {
+      var src = canvasClasses.find(function(c) { return c.id === rel.source; });
+      var tgt = canvasClasses.find(function(c) { return c.id === rel.target; });
+      if (!src || !tgt) return;
+      var line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', (src.x||100) + 50); line.setAttribute('y1', (src.y||100) + 15);
+      line.setAttribute('x2', (tgt.x||100) + 50); line.setAttribute('y2', (tgt.y||100) + 15);
+      line.setAttribute('stroke', '#58a6ff'); line.setAttribute('stroke-width', '1.5');
+      svg.appendChild(line);
+      var text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      text.setAttribute('x', ((src.x||100) + (tgt.x||100)) / 2 + 50);
+      text.setAttribute('y', ((src.y||100) + (tgt.y||100)) / 2 + 10);
+      text.setAttribute('fill', '#8b949e'); text.setAttribute('font-size', '10'); text.setAttribute('text-anchor', 'middle');
+      text.textContent = rel.relation || rel.label || '';
+      svg.appendChild(text);
+    });
+    area.appendChild(svg);
+  }
+}
+
+document.addEventListener('mousemove', function(e) {
+  if (dragNode === null) return;
+  canvasClasses[dragNode].x = e.clientX - dragOffset.x;
+  canvasClasses[dragNode].y = e.clientY - dragOffset.y;
+  renderCanvas();
+});
+document.addEventListener('mouseup', function() { if (dragNode !== null) { dragNode = null; updateTTLPreview(); } });
+
+function clearCanvas() { canvasClasses = []; canvasRelationships = []; renderCanvas(); updateTTLPreview(); }
+
+async function updateTTLPreview() {
+  var resp = await fetch('/api/model/canvas-to-ttl', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ classes: canvasClasses, relationships: canvasRelationships }) });
+  var data = await resp.json();
+  document.getElementById('ttl-live').textContent = data.ttl || '# Empty';
+}
+
+async function aiSuggest() {
+  var resp = await fetch('/api/model/suggest', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ classes: canvasClasses, relationships: canvasRelationships, context: '' }) });
+  var data = await resp.json();
+  if (data.suggestions) {
+    data.suggestions.forEach(function(s, i) {
+      if (s.type === 'class') canvasClasses.push(Object.assign({}, s, { x: 300 + i * 140, y: 250 + i * 60 }));
+      else if (s.type === 'relationship') canvasRelationships.push(s);
+    });
+    renderCanvas();
+  }
+}
+
+function copyTTL() { navigator.clipboard.writeText(document.getElementById('ttl-live').textContent); }
+function downloadTTL() {
+  var blob = new Blob([document.getElementById('ttl-live').textContent], {type: 'text/turtle'});
+  var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'ontology.ttl'; a.click();
+}
+
+// BUILD GRAPH
+async function buildGraph() {
+  var ttl = document.getElementById('ttl-live').textContent;
+  var uploadTTL = document.getElementById('ttl-paste').value;
+  if (uploadTTL && uploadTTL.length > 50) ttl = uploadTTL;
+  if (!ttl || ttl.indexOf('# Add classes') > -1) { alert('No TTL to build.'); return; }
+  await doBuildGraph(ttl);
+}
+
+async function buildGraphFromUpload() {
+  var ttl = document.getElementById('ttl-paste').value;
+  if (!ttl || ttl.length < 20) { alert('Paste or upload TTL first.'); return; }
+  await doBuildGraph(ttl);
+}
+
+async function doBuildGraph(ttl) {
+  if (!currentProject) {
+    alert('Select a project first from the dropdown above.');
+    return;
+  }
+  // Save as new file (or overwrite active file if one is set)
+  var filename = activeOntology || ('rdf_' + Date.now() + '.ttl');
+  var saveResp = await fetch('/api/projects/' + currentProject + '/save', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ttl:ttl, filename:filename}) });
+  var saveData = await saveResp.json();
+  if (saveData.error) { alert('Save error: ' + saveData.error); return; }
+  // Set as active ontology
+  activeOntology = filename;
+  var buildResp = await fetch('/api/projects/' + currentProject + '/build', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({filename:filename}) });
+  var buildData = await buildResp.json();
+  if (buildData.error) { alert('Build error: ' + buildData.error); return; }
+  await loadProject(currentProject);
+  // Store and render
+  lastGraphData = buildData.graph_data;
+  switchTab('explore');
+  setTimeout(function() {
+    if (currentGraphView === 'mindmap') renderStructuredGraph(buildData.graph_data);
+    else if (currentGraphView === 'tree') renderTreeGraph(buildData.graph_data);
+    else renderExploreGraph(buildData.graph_data);
+  }, 100);
+  document.getElementById('explore-scope').innerHTML = '&#x1f4c4; <strong style="color:var(--accent);">' + filename + '</strong> — ' + buildData.nodes + ' nodes, ' + buildData.edges + ' edges';
+}
+
+// Direct graph rendering in Explore tab
+var exploreGraph = null;
+var exploreNodes = [], exploreEdges = [], exploreNodeMap = {}, exploreAdj = {};
+var exploreFocused = null; // set of focused node IDs
+var exploreSelected = null;
+
+function renderExploreGraph(graphData) {
+  var container = document.getElementById('explore-graph-container');
+  container.innerHTML = '';
+  if (!graphData || !graphData.nodes || graphData.nodes.length === 0) {
+    container.innerHTML = '<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#8b949e;font-size:14px;text-align:center;">No graph data. Build an ontology first.</div>';
+    return;
+  }
+
+  exploreNodes = graphData.nodes;
+  exploreEdges = graphData.edges;
+  exploreNodeMap = {};
+  exploreAdj = {};
+  exploreFocused = null;
+  exploreSelected = null;
+
+  // Color by type — simple circle colors for default view
+  var typeColors = {class:'#3fb950', objectproperty:'#bc8cff', datatypeproperty:'#d29922', concept:'#58a6ff', entity:'#f0883e', service:'#4363d8', resource:'#911eb4', process:'#e6194b', decision:'#42d4f4', bestpractice:'#aaffc3', group:'#9b59b6', activity:'#a8e6cf', project:'#1a3a8a'};
+  var palette = ['#58a6ff','#3fb950','#f0883e','#bc8cff','#e6194b','#42d4f4','#d29922','#911eb4','#aaffc3','#f58231','#4363d8','#fabebe','#ffd8b1','#fffac8','#bfef45'];
+  exploreNodes.forEach(function(n, i) {
+    n.color = typeColors[n.type] || palette[i % palette.length];
+    n.degree = 0;
+    exploreNodeMap[n.id] = n;
+  });
+  exploreEdges.forEach(function(e) {
+    if (!exploreAdj[e.source]) exploreAdj[e.source] = [];
+    if (!exploreAdj[e.target]) exploreAdj[e.target] = [];
+    exploreAdj[e.source].push(e.target);
+    exploreAdj[e.target].push(e.source);
+    if (exploreNodeMap[e.source]) exploreNodeMap[e.source].degree++;
+    if (exploreNodeMap[e.target]) exploreNodeMap[e.target].degree++;
+  });
+
+  var nodes = exploreNodes.map(function(n) { return Object.assign({}, n); });
+  var links = exploreEdges.map(function(e) { return {source: e.source, target: e.target, relation: e.relation}; });
+
+  exploreGraph = ForceGraph()(container)
+    .graphData({nodes: nodes, links: links})
+    .nodeCanvasObject(function(node, ctx, globalScale) {
+      var baseSize = 4 + Math.sqrt(node.degree || 1) * 2.5;
+      var isSelected = (exploreSelected === node.id);
+      var isNeighbor = false;
+      if (exploreSelected) {
+        var adj = exploreAdj[exploreSelected] || [];
+        isNeighbor = adj.indexOf(node.id) > -1;
+      }
+      var alpha = exploreSelected ? (isSelected ? 1 : (isNeighbor ? 1 : 0.55)) : 1;
+      var size = isSelected ? baseSize * 1.6 : baseSize;
+
+      ctx.globalAlpha = alpha;
+
+      if (isSelected) { ctx.shadowColor = node.color; ctx.shadowBlur = 25; }
+
+      ctx.beginPath();
+      ctx.arc(node.x, node.y, size, 0, 2 * Math.PI);
+      ctx.fillStyle = isSelected ? '#ffffff' : node.color;
+      ctx.fill();
+
+      if (isSelected) { ctx.strokeStyle = node.color; ctx.lineWidth = 3; ctx.stroke(); ctx.shadowBlur = 0; }
+      else if (isNeighbor) { ctx.strokeStyle = 'rgba(255,255,255,0.4)'; ctx.lineWidth = 1.5; ctx.stroke(); }
+
+      // Label
+      if (isSelected || isNeighbor || globalScale > 1.2) {
+        ctx.font = (isSelected ? 'bold ' : '') + Math.max(11/globalScale, 3.5) + 'px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'top';
+        ctx.fillStyle = isSelected ? '#ffffff' : 'rgba(255,255,255,0.8)';
+        ctx.fillText(node.label, node.x, node.y + size + 3);
+      }
+
+      ctx.globalAlpha = 1;
+    })
+    .nodeCanvasObjectMode(function() { return 'replace'; })
+    .linkColor(function(link) {
+      if (!exploreSelected) return 'rgba(88,166,255,0.25)';
+      var s = typeof link.source === 'object' ? link.source.id : link.source;
+      var t = typeof link.target === 'object' ? link.target.id : link.target;
+      var connected = (s === exploreSelected || t === exploreSelected);
+      return connected ? 'rgba(88,166,255,0.8)' : 'rgba(88,166,255,0.12)';
+    })
+    .linkWidth(function(link) {
+      if (!exploreSelected) return 0.8;
+      var s = typeof link.source === 'object' ? link.source.id : link.source;
+      var t = typeof link.target === 'object' ? link.target.id : link.target;
+      var connected = (s === exploreSelected || t === exploreSelected);
+      return connected ? 2.5 : 0.5;
+    })
+    .linkDirectionalArrowLength(4)
+    .linkDirectionalArrowRelPos(0.8)
+    .linkDirectionalParticles(function(link) {
+      if (!exploreSelected) return 0;
+      var s = typeof link.source === 'object' ? link.source.id : link.source;
+      var t = typeof link.target === 'object' ? link.target.id : link.target;
+      return (s === exploreSelected || t === exploreSelected) ? 2 : 0;
+    })
+    .linkDirectionalParticleWidth(2)
+    .linkDirectionalParticleColor(function() { return '#58a6ff'; })
+    .linkLabel(function(l) { return l.relation; })
+    .backgroundColor('#080810')
+    .width(container.clientWidth)
+    .height(container.clientHeight)
+    .onNodeClick(function(node) { exploreDrillDown(node.id); })
+    .onBackgroundClick(function() { exploreReset(); })
+    .cooldownTicks(120);
+
+  exploreGraph.d3Force('charge').strength(-180);
+  exploreGraph.d3Force('link').distance(70);
+}
+
+// Drill down — click node, it highlights, neighbors stay visible, smooth pan, never lose focus
+function exploreDrillDown(nodeId) {
+  exploreSelected = nodeId;
+
+  // Get direct neighbors of clicked node
+  var neighbors = new Set([nodeId]);
+  (exploreAdj[nodeId] || []).forEach(function(n) { neighbors.add(n); });
+
+  // ADD to existing focus — never remove what's already visible
+  if (!exploreFocused) {
+    // First click — keep whole graph visible but highlight this node + neighbors
+    exploreFocused = new Set(exploreNodes.map(function(n) { return n.id; }));
+  }
+  // The focused set stays as-is (everything visible), we just change `exploreSelected`
+  // which makes the clicked node glow and its neighbors stand out
+
+  // Smooth pan to the clicked node — no zoom change, no jump
+  var gNode = exploreGraph.graphData().nodes.find(function(n) { return n.id === nodeId; });
+  if (gNode) {
+    exploreGraph.centerAt(gNode.x, gNode.y, 800);
+  }
+
+  document.getElementById('explore-status').textContent = (exploreNodeMap[nodeId] || {}).label + ' — click neighbors to drill deeper';
+}
+
+// Reset — double-click background
+function exploreReset() {
+  exploreSelected = null;
+  exploreFocused = null;
+  exploreGraph.zoomToFit(1000, 50);
+  document.getElementById('explore-status').textContent = '';
+}
+
+// Select ontology from dropdown — loads into explorer
+async function selectOntologyFromDropdown(filename) {
+  if (!filename || !currentProject) return;
+  activeOntology = filename;
+  // Build and show in explorer
+  var resp = await fetch('/api/projects/' + currentProject + '/build', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({filename: filename})
+  });
+  var data = await resp.json();
+  if (data.error) { alert('Build error: ' + data.error); return; }
+  renderExploreGraph(data.graph_data);
+  document.getElementById('explore-scope').innerHTML = '&#x1f4c4; <strong style="color:var(--accent);">' + filename + '</strong> — ' + data.nodes + ' nodes, ' + data.edges + ' edges';
+  // Also load into TTL editor
+  var fileResp = await fetch('/api/projects/' + currentProject + '/file/' + filename);
+  var fileData = await fileResp.json();
+  if (fileData.content) {
+    document.getElementById('ttl-live').textContent = fileData.content;
+    document.getElementById('ttl-paste').value = fileData.content;
+  }
+  // Refresh file lists to show active indicator
+  await loadProject(currentProject);
+  switchTab('explore');
+}
+
+// PROJECTS
+var currentProject = null;
+var activeOntology = null;  // filename of the currently active .ttl file
+
+async function loadProjects() {
+  var resp = await fetch('/api/projects/');
+  var projects = await resp.json();
+  var sel = document.getElementById('project-select');
+  sel.innerHTML = '<option value="">-- Select Project --</option>';
+  projects.forEach(function(p) {
+    var opt = document.createElement('option');
+    opt.value = p.id;
+    opt.textContent = p.name + (p.triples ? ' (' + p.triples + ' triples)' : '');
+    sel.appendChild(opt);
+  });
+}
+
+async function createProject() {
+  var name = prompt('Project name:');
+  if (!name) return;
+  var resp = await fetch('/api/projects/create', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({name: name}) });
+  var data = await resp.json();
+  if (data.error) { alert(data.error); return; }
+  currentProject = data.id;
+  activeOntology = null;
+  await loadProjects();
+  document.getElementById('project-select').value = currentProject;
+  await loadProject(currentProject);
+}
+
+async function loadProject(pid) {
+  if (!pid) { currentProject = null; activeOntology = null; document.getElementById('project-files').innerHTML = ''; renderModelFileList([]); return; }
+  // Reset activeOntology when switching to a different project
+  if (pid !== currentProject) { activeOntology = null; }
+  currentProject = pid;
+  // Ensure dropdown shows current project
+  var sel = document.getElementById('project-select');
+  if (sel.value !== pid) {
+    // If project not in dropdown yet, refresh the list
+    var found = false;
+    for (var i = 0; i < sel.options.length; i++) {
+      if (sel.options[i].value === pid) { found = true; break; }
+    }
+    if (!found) await loadProjects();
+    sel.value = pid;
+  }
+  var resp = await fetch('/api/projects/' + pid);
+  var data = await resp.json();
+  var files = (data.files || []).slice().reverse();
+  // Show file list in top bar - newest first
+  var filesEl = document.getElementById('project-files');
+  if (files.length) {
+    filesEl.innerHTML = files.map(function(f) {
+      var isActive = (f.name === activeOntology);
+      var activeStyle = isActive ? 'border-color:var(--accent);background:var(--bg3);' : '';
+      return '<div class="entity-item" style="' + activeStyle + '"><span>&#x1f4c4; ' + f.name + (isActive ? ' <span style="color:var(--accent);font-size:10px;">● active</span>' : '') + ' <span style="color:var(--text2);font-size:10px;">(' + f.triples + ' triples)</span></span><div style="display:flex;gap:4px;"><button onclick="buildFile(\'' + f.name + '\')" style="font-size:10px;padding:3px 8px;">Build</button><button onclick="switchActiveFile(\'' + f.name + '\')" style="font-size:10px;padding:3px 8px;">Edit</button></div></div>';
+    }).join('');
+  } else {
+    filesEl.innerHTML = '<span style="color:var(--text2);font-size:11px;">No files yet. Use Ingest tab to add data.</span>';
+  }
+  // Also render file list in Model tab sidebar
+  renderModelFileList(files);
+  // Populate ontology dropdown
+  var ontSel = document.getElementById('ontology-select');
+  ontSel.innerHTML = '<option value="">-- Ontology --</option>';
+  files.forEach(function(f) {
+    var opt = document.createElement('option');
+    opt.value = f.name;
+    opt.textContent = f.name + ' (' + f.triples + 't)';
+    if (f.name === activeOntology) opt.selected = true;
+    ontSel.appendChild(opt);
+  });
+}
+
+async function buildFile(filename) {
+  activeOntology = filename;
+  var resp = await fetch('/api/projects/' + currentProject + '/build', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({filename: filename}) });
+  var data = await resp.json();
+  if (data.error) { alert('Build error: ' + data.error); return; }
+  await loadProject(currentProject);
+  lastGraphData = data.graph_data;
+  switchTab('explore');
+  setTimeout(function() {
+    if (currentGraphView === 'mindmap') renderStructuredGraph(data.graph_data);
+    else if (currentGraphView === 'tree') renderTreeGraph(data.graph_data);
+    else renderExploreGraph(data.graph_data);
+  }, 100);
+  document.getElementById('explore-scope').innerHTML = '&#x1f4c4; <strong style="color:var(--accent);">' + filename + '</strong> — ' + data.nodes + ' nodes, ' + data.edges + ' edges';
+}
+
+async function loadFileToEditor(filename) {
+  var resp = await fetch('/api/projects/' + currentProject + '/file/' + filename);
+  var data = await resp.json();
+  if (data.content) {
+    document.getElementById('ttl-live').textContent = data.content;
+    document.getElementById('ttl-paste').value = data.content;
+    switchTab('model');
+    setModelMode('upload');
+  }
+}
+
+// Switch active file with auto-save of current state
+async function switchActiveFile(filename) {
+  if (!currentProject) return;
+  // Auto-save current active file before switching
+  if (activeOntology && activeOntology !== filename) {
+    var currentTTL = document.getElementById('ttl-live').textContent;
+    if (currentTTL && currentTTL.indexOf('# Add classes') === -1 && currentTTL.trim().length > 10) {
+      try {
+        await fetch('/api/projects/' + currentProject + '/save', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({ttl: currentTTL, filename: activeOntology})
+        });
+      } catch(e) { /* ignore save errors on switch */ }
+    }
+  }
+  // Set new active file
+  activeOntology = filename;
+  // Load the file content into the editor
+  var resp = await fetch('/api/projects/' + currentProject + '/file/' + filename);
+  var data = await resp.json();
+  if (data.content) {
+    document.getElementById('ttl-live').textContent = data.content;
+    document.getElementById('ttl-paste').value = data.content;
+  }
+  // Switch to Model tab
+  switchTab('model');
+  setModelMode('conversation');
+  // Refresh file lists to show active indicator
+  await loadProject(currentProject);
+}
+
+// Render file list in Model tab sidebar
+function renderModelFileList(files) {
+  var container = document.getElementById('model-file-list');
+  if (!container) return;
+  if (!files || !files.length) {
+    container.innerHTML = '<div style="padding:8px;color:var(--text2);font-size:11px;font-style:italic;">No files in project</div>';
+    return;
+  }
+  container.innerHTML = files.map(function(f) {
+    var isActive = (f.name === activeOntology);
+    var style = isActive ? 'background:var(--bg3);border-color:var(--accent);' : '';
+    var indicator = isActive ? '<span style="color:var(--accent);margin-right:4px;">●</span>' : '';
+    return '<div class="entity-item" style="cursor:pointer;' + style + '" onclick="switchActiveFile(\'' + f.name + '\')">' + indicator + '<span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + f.name + '</span><span style="font-size:10px;color:var(--text2);margin-left:4px;">' + f.triples + 't</span></div>';
+  }).join('');
+}
+
+async function mergeAndBuild() {
+  if (!currentProject) { alert('Select a project first'); return; }
+  var resp = await fetch('/api/projects/' + currentProject);
+  var data = await resp.json();
+  if (!data.files || data.files.length < 2) { alert('Need at least 2 files to merge'); return; }
+  // Show picker
+  var names = data.files.map(function(f) { return f.name; });
+  var selected = prompt('Select files to merge (comma-separated):\n\n' + names.join('\n'), names.join(', '));
+  if (!selected) return;
+  var files = selected.split(',').map(function(s) { return s.trim(); });
+  var outName = prompt('Output filename:', 'merged_' + Date.now() + '.ttl');
+  if (!outName) return;
+  // Merge
+  var mergeResp = await fetch('/api/projects/' + currentProject + '/merge', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({files: files, output: outName}) });
+  var mergeData = await mergeResp.json();
+  if (mergeData.error) { alert('Merge error: ' + mergeData.error); return; }
+  // Build the merged file
+  alert('Merged ' + mergeData.triples + ' triples into ' + outName);
+  await loadProject(currentProject);
+  await buildFile(outName);
+}
+
+// Structured Data → Graph
+async function buildStructuredGraph() {
+  var text = document.getElementById('structured-text').value;
+  var title = document.getElementById('structured-title').value.trim();
+  if (!text) { alert('Paste tabular data first'); return; }
+
+  // Auto-create project if none selected
+  if (!currentProject) {
+    var pname = title || 'Graph ' + Date.now();
+    var resp = await fetch('/api/projects/create', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({name: pname}) });
+    var pdata = await resp.json();
+    if (pdata.error) { alert(pdata.error); return; }
+    currentProject = pdata.id;
+    await loadProjects();
+    document.getElementById('project-select').value = currentProject;
+  }
+
+  var resp = await fetch('/api/ingest/structured/build', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({text: text, title: title || '', project_id: currentProject})
+  });
+  var data = await resp.json();
+  if (data.error) { alert('Error: ' + data.error); return; }
+
+  activeOntology = data.filename;
+  await loadProject(currentProject);
+
+  var buildResp = await fetch('/api/projects/' + currentProject + '/build', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({filename: data.filename})
+  });
+  var buildData = await buildResp.json();
+  if (buildData.error) { alert('Build error: ' + buildData.error); return; }
+
+  // Store graph data for view switching
+  lastGraphData = buildData.graph_data;
+  switchTab('explore');
+  setTimeout(function() {
+    if (currentGraphView === 'mindmap') renderStructuredGraph(buildData.graph_data);
+    else if (currentGraphView === 'tree') renderTreeGraph(buildData.graph_data);
+    else renderExploreGraph(buildData.graph_data);
+  }, 100);
+  document.getElementById('explore-scope').innerHTML = '&#x1f4c4; <strong style="color:var(--accent);">' + (title || data.filename) + '</strong> — ' + buildData.nodes + ' nodes, ' + buildData.edges + ' edges';
+}
+
+// Graph view switching
+var currentGraphView = 'nodes';
+var lastGraphData = null;
+
+function setGraphView(view) {
+  currentGraphView = view;
+  document.getElementById('view-nodes-btn').className = (view === 'nodes') ? 'primary' : '';
+  document.getElementById('view-mindmap-btn').className = (view === 'mindmap') ? 'primary' : '';
+  document.getElementById('view-tree-btn').className = (view === 'tree') ? 'primary' : '';
+  if (lastGraphData) {
+    if (view === 'mindmap') renderStructuredGraph(lastGraphData);
+    else if (view === 'tree') renderTreeGraph(lastGraphData);
+    else renderExploreGraph(lastGraphData);
+  }
+}
+
+// EXPLORE TAB — Build and Merge & Build
+async function exploreBuildActive() {
+  if (!currentProject) { alert('Select a project first'); return; }
+  if (!activeOntology) { alert('No active ontology. Click "Edit" on a file first.'); return; }
+  document.getElementById('explore-status').textContent = 'Building...';
+  var resp = await fetch('/api/projects/' + currentProject + '/build', {
+    method: 'POST', headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({filename: activeOntology})
+  });
+  var data = await resp.json();
+  document.getElementById('explore-status').textContent = '';
+  if (data.error) { alert('Build error: ' + data.error); return; }
+  renderExploreGraph(data.graph_data);
+  document.getElementById('explore-scope').innerHTML = '&#x1f4c4; <strong style="color:var(--accent);">' + activeOntology + '</strong> — ' + data.nodes + ' nodes, ' + data.edges + ' edges';
+}
+
+async function exploreMergeAndBuild() {
+  if (!currentProject) { alert('Select a project first'); return; }
+  document.getElementById('explore-status').textContent = 'Merging...';
+  var resp = await fetch('/api/projects/' + currentProject + '/merge-and-build', {
+    method: 'POST', headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({})
+  });
+  var data = await resp.json();
+  document.getElementById('explore-status').textContent = '';
+  if (data.error) { alert('Merge error: ' + data.error); return; }
+  renderExploreGraph(data.graph_data);
+  document.getElementById('explore-scope').innerHTML = '&#x1f500; <strong style="color:var(--purple);">Merged</strong> — ' + data.nodes + ' nodes, ' + data.edges + ' edges (' + data.source_files.length + ' files)';
+}
+
+// Mind-map renderer for structured data (rectangles, hub, colored by type)
+function renderStructuredGraph(graphData) {
+  var container = document.getElementById('explore-graph-container');
+  container.innerHTML = '';
+  if (!graphData || !graphData.nodes || graphData.nodes.length === 0) {
+    container.innerHTML = '<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#8b949e;font-size:14px;">No data.</div>';
+    return;
+  }
+  var typeStyles = {
+    project: {bg:'#2255aa', text:'#fff'},
+    group:   {bg:'#9b59b6', text:'#fff'},
+    class:   {bg:'#9b59b6', text:'#fff'},
+    entity:  {bg:'#f0e68c', text:'#222'},
+    activity:{bg:'#b5e8b0', text:'#222'},
+    concept: {bg:'#87ceeb', text:'#222'},
+    objectproperty:{bg:'#dda0dd', text:'#222'},
+  };
+  var nodes = graphData.nodes.map(function(n) {
+    var s = typeStyles[n.type] || typeStyles.concept;
+    return Object.assign({}, n, {bg: s.bg, textColor: s.text, degree: 0});
+  });
+  var nodeMap = {};
+  nodes.forEach(function(n) { nodeMap[n.id] = n; });
+  var links = graphData.edges.map(function(e) { return {source: e.source, target: e.target, relation: e.relation}; });
+  links.forEach(function(e) {
+    if (nodeMap[e.source]) nodeMap[e.source].degree++;
+    if (nodeMap[e.target]) nodeMap[e.target].degree++;
+  });
+
+  // Set up drill-down state
+  exploreNodes = graphData.nodes;
+  exploreEdges = graphData.edges;
+  exploreNodeMap = {};
+  exploreAdj = {};
+  exploreFocused = null;
+  exploreSelected = null;
+  exploreNodes.forEach(function(n) { exploreNodeMap[n.id] = n; });
+  exploreEdges.forEach(function(e) {
+    if (!exploreAdj[e.source]) exploreAdj[e.source] = [];
+    if (!exploreAdj[e.target]) exploreAdj[e.target] = [];
+    exploreAdj[e.source].push(e.target);
+    exploreAdj[e.target].push(e.source);
+  });
+
+  exploreGraph = ForceGraph()(container)
+    .graphData({nodes: nodes, links: links})
+    .nodeCanvasObject(function(node, ctx, globalScale) {
+      var label = node.label || node.id;
+      var isHub = node.type === 'project' || node.degree > 5;
+      var isSelected = (exploreSelected === node.id);
+      var isNeighbor = exploreSelected ? (exploreAdj[exploreSelected] || []).indexOf(node.id) > -1 : false;
+      var alpha = exploreSelected ? (isSelected ? 1 : (isNeighbor ? 1 : 0.4)) : 1;
+
+      ctx.globalAlpha = alpha;
+
+      if (isHub) {
+        var r = 14 + Math.sqrt(node.degree || 1) * 3;
+        if (isSelected) { ctx.shadowColor = '#fff'; ctx.shadowBlur = 20; }
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, r, 0, 2 * Math.PI);
+        ctx.fillStyle = node.bg;
+        ctx.fill();
+        if (isSelected) { ctx.strokeStyle = '#fff'; ctx.lineWidth = 3; ctx.stroke(); ctx.shadowBlur = 0; }
+        else if (isNeighbor) { ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.stroke(); }
+        var fs = Math.max(11/globalScale, 4);
+        ctx.font = 'bold ' + fs + 'px sans-serif';
+        ctx.fillStyle = node.textColor;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(label, node.x, node.y);
+      } else {
+        var fs = Math.max(10/globalScale, 3.5);
+        ctx.font = fs + 'px sans-serif';
+        var tw = ctx.measureText(label).width;
+        var px = 7/globalScale, py = 5/globalScale;
+        var w = tw + px*2, h = fs + py*2, rad = 5/globalScale;
+        var x = node.x - w/2, y = node.y - h/2;
+
+        if (isSelected) { ctx.shadowColor = '#fff'; ctx.shadowBlur = 15; }
+
+        // Rounded rect
+        ctx.beginPath();
+        ctx.moveTo(x+rad,y); ctx.lineTo(x+w-rad,y); ctx.quadraticCurveTo(x+w,y,x+w,y+rad);
+        ctx.lineTo(x+w,y+h-rad); ctx.quadraticCurveTo(x+w,y+h,x+w-rad,y+h);
+        ctx.lineTo(x+rad,y+h); ctx.quadraticCurveTo(x,y+h,x,y+h-rad);
+        ctx.lineTo(x,y+rad); ctx.quadraticCurveTo(x,y,x+rad,y);
+        ctx.closePath();
+        ctx.fillStyle = node.bg;
+        ctx.fill();
+
+        if (isSelected) { ctx.strokeStyle = '#fff'; ctx.lineWidth = 2/globalScale; ctx.stroke(); ctx.shadowBlur = 0; }
+        else if (isNeighbor) { ctx.strokeStyle = 'rgba(255,255,255,0.6)'; ctx.lineWidth = 1.5/globalScale; ctx.stroke(); }
+        else { ctx.strokeStyle = 'rgba(0,0,0,0.3)'; ctx.lineWidth = 0.5/globalScale; ctx.stroke(); }
+
+        ctx.fillStyle = node.textColor;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(label, node.x, node.y);
+      }
+      ctx.globalAlpha = 1;
+    })
+    .nodeCanvasObjectMode(function() { return 'replace'; })
+    .nodePointerAreaPaint(function(node, color, ctx, globalScale) {
+      var fs = Math.max(10/globalScale, 3.5);
+      ctx.font = fs + 'px sans-serif';
+      var tw = ctx.measureText(node.label||node.id).width;
+      var w = tw + 14/globalScale, h = fs + 10/globalScale;
+      ctx.fillStyle = color;
+      ctx.fillRect(node.x-w/2, node.y-h/2, w, h);
+    })
+    .linkColor(function(link) {
+      if (!exploreSelected) return 'rgba(180,180,180,0.5)';
+      var s = typeof link.source === 'object' ? link.source.id : link.source;
+      var t = typeof link.target === 'object' ? link.target.id : link.target;
+      return (s === exploreSelected || t === exploreSelected) ? 'rgba(255,255,255,0.8)' : 'rgba(180,180,180,0.12)';
+    })
+    .linkWidth(function(link) {
+      if (!exploreSelected) return 1.5;
+      var s = typeof link.source === 'object' ? link.source.id : link.source;
+      var t = typeof link.target === 'object' ? link.target.id : link.target;
+      return (s === exploreSelected || t === exploreSelected) ? 3 : 0.5;
+    })
+    .linkDirectionalParticles(function(link) {
+      if (!exploreSelected) return 0;
+      var s = typeof link.source === 'object' ? link.source.id : link.source;
+      var t = typeof link.target === 'object' ? link.target.id : link.target;
+      return (s === exploreSelected || t === exploreSelected) ? 2 : 0;
+    })
+    .linkDirectionalParticleWidth(2.5)
+    .linkDirectionalParticleColor(function() { return '#fff'; })
+    .backgroundColor('#0a0a14')
+    .width(container.clientWidth)
+    .height(container.clientHeight)
+    .onNodeClick(function(node) { exploreDrillDown(node.id); })
+    .onBackgroundClick(function() { exploreReset(); })
+    .cooldownTicks(150);
+
+  exploreGraph.d3Force('charge').strength(-300);
+  exploreGraph.d3Force('link').distance(100);
+}
+
+// Decision Tree view — top-down hierarchical layout with drill-down
+function renderTreeGraph(graphData) {
+  var container = document.getElementById('explore-graph-container');
+  container.innerHTML = '';
+  if (!graphData || !graphData.nodes || graphData.nodes.length === 0) {
+    container.innerHTML = '<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#8b949e;font-size:14px;">No data.</div>';
+    return;
+  }
+
+  // Build adjacency and find root (highest degree node)
+  var nodeMap = {};
+  var adj = {};
+  var degrees = {};
+  graphData.nodes.forEach(function(n) { nodeMap[n.id] = n; degrees[n.id] = 0; });
+  graphData.edges.forEach(function(e) {
+    if (!adj[e.source]) adj[e.source] = [];
+    if (!adj[e.target]) adj[e.target] = [];
+    adj[e.source].push(e.target);
+    adj[e.target].push(e.source);
+    degrees[e.source] = (degrees[e.source] || 0) + 1;
+    degrees[e.target] = (degrees[e.target] || 0) + 1;
+  });
+
+  // Pick root = highest degree
+  var rootId = graphData.nodes[0].id;
+  var maxDeg = 0;
+  Object.keys(degrees).forEach(function(id) { if (degrees[id] > maxDeg) { maxDeg = degrees[id]; rootId = id; } });
+
+  // BFS to assign levels (top-down tree layout)
+  var levels = {};
+  var visited = new Set([rootId]);
+  var queue = [{id: rootId, level: 0}];
+  levels[rootId] = 0;
+  var maxLevel = 0;
+  while (queue.length > 0) {
+    var curr = queue.shift();
+    (adj[curr.id] || []).forEach(function(nb) {
+      if (!visited.has(nb)) {
+        visited.add(nb);
+        levels[nb] = curr.level + 1;
+        if (curr.level + 1 > maxLevel) maxLevel = curr.level + 1;
+        queue.push({id: nb, level: curr.level + 1});
+      }
+    });
+  }
+  // Assign unvisited nodes to last level
+  graphData.nodes.forEach(function(n) { if (levels[n.id] === undefined) levels[n.id] = maxLevel + 1; });
+
+  // Assign x positions per level
+  var levelNodes = {};
+  graphData.nodes.forEach(function(n) {
+    var lv = levels[n.id];
+    if (!levelNodes[lv]) levelNodes[lv] = [];
+    levelNodes[lv].push(n.id);
+  });
+
+  var W = container.clientWidth || 900;
+  var H = container.clientHeight || 600;
+  var levelHeight = H / (maxLevel + 2);
+
+  var positions = {};
+  Object.keys(levelNodes).forEach(function(lv) {
+    var ids = levelNodes[lv];
+    var spacing = W / (ids.length + 1);
+    ids.forEach(function(id, i) {
+      positions[id] = { x: spacing * (i + 1) - W/2, y: parseInt(lv) * levelHeight - H/3 };
+    });
+  });
+
+  // Set up drill-down state
+  exploreNodes = graphData.nodes;
+  exploreEdges = graphData.edges;
+  exploreNodeMap = nodeMap;
+  exploreAdj = adj;
+  exploreFocused = null;
+  exploreSelected = null;
+
+  var typeColors = {class:'#3fb950', objectproperty:'#bc8cff', concept:'#58a6ff', entity:'#f0883e', service:'#4363d8', resource:'#911eb4', group:'#9b59b6', activity:'#a8e6cf', project:'#2255aa'};
+  var nodes = graphData.nodes.map(function(n) {
+    return Object.assign({}, n, {
+      fx: positions[n.id] ? positions[n.id].x : 0,
+      fy: positions[n.id] ? positions[n.id].y : 0,
+      color: typeColors[n.type] || '#58a6ff',
+      degree: degrees[n.id] || 0
+    });
+  });
+  var links = graphData.edges.map(function(e) { return {source: e.source, target: e.target, relation: e.relation}; });
+
+  exploreGraph = ForceGraph()(container)
+    .graphData({nodes: nodes, links: links})
+    .nodeCanvasObject(function(node, ctx, globalScale) {
+      var label = node.label || node.id;
+      var isRoot = (node.id === rootId);
+      var isSelected = (exploreSelected === node.id);
+      var isNeighbor = exploreSelected ? (adj[exploreSelected] || []).indexOf(node.id) > -1 : false;
+      var alpha = exploreSelected ? (isSelected ? 1 : (isNeighbor ? 1 : 0.4)) : 1;
+
+      ctx.globalAlpha = alpha;
+      var fs = Math.max((isRoot ? 12 : 10) / globalScale, 3.5);
+      ctx.font = (isRoot || isSelected ? 'bold ' : '') + fs + 'px sans-serif';
+      var tw = ctx.measureText(label).width;
+      var px = 8/globalScale, py = 5/globalScale;
+      var w = tw + px*2, h = fs + py*2, rad = isRoot ? h/2 : 5/globalScale;
+      var x = node.x - w/2, y = node.y - h/2;
+
+      if (isSelected) { ctx.shadowColor = '#fff'; ctx.shadowBlur = 15; }
+
+      // Draw shape — root gets pill shape, others get rounded rect
+      ctx.beginPath();
+      if (isRoot) {
+        // Pill / stadium shape
+        ctx.moveTo(x + rad, y);
+        ctx.lineTo(x + w - rad, y);
+        ctx.arc(x + w - rad, y + h/2, h/2, -Math.PI/2, Math.PI/2);
+        ctx.lineTo(x + rad, y + h);
+        ctx.arc(x + rad, y + h/2, h/2, Math.PI/2, -Math.PI/2);
+      } else {
+        ctx.moveTo(x+rad,y); ctx.lineTo(x+w-rad,y); ctx.quadraticCurveTo(x+w,y,x+w,y+rad);
+        ctx.lineTo(x+w,y+h-rad); ctx.quadraticCurveTo(x+w,y+h,x+w-rad,y+h);
+        ctx.lineTo(x+rad,y+h); ctx.quadraticCurveTo(x,y+h,x,y+h-rad);
+        ctx.lineTo(x,y+rad); ctx.quadraticCurveTo(x,y,x+rad,y);
+      }
+      ctx.closePath();
+      ctx.fillStyle = isRoot ? '#2255aa' : node.color;
+      ctx.fill();
+
+      if (isSelected) { ctx.strokeStyle = '#fff'; ctx.lineWidth = 2.5/globalScale; ctx.stroke(); ctx.shadowBlur = 0; }
+      else if (isNeighbor) { ctx.strokeStyle = 'rgba(255,255,255,0.6)'; ctx.lineWidth = 1.5/globalScale; ctx.stroke(); }
+      else { ctx.strokeStyle = 'rgba(255,255,255,0.15)'; ctx.lineWidth = 0.5/globalScale; ctx.stroke(); }
+
+      // Text
+      ctx.fillStyle = isRoot ? '#fff' : '#fff';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(label, node.x, node.y);
+      ctx.globalAlpha = 1;
+    })
+    .nodeCanvasObjectMode(function() { return 'replace'; })
+    .nodePointerAreaPaint(function(node, color, ctx, globalScale) {
+      var fs = Math.max(10/globalScale, 3.5);
+      ctx.font = fs + 'px sans-serif';
+      var tw = ctx.measureText(node.label||node.id).width;
+      var w = tw + 16/globalScale, h = fs + 10/globalScale;
+      ctx.fillStyle = color;
+      ctx.fillRect(node.x-w/2, node.y-h/2, w, h);
+    })
+    .linkColor(function(link) {
+      if (!exploreSelected) return 'rgba(150,150,150,0.5)';
+      var s = typeof link.source === 'object' ? link.source.id : link.source;
+      var t = typeof link.target === 'object' ? link.target.id : link.target;
+      return (s === exploreSelected || t === exploreSelected) ? 'rgba(255,255,255,0.8)' : 'rgba(150,150,150,0.1)';
+    })
+    .linkWidth(function(link) {
+      if (!exploreSelected) return 1.5;
+      var s = typeof link.source === 'object' ? link.source.id : link.source;
+      var t = typeof link.target === 'object' ? link.target.id : link.target;
+      return (s === exploreSelected || t === exploreSelected) ? 3 : 0.4;
+    })
+    .linkDirectionalArrowLength(5)
+    .linkDirectionalArrowRelPos(0.85)
+    .linkCurvature(0.1)
+    .backgroundColor('#0a0a14')
+    .width(container.clientWidth)
+    .height(container.clientHeight)
+    .onNodeClick(function(node) { exploreDrillDown(node.id); })
+    .onBackgroundClick(function() { exploreReset(); })
+    .cooldownTicks(0);  // No physics — fixed positions
+}
+
+// Export current graph as standalone HTML with drill-down
+function exportGraphHTML() {
+  if (!lastGraphData || !lastGraphData.nodes || lastGraphData.nodes.length === 0) {
+    alert('No graph to export. Build a graph first.');
+    return;
+  }
+  var isMindMap = (currentGraphView === 'mindmap');
+  var isTree = (currentGraphView === 'tree');
+  var graphJSON = JSON.stringify(lastGraphData);
+  var title = document.getElementById('explore-scope').textContent || 'Knowledge Graph';
+
+  var html = '<!DOCTYPE html>\n<html><head><meta charset="UTF-8"><title>' + title + '</title>\n';
+  html += '<script src="https://unpkg.com/force-graph"><\/script>\n';
+  html += '<style>*{margin:0;padding:0;box-sizing:border-box}body{background:#0a0a14;overflow:hidden;height:100vh;font-family:sans-serif}#graph{width:100%;height:100%}#info{position:fixed;top:12px;left:12px;color:#8b949e;font-size:12px;z-index:10;background:rgba(10,10,20,0.8);padding:8px 14px;border-radius:6px}#status{position:fixed;bottom:12px;left:12px;color:#58a6ff;font-size:12px;z-index:10}</style>\n';
+  html += '</head><body>\n<div id="info">' + title + '</div>\n<div id="status">Click a node to drill down</div>\n<div id="graph"></div>\n';
+  html += '<script>\nvar graphData = ' + graphJSON + ';\n';
+  html += 'var selected = null;\nvar adj = {};\n';
+  html += 'graphData.edges.forEach(function(e){if(!adj[e.source])adj[e.source]=[];if(!adj[e.target])adj[e.target]=[];adj[e.source].push(e.target);adj[e.target].push(e.source);});\n';
+
+  if (isMindMap) {
+    html += 'var typeStyles={project:{bg:"#2255aa",text:"#fff"},group:{bg:"#9b59b6",text:"#fff"},class:{bg:"#9b59b6",text:"#fff"},entity:{bg:"#f0e68c",text:"#222"},activity:{bg:"#b5e8b0",text:"#222"},concept:{bg:"#87ceeb",text:"#222"},objectproperty:{bg:"#dda0dd",text:"#222"}};\n';
+    html += 'var nodes=graphData.nodes.map(function(n){var s=typeStyles[n.type]||typeStyles.concept;return Object.assign({},n,{bg:s.bg,textColor:s.text,degree:0})});\n';
+    html += 'var nodeMap={};nodes.forEach(function(n){nodeMap[n.id]=n});\n';
+    html += 'var links=graphData.edges.map(function(e){return{source:e.source,target:e.target}});\n';
+    html += 'links.forEach(function(e){if(nodeMap[e.source])nodeMap[e.source].degree++;if(nodeMap[e.target])nodeMap[e.target].degree++});\n';
+    html += 'var graph=ForceGraph()(document.getElementById("graph")).graphData({nodes:nodes,links:links})\n';
+    html += '.nodeCanvasObject(function(node,ctx,gs){var label=node.label||node.id;var isHub=node.type==="project"||node.degree>5;var isSel=(selected===node.id);var isNb=selected?(adj[selected]||[]).indexOf(node.id)>-1:false;var alpha=selected?(isSel?1:(isNb?1:0.4)):1;ctx.globalAlpha=alpha;\n';
+    html += 'if(isHub){var r=14+Math.sqrt(node.degree||1)*3;if(isSel){ctx.shadowColor="#fff";ctx.shadowBlur=20}ctx.beginPath();ctx.arc(node.x,node.y,r,0,2*Math.PI);ctx.fillStyle=node.bg;ctx.fill();if(isSel){ctx.strokeStyle="#fff";ctx.lineWidth=3;ctx.stroke();ctx.shadowBlur=0}else if(isNb){ctx.strokeStyle="#fff";ctx.lineWidth=2;ctx.stroke()}var fs=Math.max(11/gs,4);ctx.font="bold "+fs+"px sans-serif";ctx.fillStyle=node.textColor;ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText(label,node.x,node.y)}\n';
+    html += 'else{var fs=Math.max(10/gs,3.5);ctx.font=fs+"px sans-serif";var tw=ctx.measureText(label).width;var px=7/gs,py=5/gs;var w=tw+px*2,h=fs+py*2,rad=5/gs;var x=node.x-w/2,y=node.y-h/2;if(isSel){ctx.shadowColor="#fff";ctx.shadowBlur=15}ctx.beginPath();ctx.moveTo(x+rad,y);ctx.lineTo(x+w-rad,y);ctx.quadraticCurveTo(x+w,y,x+w,y+rad);ctx.lineTo(x+w,y+h-rad);ctx.quadraticCurveTo(x+w,y+h,x+w-rad,y+h);ctx.lineTo(x+rad,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-rad);ctx.lineTo(x,y+rad);ctx.quadraticCurveTo(x,y,x+rad,y);ctx.closePath();ctx.fillStyle=node.bg;ctx.fill();if(isSel){ctx.strokeStyle="#fff";ctx.lineWidth=2/gs;ctx.stroke();ctx.shadowBlur=0}else if(isNb){ctx.strokeStyle="rgba(255,255,255,0.6)";ctx.lineWidth=1.5/gs;ctx.stroke()}else{ctx.strokeStyle="rgba(0,0,0,0.3)";ctx.lineWidth=0.5/gs;ctx.stroke()}ctx.fillStyle=node.textColor;ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText(label,node.x,node.y)}ctx.globalAlpha=1})\n';
+    html += '.nodeCanvasObjectMode(function(){return"replace"})\n';
+    html += '.nodePointerAreaPaint(function(node,color,ctx,gs){var fs=Math.max(10/gs,3.5);ctx.font=fs+"px sans-serif";var tw=ctx.measureText(node.label||node.id).width;var w=tw+14/gs,h=fs+10/gs;ctx.fillStyle=color;ctx.fillRect(node.x-w/2,node.y-h/2,w,h)})\n';
+    html += '.linkColor(function(l){if(!selected)return"rgba(180,180,180,0.5)";var s=typeof l.source==="object"?l.source.id:l.source;var t=typeof l.target==="object"?l.target.id:l.target;return(s===selected||t===selected)?"rgba(255,255,255,0.8)":"rgba(180,180,180,0.12)"})\n';
+    html += '.linkWidth(function(l){if(!selected)return 1.5;var s=typeof l.source==="object"?l.source.id:l.source;var t=typeof l.target==="object"?l.target.id:l.target;return(s===selected||t===selected)?3:0.5})\n';
+  } else {
+    html += 'var palette=["#58a6ff","#3fb950","#f0883e","#bc8cff","#e6194b","#42d4f4","#d29922","#911eb4","#aaffc3","#f58231"];\n';
+    html += 'var typeColors={class:"#3fb950",objectproperty:"#bc8cff",concept:"#58a6ff",entity:"#f0883e",service:"#4363d8",resource:"#911eb4",group:"#9b59b6",activity:"#a8e6cf",project:"#1a3a8a"};\n';
+    html += 'var nodes=graphData.nodes.map(function(n,i){return Object.assign({},n,{color:typeColors[n.type]||palette[i%palette.length],degree:0})});\n';
+    html += 'var nodeMap={};nodes.forEach(function(n){nodeMap[n.id]=n});\n';
+    html += 'var links=graphData.edges.map(function(e){return{source:e.source,target:e.target}});\n';
+    html += 'links.forEach(function(e){if(nodeMap[e.source])nodeMap[e.source].degree++;if(nodeMap[e.target])nodeMap[e.target].degree++});\n';
+    html += 'var graph=ForceGraph()(document.getElementById("graph")).graphData({nodes:nodes,links:links})\n';
+    html += '.nodeCanvasObject(function(node,ctx,gs){var sz=4+Math.sqrt(node.degree||1)*2.5;var isSel=(selected===node.id);var isNb=selected?(adj[selected]||[]).indexOf(node.id)>-1:false;var alpha=selected?(isSel?1:(isNb?1:0.55)):1;var size=isSel?sz*1.6:sz;ctx.globalAlpha=alpha;if(isSel){ctx.shadowColor=node.color;ctx.shadowBlur=25}ctx.beginPath();ctx.arc(node.x,node.y,size,0,2*Math.PI);ctx.fillStyle=isSel?"#ffffff":node.color;ctx.fill();if(isSel){ctx.strokeStyle=node.color;ctx.lineWidth=3;ctx.stroke();ctx.shadowBlur=0}else if(isNb){ctx.strokeStyle="rgba(255,255,255,0.4)";ctx.lineWidth=1.5;ctx.stroke()}if(isSel||isNb||gs>1.2){ctx.font=(isSel?"bold ":"")+Math.max(11/gs,3.5)+"px sans-serif";ctx.textAlign="center";ctx.textBaseline="top";ctx.fillStyle=isSel?"#ffffff":"rgba(255,255,255,0.8)";ctx.fillText(node.label,node.x,node.y+size+3)}ctx.globalAlpha=1})\n';
+    html += '.nodeCanvasObjectMode(function(){return"replace"})\n';
+    html += '.linkColor(function(l){if(!selected)return"rgba(88,166,255,0.25)";var s=typeof l.source==="object"?l.source.id:l.source;var t=typeof l.target==="object"?l.target.id:l.target;return(s===selected||t===selected)?"rgba(88,166,255,0.8)":"rgba(88,166,255,0.06)"})\n';
+    html += '.linkWidth(function(l){if(!selected)return 0.8;var s=typeof l.source==="object"?l.source.id:l.source;var t=typeof l.target==="object"?l.target.id:l.target;return(s===selected||t===selected)?2.5:0.3})\n';
+  }
+
+  html += '.linkDirectionalArrowLength(4).linkDirectionalArrowRelPos(0.8)\n';
+  html += '.backgroundColor("#0a0a14")\n';
+  html += '.width(window.innerWidth).height(window.innerHeight)\n';
+  html += '.onNodeClick(function(node){selected=node.id;var gn=graph.graphData().nodes.find(function(n){return n.id===node.id});if(gn)graph.centerAt(gn.x,gn.y,800);document.getElementById("status").textContent=node.label+" — click neighbors to drill deeper"})\n';
+  html += '.onBackgroundClick(function(){selected=null;graph.zoomToFit(1000,50);document.getElementById("status").textContent="Click a node to drill down"})\n';
+  html += '.cooldownTicks(150);\n';
+  html += 'graph.d3Force("charge").strength(-250);graph.d3Force("link").distance(90);\n';
+  html += 'window.addEventListener("resize",function(){graph.width(window.innerWidth);graph.height(window.innerHeight)});\n';
+  html += '<\/script>\n</body></html>';
+
+  var blob = new Blob([html], {type: 'text/html'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = (title.replace(/[^a-z0-9]/gi, '_').substring(0,40) || 'graph') + '.html';
+  a.click();
+}
+
+loadProjects();
+</script>
+</body>
+</html>

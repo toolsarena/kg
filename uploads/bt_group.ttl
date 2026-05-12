@@ -1,0 +1,368 @@
+@prefix kg: <http://kg.local/ontology#> .
+@prefix kgr: <http://kg.local/resource/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# ============================================================
+# BT GROUP — Ontology Classes
+# ============================================================
+kg:Company a owl:Class ; rdfs:label "Company" .
+kg:Division a owl:Class ; rdfs:subClassOf kg:Company ; rdfs:label "Division" .
+kg:Subsidiary a owl:Class ; rdfs:subClassOf kg:Company ; rdfs:label "Subsidiary" .
+kg:Person a owl:Class ; rdfs:label "Person" .
+kg:Service a owl:Class ; rdfs:label "Service" .
+kg:Network a owl:Class ; rdfs:label "Network Infrastructure" .
+kg:Regulator a owl:Class ; rdfs:label "Regulatory Body" .
+kg:Competitor a owl:Class ; rdfs:label "Competitor" .
+kg:Brand a owl:Class ; rdfs:label "Brand" .
+kg:Technology a owl:Class ; rdfs:label "Technology" .
+kg:Strategy a owl:Class ; rdfs:label "Strategic Priority" .
+kg:ServiceCategory a owl:Class ; rdfs:label "Service Category" .
+
+kg:subsidiary_of a owl:ObjectProperty ; rdfs:label "subsidiary of" .
+kg:division_of a owl:ObjectProperty ; rdfs:label "division of" .
+kg:leads a owl:ObjectProperty ; rdfs:label "leads" .
+kg:role_at a owl:ObjectProperty ; rdfs:label "role at" .
+kg:provides a owl:ObjectProperty ; rdfs:label "provides" .
+kg:operates a owl:ObjectProperty ; rdfs:label "operates" .
+kg:regulated_by a owl:ObjectProperty ; rdfs:label "regulated by" .
+kg:competes_with a owl:ObjectProperty ; rdfs:label "competes with" .
+kg:uses_technology a owl:ObjectProperty ; rdfs:label "uses technology" .
+kg:partners_with a owl:ObjectProperty ; rdfs:label "partners with" .
+kg:has_brand a owl:ObjectProperty ; rdfs:label "has brand" .
+kg:category a owl:ObjectProperty ; rdfs:label "service category" .
+kg:pursues a owl:ObjectProperty ; rdfs:label "pursues strategy" .
+
+# ============================================================
+# BT GROUP — Parent Company
+# ============================================================
+kgr:bt_group a kg:Company ;
+    skos:prefLabel "BT Group plc" ;
+    rdfs:comment "British multinational telecommunications company, FTSE 100, incorporated 1984" ;
+    kg:company_number "01800000" ;
+    kg:jurisdiction "United Kingdom" ;
+    kg:registered_address "1 Braham Street, London, E1 8EE" ;
+    kg:stock_exchange "London Stock Exchange" ;
+    kg:ticker "BT.A" ;
+    kg:revenue "20.8 billion GBP (2024)" ;
+    kg:employees "99600" ;
+    kg:status "Active" .
+
+# ============================================================
+# DIVISIONS & SUBSIDIARIES
+# ============================================================
+kgr:bt_consumer a kg:Division ;
+    skos:prefLabel "BT Consumer" ;
+    rdfs:comment "Broadband, mobile, TV and home phone services for consumers" ;
+    kg:division_of kgr:bt_group .
+
+kgr:bt_business a kg:Division ;
+    skos:prefLabel "BT Business" ;
+    rdfs:comment "IT and communications services for businesses and public sector" ;
+    kg:division_of kgr:bt_group .
+
+kgr:bt_enterprise a kg:Division ;
+    skos:prefLabel "BT Enterprise" ;
+    rdfs:comment "Network and IT services for large enterprises and government" ;
+    kg:division_of kgr:bt_group .
+
+kgr:bt_global a kg:Division ;
+    skos:prefLabel "BT Global" ;
+    rdfs:comment "Global network and IT services for multinational corporations across 180 countries" ;
+    kg:division_of kgr:bt_group .
+
+kgr:bt_security a kg:Division ;
+    skos:prefLabel "BT Security" ;
+    rdfs:comment "Cybersecurity services and threat intelligence" ;
+    kg:division_of kgr:bt_group .
+
+kgr:bt_applied_research a kg:Division ;
+    skos:prefLabel "BT Applied Research" ;
+    rdfs:comment "R&D division at Adastral Park, Ipswich — AI, Quantum Computing, Network Automation" ;
+    kg:division_of kgr:bt_group .
+
+kgr:openreach a kg:Subsidiary ;
+    skos:prefLabel "Openreach" ;
+    rdfs:comment "UK's digital network infrastructure provider, legally separated from BT Group" ;
+    kg:subsidiary_of kgr:bt_group ;
+    kg:company_number "10690039" .
+
+kgr:ee a kg:Subsidiary ;
+    skos:prefLabel "EE" ;
+    rdfs:comment "UK's largest mobile network operator, acquired by BT in 2016" ;
+    kg:subsidiary_of kgr:bt_group ;
+    kg:company_number "02382161" .
+
+kgr:plusnet a kg:Subsidiary ;
+    skos:prefLabel "Plusnet" ;
+    rdfs:comment "Budget broadband and phone provider, headquartered in Sheffield" ;
+    kg:subsidiary_of kgr:bt_group ;
+    kg:company_number "03279013" .
+
+# ============================================================
+# KEY OFFICERS
+# ============================================================
+kgr:allison_kirkby a kg:Person ;
+    skos:prefLabel "Dame Allison Kirkby" ;
+    rdfs:comment "Chief Executive Officer of BT Group, appointed February 2024" ;
+    kg:role_at kgr:bt_group ;
+    kg:leads kgr:bt_group .
+
+kgr:simon_lowth a kg:Person ;
+    skos:prefLabel "Simon Lowth" ;
+    rdfs:comment "Chief Financial Officer of BT Group" ;
+    kg:role_at kgr:bt_group .
+
+kgr:adam_crozier a kg:Person ;
+    skos:prefLabel "Adam Crozier" ;
+    rdfs:comment "Chairman of BT Group, appointed December 2021" ;
+    kg:role_at kgr:bt_group .
+
+kgr:howard_watson a kg:Person ;
+    skos:prefLabel "Howard Watson" ;
+    rdfs:comment "Chief Security and Networks Officer" ;
+    kg:role_at kgr:bt_group ;
+    kg:leads kgr:bt_security .
+
+kgr:harmeen_mehta a kg:Person ;
+    skos:prefLabel "Harmeen Mehta" ;
+    rdfs:comment "Chief Digital and Innovation Officer" ;
+    kg:role_at kgr:bt_group ;
+    kg:leads kgr:bt_applied_research .
+
+kgr:bas_burger a kg:Person ;
+    skos:prefLabel "Bas Burger" ;
+    rdfs:comment "CEO of BT Business" ;
+    kg:role_at kgr:bt_group ;
+    kg:leads kgr:bt_business .
+
+kgr:clive_selley a kg:Person ;
+    skos:prefLabel "Clive Selley" ;
+    rdfs:comment "CEO of Openreach" ;
+    kg:role_at kgr:bt_group ;
+    kg:leads kgr:openreach .
+
+# ============================================================
+# NETWORK INFRASTRUCTURE
+# ============================================================
+kgr:twentyone_cn a kg:Network ;
+    skos:prefLabel "21CN (21st Century Network)" ;
+    rdfs:comment "BT's next-generation IP-based core network" ;
+    kg:operates kgr:bt_group .
+
+kgr:fttp_network a kg:Network ;
+    skos:prefLabel "FTTP (Full Fibre) Network" ;
+    rdfs:comment "Fibre to the Premises, target 25 million premises by 2026, 14 million passed" ;
+    kg:operates kgr:openreach .
+
+kgr:ee_5g_network a kg:Network ;
+    skos:prefLabel "EE 5G Network" ;
+    rdfs:comment "5G rollout across 100+ UK cities" ;
+    kg:operates kgr:ee .
+
+kgr:global_network a kg:Network ;
+    skos:prefLabel "BT Global Network" ;
+    rdfs:comment "Operates in 180 countries, one of world's largest networks" ;
+    kg:operates kgr:bt_global .
+
+kgr:adastral_park a kg:Network ;
+    skos:prefLabel "Adastral Park" ;
+    rdfs:comment "BT's global R&D headquarters in Ipswich, Suffolk" ;
+    kg:operates kgr:bt_applied_research .
+
+kgr:submarine_cables a kg:Network ;
+    skos:prefLabel "Submarine Cable Systems" ;
+    rdfs:comment "Investments in multiple submarine cable systems globally" ;
+    kg:operates kgr:bt_global .
+
+# ============================================================
+# SERVICES
+# ============================================================
+kgr:cat_consumer a kg:ServiceCategory ; skos:prefLabel "Consumer Services" .
+kgr:cat_enterprise a kg:ServiceCategory ; skos:prefLabel "Enterprise Services" .
+kgr:cat_wholesale a kg:ServiceCategory ; skos:prefLabel "Wholesale Services" .
+
+kgr:svc_bt_broadband a kg:Service ;
+    skos:prefLabel "BT Broadband" ;
+    rdfs:comment "Consumer broadband via FTTP, FTTC, ADSL" ;
+    kg:provides kgr:bt_consumer ;
+    kg:category kgr:cat_consumer ;
+    kg:uses_technology kgr:tech_fttp ;
+    kg:uses_technology kgr:tech_fttc .
+
+kgr:svc_ee_mobile a kg:Service ;
+    skos:prefLabel "EE Mobile" ;
+    rdfs:comment "UK's largest mobile service — 34 million connections" ;
+    kg:provides kgr:ee ;
+    kg:category kgr:cat_consumer ;
+    kg:uses_technology kgr:tech_4g ;
+    kg:uses_technology kgr:tech_5g .
+
+kgr:svc_bt_sport a kg:Service ;
+    skos:prefLabel "BT Sport" ;
+    rdfs:comment "Premium sports broadcasting, being merged with Warner Bros Discovery" ;
+    kg:provides kgr:bt_consumer ;
+    kg:category kgr:cat_consumer .
+
+kgr:svc_sdwan a kg:Service ;
+    skos:prefLabel "SD-WAN" ;
+    rdfs:comment "Software-defined wide area networking for enterprises" ;
+    kg:provides kgr:bt_enterprise ;
+    kg:category kgr:cat_enterprise .
+
+kgr:svc_cloud_connect a kg:Service ;
+    skos:prefLabel "Cloud Connect" ;
+    rdfs:comment "Direct cloud connectivity to AWS, Azure, Google Cloud" ;
+    kg:provides kgr:bt_enterprise ;
+    kg:category kgr:cat_enterprise ;
+    kg:partners_with kgr:partner_aws ;
+    kg:partners_with kgr:partner_azure ;
+    kg:partners_with kgr:partner_gcp .
+
+kgr:svc_managed_security a kg:Service ;
+    skos:prefLabel "Managed Security Services" ;
+    rdfs:comment "SOC, Threat Intelligence, Incident Response, DDoS Mitigation" ;
+    kg:provides kgr:bt_security ;
+    kg:category kgr:cat_enterprise .
+
+kgr:svc_unified_comms a kg:Service ;
+    skos:prefLabel "Unified Communications" ;
+    rdfs:comment "Enterprise collaboration services" ;
+    kg:provides kgr:bt_enterprise ;
+    kg:category kgr:cat_enterprise ;
+    kg:partners_with kgr:partner_microsoft ;
+    kg:partners_with kgr:partner_zoom ;
+    kg:partners_with kgr:partner_cisco .
+
+kgr:svc_iot_platform a kg:Service ;
+    skos:prefLabel "IoT Platform" ;
+    rdfs:comment "Connected devices management and analytics" ;
+    kg:provides kgr:bt_enterprise ;
+    kg:category kgr:cat_enterprise ;
+    kg:uses_technology kgr:tech_5g .
+
+kgr:svc_ethernet a kg:Service ;
+    skos:prefLabel "Ethernet Services" ;
+    rdfs:comment "Wholesale ethernet connectivity" ;
+    kg:provides kgr:openreach ;
+    kg:category kgr:cat_wholesale .
+
+kgr:svc_dark_fibre a kg:Service ;
+    skos:prefLabel "Dark Fibre" ;
+    rdfs:comment "Wholesale unlit fibre infrastructure" ;
+    kg:provides kgr:openreach ;
+    kg:category kgr:cat_wholesale .
+
+kgr:svc_fttp_wholesale a kg:Service ;
+    skos:prefLabel "FTTP Wholesale" ;
+    rdfs:comment "Wholesale fibre access for ISPs" ;
+    kg:provides kgr:openreach ;
+    kg:category kgr:cat_wholesale .
+
+# ============================================================
+# TECHNOLOGIES
+# ============================================================
+kgr:tech_fttp a kg:Technology ; skos:prefLabel "FTTP (Fibre to the Premises)" .
+kgr:tech_fttc a kg:Technology ; skos:prefLabel "FTTC (Fibre to the Cabinet)" .
+kgr:tech_4g a kg:Technology ; skos:prefLabel "4G LTE" .
+kgr:tech_5g a kg:Technology ; skos:prefLabel "5G NR" .
+kgr:tech_sdwan a kg:Technology ; skos:prefLabel "SD-WAN Technology" .
+kgr:tech_ai a kg:Technology ; skos:prefLabel "Artificial Intelligence" .
+kgr:tech_quantum a kg:Technology ; skos:prefLabel "Quantum Computing" .
+
+kgr:bt_applied_research kg:uses_technology kgr:tech_ai .
+kgr:bt_applied_research kg:uses_technology kgr:tech_quantum .
+kgr:svc_sdwan kg:uses_technology kgr:tech_sdwan .
+
+# ============================================================
+# PARTNERS
+# ============================================================
+kgr:partner_aws a kg:Company ; skos:prefLabel "Amazon Web Services (AWS)" .
+kgr:partner_azure a kg:Company ; skos:prefLabel "Microsoft Azure" .
+kgr:partner_gcp a kg:Company ; skos:prefLabel "Google Cloud" .
+kgr:partner_microsoft a kg:Company ; skos:prefLabel "Microsoft" .
+kgr:partner_zoom a kg:Company ; skos:prefLabel "Zoom" .
+kgr:partner_cisco a kg:Company ; skos:prefLabel "Cisco" .
+
+# ============================================================
+# BRANDS
+# ============================================================
+kgr:brand_bt_broadband a kg:Brand ; skos:prefLabel "BT Broadband" ; kg:has_brand kgr:bt_consumer .
+kgr:brand_bt_sport a kg:Brand ; skos:prefLabel "BT Sport" ; kg:has_brand kgr:bt_consumer .
+kgr:brand_bt_mobile a kg:Brand ; skos:prefLabel "BT Mobile" ; kg:has_brand kgr:bt_consumer .
+kgr:brand_ee a kg:Brand ; skos:prefLabel "EE" ; kg:has_brand kgr:ee .
+kgr:brand_plusnet a kg:Brand ; skos:prefLabel "Plusnet" ; kg:has_brand kgr:plusnet .
+kgr:brand_bt_cloud_voice a kg:Brand ; skos:prefLabel "BT Cloud Voice" ; kg:has_brand kgr:bt_business .
+
+# ============================================================
+# REGULATORS
+# ============================================================
+kgr:ofcom a kg:Regulator ;
+    skos:prefLabel "Ofcom" ;
+    rdfs:comment "UK communications regulator — Universal Service Obligation, Openreach separation, wholesale access" .
+kgr:fca a kg:Regulator ;
+    skos:prefLabel "Financial Conduct Authority (FCA)" ;
+    rdfs:comment "Regulates BT as a listed company on London Stock Exchange" .
+kgr:ico a kg:Regulator ;
+    skos:prefLabel "Information Commissioner's Office (ICO)" ;
+    rdfs:comment "Data protection and GDPR compliance regulator" .
+
+kgr:bt_group kg:regulated_by kgr:ofcom .
+kgr:bt_group kg:regulated_by kgr:fca .
+kgr:bt_group kg:regulated_by kgr:ico .
+kgr:openreach kg:regulated_by kgr:ofcom .
+
+# ============================================================
+# COMPETITORS
+# ============================================================
+kgr:virgin_media_o2 a kg:Competitor ; skos:prefLabel "Virgin Media O2" ; rdfs:comment "Broadband, Mobile, TV competitor" .
+kgr:sky a kg:Competitor ; skos:prefLabel "Sky" ; rdfs:comment "Broadband and TV competitor" .
+kgr:vodafone_uk a kg:Competitor ; skos:prefLabel "Vodafone UK" ; rdfs:comment "Mobile, Broadband, Enterprise competitor" .
+kgr:three_uk a kg:Competitor ; skos:prefLabel "Three UK" ; rdfs:comment "Mobile competitor" .
+kgr:talktalk a kg:Competitor ; skos:prefLabel "TalkTalk" ; rdfs:comment "Broadband competitor" .
+kgr:cityfibre a kg:Competitor ; skos:prefLabel "CityFibre" ; rdfs:comment "FTTP infrastructure competitor" .
+kgr:colt a kg:Competitor ; skos:prefLabel "Colt Technology Services" ; rdfs:comment "Enterprise networking competitor" .
+
+kgr:bt_group kg:competes_with kgr:virgin_media_o2 .
+kgr:bt_group kg:competes_with kgr:sky .
+kgr:bt_group kg:competes_with kgr:vodafone_uk .
+kgr:ee kg:competes_with kgr:three_uk .
+kgr:ee kg:competes_with kgr:vodafone_uk .
+kgr:bt_consumer kg:competes_with kgr:talktalk .
+kgr:bt_consumer kg:competes_with kgr:sky .
+kgr:openreach kg:competes_with kgr:cityfibre .
+kgr:bt_enterprise kg:competes_with kgr:colt .
+
+# ============================================================
+# STRATEGIC PRIORITIES
+# ============================================================
+kgr:strat_full_fibre a kg:Strategy ;
+    skos:prefLabel "Full Fibre Rollout" ;
+    rdfs:comment "25 million premises passed by 2026 via Openreach FTTP" .
+kgr:strat_5g_leadership a kg:Strategy ;
+    skos:prefLabel "5G Leadership" ;
+    rdfs:comment "Largest 5G network in UK via EE" .
+kgr:strat_cost_transform a kg:Strategy ;
+    skos:prefLabel "Cost Transformation" ;
+    rdfs:comment "Target 3 billion GBP gross annualised cost savings by 2025" .
+kgr:strat_digital_transform a kg:Strategy ;
+    skos:prefLabel "Digital Transformation" ;
+    rdfs:comment "Simplify products, digitise customer journeys, AI-driven operations" .
+kgr:strat_sustainability a kg:Strategy ;
+    skos:prefLabel "Sustainability" ;
+    rdfs:comment "Net zero carbon emissions by 2031, 100% renewable electricity" .
+
+kgr:bt_group kg:pursues kgr:strat_full_fibre .
+kgr:bt_group kg:pursues kgr:strat_5g_leadership .
+kgr:bt_group kg:pursues kgr:strat_cost_transform .
+kgr:bt_group kg:pursues kgr:strat_digital_transform .
+kgr:bt_group kg:pursues kgr:strat_sustainability .
+kgr:openreach kg:pursues kgr:strat_full_fibre .
+kgr:ee kg:pursues kgr:strat_5g_leadership .
+kgr:strat_full_fibre kg:uses_technology kgr:tech_fttp .
+kgr:strat_5g_leadership kg:uses_technology kgr:tech_5g .
+kgr:strat_digital_transform kg:uses_technology kgr:tech_ai .
