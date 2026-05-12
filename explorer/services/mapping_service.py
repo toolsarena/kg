@@ -108,16 +108,18 @@ Sample data (first 3 rows): {json.dumps(sample[:3], default=str)}
 Ontology classes: {json.dumps(class_info)}
 Ontology properties: {json.dumps(prop_info)}
 
+IMPORTANT: Map ALL columns to properties. If no exact ontology property exists for a column, create a new datatype property URI using the ontology namespace and a camelCase version of the column name. Do NOT leave columns as "unmapped" — every column should be mapped as either "datatype" or "object".
+
 Return a JSON object with:
 - "target_class": the ontology class URI that best represents each data row
-- "id_column": the column that uniquely identifies each row
-- "label_column": the column best used as a human-readable label
+- "id_column": the column that uniquely identifies each row (prefer columns with "id", "key", "code", or unique values)
+- "label_column": the column best used as a human-readable label (prefer "name", "title", "label" columns)
 - "column_mappings": array of objects, one per column, each with:
   - "column_name": the column name
-  - "mapped_property": the ontology property URI (or null if unmapped)
-  - "mapping_type": "datatype", "object", "skip", or "unmapped"
-  - "confidence": float 0.0-1.0
-  - "target_class": for object properties, the target class URI (or null)
+  - "mapped_property": the ontology property URI (create one if needed using the ontology namespace)
+  - "mapping_type": "datatype" for literal values, "object" for references to other entities
+  - "confidence": float 0.0-1.0 (1.0 for exact matches, 0.5+ for reasonable mappings)
+  - "target_class": for object properties, the target class URI (or null for datatype)
 
 Return ONLY valid JSON, no explanation."""
 
@@ -176,7 +178,11 @@ def heuristic_mapping(
     columns: list[Any],
     ontology: OntologySchema,
 ) -> MappingSuggestion:
-    """Generate a mapping suggestion using string similarity (fallback)."""
+    """Generate a mapping suggestion using string similarity (fallback).
+    
+    When no good matches are found, maps all columns as datatype properties
+    to the target class — better than leaving everything unmapped.
+    """
     col_names = [c["name"] if isinstance(c, dict) else (c.name if hasattr(c, "name") else str(c)) for c in columns]
 
     # Determine target class (first class or empty)
@@ -190,10 +196,10 @@ def heuristic_mapping(
     label_column = ""
     for col in col_names:
         col_lower = col.lower()
-        if any(kw in col_lower for kw in ("id", "identifier", "key", "code")):
+        if any(kw in col_lower for kw in ("id", "identifier", "key", "code", "number", "frn")):
             if not id_column:
                 id_column = col
-        if any(kw in col_lower for kw in ("name", "label", "title")):
+        if any(kw in col_lower for kw in ("name", "label", "title", "dba")):
             if not label_column:
                 label_column = col
 
@@ -230,11 +236,21 @@ def heuristic_mapping(
                 target_class=target_cls,
             ))
         else:
+            # No good match — but still map as datatype property using column name as property
+            # This is better than leaving unmapped — user can adjust
+            prop_name = re.sub(r'[^a-zA-Z0-9]', '_', col).strip('_')
+            prop_uri = f"{target_class.rsplit('#', 1)[0] if '#' in target_class else target_class.rsplit('/', 1)[0]}/{'#' if '#' in target_class else '/'}{prop_name}" if target_class else None
+            # Use a generated property URI based on the ontology namespace
+            if ontology.classes:
+                ns = ontology.classes[0].uri.rsplit('#', 1)[0] if '#' in ontology.classes[0].uri else ontology.classes[0].uri.rsplit('/', 1)[0]
+                sep = '#' if '#' in ontology.classes[0].uri else '/'
+                prop_uri = f"{ns}{sep}{prop_name}"
             mappings.append(ColumnMapping(
                 column_name=col,
-                mapped_property=None,
-                mapping_type="unmapped",
-                confidence=0.0,
+                mapped_property=prop_uri,
+                mapping_type="datatype",
+                confidence=0.4,  # Low but not zero — indicates auto-generated
+                target_class=None,
             ))
 
     return MappingSuggestion(
