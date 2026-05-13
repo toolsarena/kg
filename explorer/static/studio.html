@@ -401,10 +401,19 @@ async function mapToOntology() {
   mappingText += '**Column mappings:**\n';
   (mapData.column_mappings || []).forEach(function(cm) {
     var conf = Math.round((cm.confidence || 0) * 100) + '%';
-    var prop = cm.mapped_property ? cm.mapped_property.split('#').pop().split('/').pop() : 'unmapped';
-    mappingText += '• ' + cm.column_name + ' → ' + prop + ' (' + cm.mapping_type + ', ' + conf + ' confidence)\n';
+    var prop = cm.mapped_property ? cm.mapped_property.split('#').pop().split('/').pop() : '⚠️ unmapped';
+    var icon = cm.mapping_type === 'unmapped' ? '❌' : '✅';
+    mappingText += icon + ' ' + cm.column_name + ' → ' + prop + ' (' + cm.mapping_type + ', ' + conf + ')\n';
   });
-  mappingText += '\nSay "confirm" to generate instances, or tell me what to change.';
+
+  var unmappedCount = (mapData.column_mappings || []).filter(function(cm) { return cm.mapping_type === 'unmapped'; }).length;
+  if (unmappedCount > 0) {
+    mappingText += '\n**' + unmappedCount + ' columns are unmapped.** You can tell me how to map them, e.g.:\n';
+    mappingText += '"Map Provider Name to providerName as datatype"\n';
+    mappingText += '"Map State to hasState as object property"\n';
+  }
+
+  mappingText += '\nSay **"confirm"** to generate instances with current mapping (unmapped columns will be stored as-is).';
 
   if (mapData.fallback) {
     mappingText += '\n\n⚠️ LLM was unavailable, used heuristic matching.';
@@ -447,7 +456,23 @@ async function sendModelChat() {
     addModelMsg('Generating instances...', 'assistant', 'model-thinking');
     var pm = window._pendingMapping;
 
-    // Confirm the mapping
+    // Confirm the mapping — map unmapped columns as new datatype properties
+    var columnMappings = pm.mapping.column_mappings.map(function(cm) {
+      if (cm.mapping_type === 'unmapped' || !cm.mapped_property) {
+        // Auto-create property URI from column name
+        var propName = cm.column_name.replace(/[^a-zA-Z0-9]/g, '_');
+        var ns = pm.mapping.target_class ? pm.mapping.target_class.replace(/[^/]*$/, '') : 'http://kg.local/ontology#';
+        return {
+          column_name: cm.column_name,
+          mapped_property: ns + propName,
+          mapping_type: 'datatype',
+          confidence: cm.confidence || 0.3,
+          target_class: null
+        };
+      }
+      return cm;
+    });
+
     var confirmResp = await fetch('/api/population/' + currentProject + '/confirm-mapping', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
@@ -456,7 +481,7 @@ async function sendModelChat() {
         target_class: pm.mapping.target_class,
         id_column: pm.mapping.id_column,
         label_column: pm.mapping.label_column,
-        column_mappings: pm.mapping.column_mappings,
+        column_mappings: columnMappings,
         dataset_columns: pm.columns.map(function(c) { return c.name; })
       })
     });

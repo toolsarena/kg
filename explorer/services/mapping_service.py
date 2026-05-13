@@ -236,21 +236,12 @@ def heuristic_mapping(
                 target_class=target_cls,
             ))
         else:
-            # No good match — but still map as datatype property using column name as property
-            # This is better than leaving unmapped — user can adjust
-            prop_name = re.sub(r'[^a-zA-Z0-9]', '_', col).strip('_')
-            prop_uri = f"{target_class.rsplit('#', 1)[0] if '#' in target_class else target_class.rsplit('/', 1)[0]}/{'#' if '#' in target_class else '/'}{prop_name}" if target_class else None
-            # Use a generated property URI based on the ontology namespace
-            if ontology.classes:
-                ns = ontology.classes[0].uri.rsplit('#', 1)[0] if '#' in ontology.classes[0].uri else ontology.classes[0].uri.rsplit('/', 1)[0]
-                sep = '#' if '#' in ontology.classes[0].uri else '/'
-                prop_uri = f"{ns}{sep}{prop_name}"
+            # No good match found — leave as unmapped, user will assign manually
             mappings.append(ColumnMapping(
                 column_name=col,
-                mapped_property=prop_uri,
-                mapping_type="datatype",
-                confidence=0.4,  # Low but not zero — indicates auto-generated
-                target_class=None,
+                mapped_property=None,
+                mapping_type="unmapped",
+                confidence=0.0,
             ))
 
     return MappingSuggestion(
@@ -262,7 +253,11 @@ def heuristic_mapping(
 
 
 def validate_mapping(mapping: ConfirmedMapping, ontology: OntologySchema) -> dict:
-    """Validate that mapped properties belong to the domain of the target class."""
+    """Validate that mapped properties belong to the domain of the target class.
+    
+    Only validates properties that exist in the ontology. Properties not found
+    are treated as new extensions (user is extending the ontology with data).
+    """
     errors = []
     warnings = []
 
@@ -272,27 +267,25 @@ def validate_mapping(mapping: ConfirmedMapping, ontology: OntologySchema) -> dic
     for p in ontology.datatype_properties + ontology.object_properties:
         prop_map[p.uri] = p
 
-    # Check target class exists
+    # Check target class exists (warning, not error)
     if mapping.target_class and mapping.target_class not in class_uris:
-        errors.append(f"Target class '{mapping.target_class}' not found in ontology")
+        warnings.append(f"Target class '{mapping.target_class}' not found in ontology — will be created")
 
     # Check each column mapping
     for cm in mapping.column_mappings:
         if cm.mapping_type in ("skip", "unmapped") or not cm.mapped_property:
             continue
 
-        if cm.mapped_property not in prop_map:
-            errors.append(f"Property '{cm.mapped_property}' not found in ontology")
-            continue
-
-        prop = prop_map[cm.mapped_property]
-        # Check domain constraint
-        if prop.domain and mapping.target_class:
-            if prop.domain != mapping.target_class:
-                errors.append(
-                    f"Property '{prop.local_name}' has domain '{prop.domain}', "
-                    f"incompatible with class '{mapping.target_class}'"
-                )
+        # If property exists in ontology, check domain constraint
+        if cm.mapped_property in prop_map:
+            prop = prop_map[cm.mapped_property]
+            if prop.domain and mapping.target_class:
+                if prop.domain != mapping.target_class:
+                    warnings.append(
+                        f"Property '{prop.local_name}' has domain '{prop.domain}', "
+                        f"target class is '{mapping.target_class}'"
+                    )
+        # If property doesn't exist, that's fine — it will be created as a new property
 
     valid = len(errors) == 0
     return {"valid": valid, "errors": errors, "warnings": warnings}
