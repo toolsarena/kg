@@ -324,6 +324,85 @@ async function commitEntities() {
   }
 }
 
+// Ask AI to fill in the mapping dropdowns
+async function askAIToMap() {
+  var pm = window._pendingMapping;
+  if (!pm) return;
+
+  addModelMsg('Asking AI to suggest mappings...', 'assistant', 'model-thinking');
+
+  var resp = await fetch('/api/population/' + currentProject + '/suggest-mapping', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      columns: pm.columns,
+      sample: pm.dataRows.slice(0, 5),
+      ontology_file: pm.ontologyFile,
+      session_id: currentProject
+    })
+  });
+  var mapData = await resp.json();
+
+  var el = document.getElementById('model-thinking');
+  if (el) el.remove();
+
+  if (mapData.error) {
+    addModelMsg('AI suggestion failed: ' + mapData.error + '. Please map manually.', 'assistant');
+    return;
+  }
+
+  // Fill in the dropdowns with AI suggestions
+  (mapData.column_mappings || []).forEach(function(cm, idx) {
+    if (cm.mapped_property && cm.mapping_type !== 'unmapped') {
+      var propSelect = document.getElementById('map-prop-' + idx);
+      var typeSelect = document.getElementById('map-type-' + idx);
+      if (propSelect) {
+        // Try to find the property in the dropdown
+        var found = false;
+        for (var i = 0; i < propSelect.options.length; i++) {
+          if (propSelect.options[i].value === cm.mapped_property) {
+            propSelect.selectedIndex = i;
+            found = true;
+            break;
+          }
+        }
+        if (!found) {
+          // Property not in dropdown — select "new datatype"
+          for (var i = 0; i < propSelect.options.length; i++) {
+            if (propSelect.options[i].value === '__new_datatype__') {
+              propSelect.selectedIndex = i;
+              break;
+            }
+          }
+        }
+      }
+      if (typeSelect && cm.mapping_type) {
+        typeSelect.value = cm.mapping_type;
+      }
+    }
+  });
+
+  // Set target class, id, label
+  if (mapData.target_class) {
+    var tcSelect = document.getElementById('map-target-class');
+    if (tcSelect) {
+      for (var i = 0; i < tcSelect.options.length; i++) {
+        if (tcSelect.options[i].value === mapData.target_class) { tcSelect.selectedIndex = i; break; }
+      }
+    }
+  }
+  if (mapData.id_column) {
+    var idSelect = document.getElementById('map-id-col');
+    if (idSelect) idSelect.value = mapData.id_column;
+  }
+  if (mapData.label_column) {
+    var lblSelect = document.getElementById('map-label-col');
+    if (lblSelect) lblSelect.value = mapData.label_column;
+  }
+
+  addModelMsg('AI suggestions applied to the dropdowns above. Review and adjust, then click Confirm.', 'assistant');
+}
+
 // Confirm manual mapping from the UI dropdowns
 async function confirmManualMapping() {
   var pm = window._pendingMapping;
@@ -453,37 +532,16 @@ async function mapToOntology() {
   var allKeys = new Set();
   dataRows.forEach(function(r) { Object.keys(r).forEach(function(k) { allKeys.add(k); }); });
   var columns = Array.from(allKeys).map(function(k) { return {name: k, inferred_type: 'string'}; });
+  var col_names = Array.from(allKeys);
 
   // Switch to Model tab and start mapping conversation
   switchTab('model');
   setModelMode('conversation');
 
-  addModelMsg('I want to map my data to the ontology in "' + ontologyFile + '". Here are my data columns:\n\n' + Array.from(allKeys).join(', ') + '\n\nSample data:\n' + JSON.stringify(dataRows.slice(0, 3), null, 2), 'user');
-  addModelMsg('Analyzing your data and ontology...', 'assistant', 'model-thinking');
+  addModelMsg('I want to map my data to the ontology in "' + ontologyFile + '". Here are my data columns:\n\n' + col_names.join(', '), 'user');
+  addModelMsg('Loading ontology and preparing mapping UI...', 'assistant', 'model-thinking');
 
-  // Call the mapping suggestion API
-  var mapResp = await fetch('/api/population/' + currentProject + '/suggest-mapping', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({
-      columns: columns,
-      sample: dataRows.slice(0, 5),
-      ontology_file: ontologyFile,
-      session_id: currentProject
-    })
-  });
-  var mapData = await mapResp.json();
-
-  var el = document.getElementById('model-thinking');
-  if (el) el.remove();
-
-  if (mapData.error) {
-    addModelMsg('Error: ' + mapData.error, 'assistant');
-    return;
-  }
-
-  // Show mapping UI in the Model tab — side by side columns vs ontology properties
-  // First get the ontology schema
+  // Get the ontology schema directly (skip suggest-mapping — go straight to UI)
   var schemaResp = await fetch('/api/population/' + currentProject + '/select-ontology', {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
@@ -536,14 +594,16 @@ async function mapToOntology() {
     mappingHTML += '</tr>';
   });
   mappingHTML += '</table><br>';
-  mappingHTML += '<button class="primary" onclick="confirmManualMapping()" style="width:100%;padding:10px;">Confirm Mapping & Generate Instances</button>';
+  mappingHTML += '<div style="display:flex;gap:8px;">';
+  mappingHTML += '<button onclick="askAIToMap()" style="flex:1;padding:8px;">🤖 Ask AI to Suggest</button>';
+  mappingHTML += '<button class="primary" onclick="confirmManualMapping()" style="flex:1;padding:8px;">✅ Confirm & Generate</button>';
+  mappingHTML += '</div>';
   mappingHTML += '</div>';
 
   addModelMsg(mappingHTML, 'assistant');
 
   // Store state for manual mapping confirmation
   window._pendingMapping = {
-    mapping: mapData,
     dataRows: dataRows,
     ontologyFile: ontologyFile,
     columns: columns,
