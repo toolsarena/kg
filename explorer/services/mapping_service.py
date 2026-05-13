@@ -3,7 +3,7 @@ import json
 import re
 from typing import Any
 
-from rdflib import Graph as RDFGraph, RDF, RDFS, OWL, Namespace
+from rdflib import Graph as RDFGraph, RDF, RDFS, OWL, Namespace, URIRef
 from rdflib.namespace import XSD
 
 from explorer.services.models import (
@@ -18,22 +18,71 @@ from explorer.services.models import (
 
 
 def extract_ontology_schema(ttl_content: str) -> OntologySchema:
-    """Parse a TTL string and extract all OWL classes and properties."""
+    """Parse a TTL string and extract all classes and properties.
+    
+    Recognizes owl:Class, rdfs:Class, and any custom types used as classes
+    (anything that has instances via rdf:type).
+    """
     g = RDFGraph()
     g.parse(data=ttl_content, format="turtle")
 
     classes = []
     object_properties = []
     datatype_properties = []
+    seen_class_uris = set()
 
     # Extract OWL classes
     for s in g.subjects(RDF.type, OWL.Class):
         uri = str(s)
+        if uri in seen_class_uris:
+            continue
+        seen_class_uris.add(uri)
         local_name = uri.split("#")[-1] if "#" in uri else uri.split("/")[-1]
         label = local_name.replace("_", " ").title()
         for _, _, o in g.triples((s, RDFS.label, None)):
             label = str(o)
         classes.append(OntologyClass(uri=uri, label=label, local_name=local_name))
+
+    # Extract RDFS classes
+    for s in g.subjects(RDF.type, RDFS.Class):
+        uri = str(s)
+        if uri in seen_class_uris:
+            continue
+        seen_class_uris.add(uri)
+        local_name = uri.split("#")[-1] if "#" in uri else uri.split("/")[-1]
+        label = local_name.replace("_", " ").title()
+        for _, _, o in g.triples((s, RDFS.label, None)):
+            label = str(o)
+        classes.append(OntologyClass(uri=uri, label=label, local_name=local_name))
+
+    # If no OWL/RDFS classes found, look for any URI used as rdf:type object
+    # (e.g., kg:Concept, kg:Service — custom types)
+    if not classes:
+        type_uris = set()
+        for _, _, o in g.triples((None, RDF.type, None)):
+            uri = str(o)
+            # Skip well-known vocabulary types
+            if any(uri.startswith(ns) for ns in [
+                'http://www.w3.org/2002/07/owl#',
+                'http://www.w3.org/2000/01/rdf-schema#',
+                'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+            ]):
+                continue
+            type_uris.add(uri)
+        for uri in type_uris:
+            if uri in seen_class_uris:
+                continue
+            seen_class_uris.add(uri)
+            local_name = uri.split("#")[-1] if "#" in uri else uri.split("/")[-1]
+            label = local_name.replace("_", " ").title()
+            # Try to find a label
+            uri_ref = URIRef(uri) if not isinstance(uri, URIRef) else uri
+            for _, _, o in g.triples((uri_ref, RDFS.label, None)):
+                label = str(o)
+            from rdflib.namespace import SKOS as _SKOS
+            for _, _, o in g.triples((uri_ref, _SKOS.prefLabel, None)):
+                label = str(o)
+            classes.append(OntologyClass(uri=uri, label=label, local_name=local_name))
 
     # Extract object properties
     for s in g.subjects(RDF.type, OWL.ObjectProperty):
@@ -70,6 +119,29 @@ def extract_ontology_schema(ttl_content: str) -> OntologySchema:
             uri=uri, label=label, local_name=local_name,
             domain=domain, range=range_,
         ))
+
+    # If no formal properties found, extract predicates used in the graph as properties
+    if not object_properties and not datatype_properties:
+        skip_preds = {
+            str(RDF.type), str(RDFS.label), str(RDFS.comment),
+            'http://www.w3.org/2004/02/skos/core#prefLabel',
+            'http://www.w3.org/2000/01/rdf-schema#subClassOf',
+        }
+        pred_uris = set()
+        for _, p, o in g:
+            uri = str(p)
+            if uri in skip_preds:
+                continue
+            pred_uris.add((uri, hasattr(o, 'n3') and str(o).startswith('http')))
+
+        for uri, is_object in pred_uris:
+            local_name = uri.split("#")[-1] if "#" in uri else uri.split("/")[-1]
+            label = local_name.replace("_", " ").title()
+            prop = OntologyProperty(uri=uri, label=label, local_name=local_name)
+            if is_object:
+                object_properties.append(prop)
+            else:
+                datatype_properties.append(prop)
 
     return OntologySchema(
         classes=classes,
