@@ -324,6 +324,95 @@ async function commitEntities() {
   }
 }
 
+// Confirm manual mapping from the UI dropdowns
+async function confirmManualMapping() {
+  var pm = window._pendingMapping;
+  if (!pm) { alert('No pending mapping'); return; }
+
+  var targetClass = document.getElementById('map-target-class').value;
+  var idCol = document.getElementById('map-id-col').value;
+  var labelCol = document.getElementById('map-label-col').value;
+
+  // Read column mappings from dropdowns
+  var columnMappings = [];
+  pm.colNames.forEach(function(colName, idx) {
+    var propSelect = document.getElementById('map-prop-' + idx);
+    var typeSelect = document.getElementById('map-type-' + idx);
+    var propUri = propSelect ? propSelect.value : '';
+    var mapType = typeSelect ? typeSelect.value : 'skip';
+
+    if (!propUri || propUri === '') {
+      mapType = 'skip';
+      propUri = null;
+    } else if (propUri === '__new_datatype__') {
+      // Create new property URI from column name
+      var ns = targetClass ? targetClass.replace(/[^/#]*$/, '') : 'http://kg.local/ontology#';
+      var propName = colName.replace(/[^a-zA-Z0-9]/g, '_');
+      propUri = ns + propName;
+      mapType = 'datatype';
+    }
+
+    columnMappings.push({
+      column_name: colName,
+      mapped_property: propUri,
+      mapping_type: mapType,
+      confidence: propUri ? 1.0 : 0.0,
+      target_class: null
+    });
+  });
+
+  addModelMsg('Generating instances...', 'assistant', 'model-thinking');
+
+  // Confirm mapping
+  var confirmResp = await fetch('/api/population/' + currentProject + '/confirm-mapping', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      ontology_file: pm.ontologyFile,
+      target_class: targetClass,
+      id_column: idCol,
+      label_column: labelCol,
+      column_mappings: columnMappings,
+      dataset_columns: pm.colNames
+    })
+  });
+  var confirmData = await confirmResp.json();
+
+  if (confirmData.error) {
+    var el = document.getElementById('model-thinking');
+    if (el) el.remove();
+    addModelMsg('Mapping error: ' + confirmData.error, 'assistant');
+    return;
+  }
+
+  // Generate instances
+  var genResp = await fetch('/api/population/' + currentProject + '/generate-instances', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      mapping_id: confirmData.mapping_id,
+      data: pm.dataRows,
+      base_uri: 'http://kg.local/resource/'
+    })
+  });
+  var genData = await genResp.json();
+
+  var el = document.getElementById('model-thinking');
+  if (el) el.remove();
+
+  if (genData.error) {
+    addModelMsg('Generation error: ' + genData.error, 'assistant');
+  } else {
+    addModelMsg('✅ Generated **' + genData.instances_created + ' instances** with ' + genData.triples_generated + ' triples.\n\nSaved as: ' + genData.filename + '\n\nClick **Build Graph** to visualize.', 'assistant');
+    activeOntology = genData.filename;
+    await loadProject(currentProject);
+  }
+
+  window._pendingMapping = null;
+}
+
+// MODEL TAB
+
 // MAP TO ONTOLOGY — maps ingested data to an existing ontology
 async function mapToOntology() {
   if (!currentProject) { alert('Select a project first'); return; }
@@ -393,40 +482,74 @@ async function mapToOntology() {
     return;
   }
 
-  // Show mapping suggestion
-  var mappingText = 'Here\'s my suggested mapping to **' + ontologyFile + '**:\n\n';
-  mappingText += '**Target class:** ' + (mapData.target_class || 'auto-detect') + '\n';
-  mappingText += '**ID column:** ' + mapData.id_column + '\n';
-  mappingText += '**Label column:** ' + mapData.label_column + '\n\n';
-  mappingText += '**Column mappings:**\n';
-  (mapData.column_mappings || []).forEach(function(cm) {
-    var conf = Math.round((cm.confidence || 0) * 100) + '%';
-    var prop = cm.mapped_property ? cm.mapped_property.split('#').pop().split('/').pop() : '⚠️ unmapped';
-    var icon = cm.mapping_type === 'unmapped' ? '❌' : '✅';
-    mappingText += icon + ' ' + cm.column_name + ' → ' + prop + ' (' + cm.mapping_type + ', ' + conf + ')\n';
+  // Show mapping UI in the Model tab — side by side columns vs ontology properties
+  // First get the ontology schema
+  var schemaResp = await fetch('/api/population/' + currentProject + '/select-ontology', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({filename: ontologyFile})
   });
+  var schemaData = await schemaResp.json();
 
-  var unmappedCount = (mapData.column_mappings || []).filter(function(cm) { return cm.mapping_type === 'unmapped'; }).length;
-  if (unmappedCount > 0) {
-    mappingText += '\n**' + unmappedCount + ' columns are unmapped.** You can tell me how to map them, e.g.:\n';
-    mappingText += '"Map Provider Name to providerName as datatype"\n';
-    mappingText += '"Map State to hasState as object property"\n';
+  var el = document.getElementById('model-thinking');
+  if (el) el.remove();
+
+  if (schemaData.error) {
+    addModelMsg('Error loading ontology: ' + schemaData.error, 'assistant');
+    return;
   }
 
-  mappingText += '\nSay **"confirm"** to generate instances with current mapping (unmapped columns will be stored as-is).';
+  // Build the mapping UI
+  var allProps = (schemaData.datatype_properties || []).concat(schemaData.object_properties || []);
+  var classes = schemaData.classes || [];
 
-  if (mapData.fallback) {
-    mappingText += '\n\n⚠️ LLM was unavailable, used heuristic matching.';
-  }
+  var mappingHTML = '<div style="font-size:12px;line-height:1.8;">';
+  mappingHTML += '<strong>Map columns to ontology: ' + ontologyFile + '</strong><br>';
+  mappingHTML += '<strong>Target class:</strong> <select id="map-target-class" style="padding:2px 6px;background:var(--bg);border:1px solid var(--border);color:var(--text);border-radius:4px;font-size:11px;">';
+  classes.forEach(function(c) {
+    mappingHTML += '<option value="' + c.uri + '">' + c.label + '</option>';
+  });
+  mappingHTML += '</select><br><br>';
+  mappingHTML += '<strong>ID column:</strong> <select id="map-id-col" style="padding:2px 6px;background:var(--bg);border:1px solid var(--border);color:var(--text);border-radius:4px;font-size:11px;">';
+  col_names.forEach(function(c) { mappingHTML += '<option value="' + c + '"' + (c.toLowerCase().indexOf('id') > -1 ? ' selected' : '') + '>' + c + '</option>'; });
+  mappingHTML += '</select><br>';
+  mappingHTML += '<strong>Label column:</strong> <select id="map-label-col" style="padding:2px 6px;background:var(--bg);border:1px solid var(--border);color:var(--text);border-radius:4px;font-size:11px;">';
+  col_names.forEach(function(c) { mappingHTML += '<option value="' + c + '"' + (c.toLowerCase().indexOf('name') > -1 ? ' selected' : '') + '>' + c + '</option>'; });
+  mappingHTML += '</select><br><br>';
 
-  addModelMsg(mappingText, 'assistant');
+  mappingHTML += '<table style="width:100%;font-size:11px;border-collapse:collapse;">';
+  mappingHTML += '<tr style="border-bottom:1px solid var(--border);"><th style="text-align:left;padding:4px;">Column</th><th style="text-align:left;padding:4px;">→ Property</th><th style="padding:4px;">Type</th></tr>';
 
-  // Store mapping state for confirmation
+  col_names.forEach(function(colName, idx) {
+    mappingHTML += '<tr style="border-bottom:1px solid var(--border);">';
+    mappingHTML += '<td style="padding:4px;color:var(--accent);">' + colName + '</td>';
+    mappingHTML += '<td style="padding:4px;"><select id="map-prop-' + idx + '" style="width:100%;padding:2px;background:var(--bg);border:1px solid var(--border);color:var(--text);border-radius:3px;font-size:10px;">';
+    mappingHTML += '<option value="">-- skip --</option>';
+    allProps.forEach(function(p) {
+      mappingHTML += '<option value="' + p.uri + '">' + p.label + ' (' + p.local_name + ')</option>';
+    });
+    mappingHTML += '<option value="__new_datatype__">+ New datatype property</option>';
+    mappingHTML += '</select></td>';
+    mappingHTML += '<td style="padding:4px;"><select id="map-type-' + idx + '" style="padding:2px;background:var(--bg);border:1px solid var(--border);color:var(--text);border-radius:3px;font-size:10px;">';
+    mappingHTML += '<option value="datatype">datatype</option><option value="object">object</option><option value="skip">skip</option>';
+    mappingHTML += '</select></td>';
+    mappingHTML += '</tr>';
+  });
+  mappingHTML += '</table><br>';
+  mappingHTML += '<button class="primary" onclick="confirmManualMapping()" style="width:100%;padding:10px;">Confirm Mapping & Generate Instances</button>';
+  mappingHTML += '</div>';
+
+  addModelMsg(mappingHTML, 'assistant');
+
+  // Store state for manual mapping confirmation
   window._pendingMapping = {
     mapping: mapData,
     dataRows: dataRows,
     ontologyFile: ontologyFile,
-    columns: columns
+    columns: columns,
+    colNames: col_names,
+    allProps: allProps,
+    classes: classes
   };
 }
 
