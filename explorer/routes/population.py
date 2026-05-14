@@ -466,15 +466,17 @@ async def generate_instances(project_id: str, body: dict):
         return JSONResponse({"error": "No data rows to process"}, 400)
 
     # Check for existing instance graph (incremental loading)
+    # Only use existing graph if explicitly requested
     existing_graph = None
-    existing_files = sorted(project_dir.glob("instances_*.ttl"))
-    if existing_files:
-        existing_graph = RDFGraph()
-        for f in existing_files:
-            try:
-                existing_graph.parse(str(f), format="turtle")
-            except Exception:
-                pass
+    if body.get("incremental", False):
+        existing_files = sorted(project_dir.glob("instances_*.ttl"))
+        if existing_files:
+            existing_graph = RDFGraph()
+            for f in existing_files:
+                try:
+                    existing_graph.parse(str(f), format="turtle")
+                except Exception:
+                    pass
 
     try:
         result = instance_generator.generate(
@@ -484,10 +486,14 @@ async def generate_instances(project_id: str, body: dict):
             existing_graph=existing_graph,
         )
 
-        # Save generated TTL
+        # Save generated TTL — ONLY the new instances, not existing graph
         timestamp = int(time.time())
         output_path = project_dir / f"instances_{timestamp}.ttl"
         output_path.write_text(result.ttl, encoding="utf-8")
+        
+        # Verify the file has actual instance data
+        print(f"  [Population] Generated {result.instances_created} instances, {result.triples_generated} triples")
+        print(f"  [Population] TTL size: {len(result.ttl)} bytes, saved to {output_path.name}")
 
         return {
             "generated": True,
