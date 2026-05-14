@@ -688,7 +688,8 @@ app.mount("/static", StaticFiles(directory=str(static_dir)), name="static")
 
 @app.get("/")
 def index():
-    return FileResponse(str(static_dir / "index.html"))
+    from fastapi.responses import RedirectResponse
+    return RedirectResponse("/studio")
 
 @app.get("/studio")
 def studio():
