@@ -1,0 +1,53 @@
+{
+  "id": "73936690-c70b-47f1-aaa6-e1a14bd4bc34",
+  "project_id": "fcc_broadband",
+  "ontology_file": "model.ttl",
+  "target_class": "http://kg.local/fcc#Provider",
+  "id_column": "Provider ID",
+  "label_column": "Provider Name",
+  "column_mappings": [
+    {
+      "column_name": "id",
+      "mapped_property": "http://kg.local/fcc#id",
+      "mapping_type": "datatype",
+      "confidence": 0.0,
+      "target_class": null
+    },
+    {
+      "column_name": "Provider ID",
+      "mapped_property": null,
+      "mapping_type": "skip",
+      "confidence": 0.0,
+      "target_class": null
+    },
+    {
+      "column_name": "Provider Name",
+      "mapped_property": null,
+      "mapping_type": "skip",
+      "confidence": 0.0,
+      "target_class": null
+    },
+    {
+      "column_name": "State",
+      "mapped_property": "http://kg.local/fcc#State",
+      "mapping_type": "datatype",
+      "confidence": 0.0,
+      "target_class": null
+    },
+    {
+      "column_name": "FRN",
+      "mapped_property": "http://kg.local/fcc#FRN",
+      "mapping_type": "datatype",
+      "confidence": 0.0,
+      "target_class": null
+    }
+  ],
+  "created_at": 1778738942.2722485,
+  "dataset_columns": [
+    "id",
+    "Provider ID",
+    "Provider Name",
+    "State",
+    "FRN"
+  ]
+}

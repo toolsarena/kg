@@ -358,23 +358,43 @@ async def confirm_mapping(project_id: str, body: dict):
         return JSONResponse({"error": "Project not found"}, 404)
 
     # Build ConfirmedMapping from request body
+    raw_mappings = body.get("column_mappings", [])
+    
+    # Auto-map any "skip" or "unmapped" columns as new datatype properties
+    # so data always gets into the graph
+    target_class = body.get("target_class", "")
+    ns = target_class.rsplit('#', 1)[0] + '#' if '#' in target_class else target_class.rsplit('/', 1)[0] + '/' if target_class else 'http://kg.local/ontology#'
+    
+    column_mappings = []
+    for cm in raw_mappings:
+        col_name = cm.get("column_name", "")
+        mapped_prop = cm.get("mapped_property")
+        map_type = cm.get("mapping_type", "unmapped")
+        
+        # If skip/unmapped and not the id/label column, auto-create a datatype property
+        if map_type in ("skip", "unmapped", "") and not mapped_prop:
+            if col_name and col_name != body.get("id_column") and col_name != body.get("label_column"):
+                import re as _re
+                prop_name = _re.sub(r'[^a-zA-Z0-9]', '_', col_name).strip('_')
+                mapped_prop = ns + prop_name
+                map_type = "datatype"
+        
+        column_mappings.append(ColumnMapping(
+            column_name=col_name,
+            mapped_property=mapped_prop,
+            mapping_type=map_type,
+            confidence=cm.get("confidence", 0.0),
+            target_class=cm.get("target_class"),
+        ))
+
     mapping = ConfirmedMapping(
         id=body.get("id", str(uuid.uuid4())),
         project_id=project_id,
         ontology_file=body.get("ontology_file", "model.ttl"),
-        target_class=body.get("target_class", ""),
+        target_class=target_class,
         id_column=body.get("id_column", ""),
         label_column=body.get("label_column", ""),
-        column_mappings=[
-            ColumnMapping(
-                column_name=cm.get("column_name", ""),
-                mapped_property=cm.get("mapped_property"),
-                mapping_type=cm.get("mapping_type", "unmapped"),
-                confidence=cm.get("confidence", 0.0),
-                target_class=cm.get("target_class"),
-            )
-            for cm in body.get("column_mappings", [])
-        ],
+        column_mappings=column_mappings,
         dataset_columns=body.get("dataset_columns", []),
     )
 

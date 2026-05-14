@@ -185,8 +185,8 @@ button.primary { background:var(--accent2); border-color:var(--accent2); color:#
     <span id="explore-scope" style="margin-left:12px;font-size:12px;color:var(--text2);">No graph loaded</span>
     <span id="explore-status" style="margin-left:auto;font-size:11px;color:var(--text2);"></span>
   </div>
-  <div style="display:flex;height:calc(100% - 44px);">
-    <div id="explore-graph-container" style="flex:1;position:relative;background:#080810;"></div>
+  <div style="display:flex;height:calc(100% - 44px);overflow:hidden;">
+    <div id="explore-graph-container" style="flex:1;position:relative;background:#080810;min-height:400px;"></div>
     <div id="explore-chat" style="width:320px;min-width:320px;background:var(--bg2);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;">
       <div style="padding:8px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:6px;">
         <span style="font-size:12px;font-weight:600;color:var(--accent);">Chat</span>
