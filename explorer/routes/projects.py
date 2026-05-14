@@ -262,9 +262,15 @@ async def build_project(project_id: str, body: dict = None):
                        'http://www.w3.org/2002/07/owl#DatatypeProperty', 'http://www.w3.org/2002/07/owl#Ontology',
                        'http://www.w3.org/2002/07/owl#NamedIndividual', 'http://www.w3.org/2000/01/rdf-schema#Class',
                        'http://www.w3.org/2000/01/rdf-schema#Resource'}
+        # Also skip XSD types and other W3C vocabulary
+        _VOCAB_PREFIXES = ('http://www.w3.org/2001/XMLSchema#', 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+                           'http://www.w3.org/2000/01/rdf-schema#', 'http://www.w3.org/2002/07/owl#')
         node_ids = set()
         for uri in all_uris:
-            if str(uri) in _VOCAB_URIS:
+            uri_str = str(uri)
+            if uri_str in _VOCAB_URIS:
+                continue
+            if any(uri_str.startswith(p) for p in _VOCAB_PREFIXES):
                 continue
             uid = str(uri).split('/')[-1].split('#')[-1]
             label = uid.replace('_', ' ').title()
@@ -394,9 +400,14 @@ async def merge_and_build(project_id: str, body: dict = None):
                        'http://www.w3.org/2002/07/owl#DatatypeProperty', 'http://www.w3.org/2002/07/owl#Ontology',
                        'http://www.w3.org/2002/07/owl#NamedIndividual', 'http://www.w3.org/2000/01/rdf-schema#Class',
                        'http://www.w3.org/2000/01/rdf-schema#Resource'}
+        _VOCAB_PREFIXES = ('http://www.w3.org/2001/XMLSchema#', 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+                           'http://www.w3.org/2000/01/rdf-schema#', 'http://www.w3.org/2002/07/owl#')
         node_ids = set()
         for uri in all_uris:
-            if str(uri) in _VOCAB_URIS:
+            uri_str = str(uri)
+            if uri_str in _VOCAB_URIS:
+                continue
+            if any(uri_str.startswith(p) for p in _VOCAB_PREFIXES):
                 continue
             uid = str(uri).split('/')[-1].split('#')[-1]
             label = uid.replace('_', ' ').title()
