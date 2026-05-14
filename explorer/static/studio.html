@@ -185,7 +185,23 @@ button.primary { background:var(--accent2); border-color:var(--accent2); color:#
     <span id="explore-scope" style="margin-left:12px;font-size:12px;color:var(--text2);">No graph loaded</span>
     <span id="explore-status" style="margin-left:auto;font-size:11px;color:var(--text2);"></span>
   </div>
-  <div id="explore-graph-container" style="width:100%;height:calc(100% - 44px);position:relative;background:#080810;"></div>
+  <div style="display:flex;height:calc(100% - 44px);">
+    <div id="explore-graph-container" style="flex:1;position:relative;background:#080810;"></div>
+    <div id="explore-chat" style="width:320px;min-width:320px;background:var(--bg2);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;">
+      <div style="padding:8px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:6px;">
+        <span style="font-size:12px;font-weight:600;color:var(--accent);">Chat</span>
+        <div style="margin-left:auto;display:flex;gap:2px;">
+          <button onclick="setExploreChat('context')" id="echat-ctx" class="primary" style="padding:3px 8px;font-size:10px;border-radius:3px;">Context QA</button>
+          <button onclick="setExploreChat('sparql')" id="echat-spq" style="padding:3px 8px;font-size:10px;border-radius:3px;">SPARQL</button>
+        </div>
+      </div>
+      <div id="explore-chat-msgs" style="flex:1;overflow-y:auto;padding:10px;font-size:12px;"></div>
+      <div style="padding:8px;border-top:1px solid var(--border);display:flex;gap:6px;">
+        <input type="text" id="explore-chat-input" placeholder="Ask about your graph..." style="flex:1;padding:6px 10px;font-size:12px;">
+        <button class="primary" onclick="sendExploreChat()" style="padding:6px 12px;font-size:12px;">Send</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 </div>
@@ -1628,6 +1644,45 @@ function renderTreeGraph(graphData) {
     .onBackgroundClick(function() { exploreReset(); })
     .cooldownTicks(0);  // No physics — fixed positions
 }
+
+// Explore tab chat — Context QA and SPARQL Agent
+var exploreChatMode = 'context';
+
+function setExploreChat(mode) {
+  exploreChatMode = mode;
+  document.getElementById('echat-ctx').className = (mode === 'context') ? 'primary' : '';
+  document.getElementById('echat-spq').className = (mode === 'sparql') ? 'primary' : '';
+}
+
+async function sendExploreChat() {
+  var input = document.getElementById('explore-chat-input');
+  var msg = input.value.trim();
+  if (!msg) return;
+  input.value = '';
+
+  var msgsEl = document.getElementById('explore-chat-msgs');
+  msgsEl.innerHTML += '<div style="margin-bottom:8px;text-align:right;"><span style="background:var(--accent2);color:#fff;padding:4px 10px;border-radius:10px;display:inline-block;max-width:85%;text-align:left;">' + msg + '</span></div>';
+
+  // Call appropriate endpoint
+  var endpoint = (exploreChatMode === 'sparql') ? '/api/ask/sparql' : '/api/ask/project';
+  try {
+    var resp = await fetch(endpoint, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({question: msg})
+    });
+    var data = await resp.json();
+    var answer = data.answer || data.error || 'No response';
+    var extra = '';
+    if (data.sparql) extra = '<div style="margin-top:4px;padding:4px 8px;background:var(--bg);border-radius:4px;font-family:monospace;font-size:10px;color:var(--green);white-space:pre-wrap;max-height:100px;overflow-y:auto;">' + data.sparql + '</div>';
+    msgsEl.innerHTML += '<div style="margin-bottom:8px;"><span style="background:var(--bg3);color:var(--text);padding:6px 10px;border-radius:10px;display:inline-block;max-width:85%;text-align:left;white-space:pre-wrap;">' + answer + '</span>' + extra + '</div>';
+  } catch(e) {
+    msgsEl.innerHTML += '<div style="margin-bottom:8px;"><span style="background:var(--bg3);color:var(--red);padding:4px 10px;border-radius:10px;display:inline-block;">Error: ' + e.message + '</span></div>';
+  }
+  msgsEl.scrollTop = msgsEl.scrollHeight;
+}
+
+document.getElementById('explore-chat-input').addEventListener('keydown', function(e) { if (e.key === 'Enter') sendExploreChat(); });
 
 // Export current graph as standalone HTML with drill-down
 function exportGraphHTML() {

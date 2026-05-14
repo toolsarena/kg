@@ -1,0 +1,121 @@
+@prefix fcc: <http://kg.local/fcc#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+fcc:censusBlockFIPS a owl:DatatypeProperty ;
+    rdfs:label "Census Block FIPS Code" ;
+    rdfs:comment "15-digit FIPS code identifying the census block." ;
+    rdfs:domain fcc:Location ;
+    rdfs:range xsd:string .
+
+fcc:dbaName a owl:DatatypeProperty ;
+    rdfs:label "DBA Name" ;
+    rdfs:comment "Doing Business As name." ;
+    rdfs:domain fcc:Provider ;
+    rdfs:range xsd:string .
+
+fcc:frn a owl:DatatypeProperty ;
+    rdfs:label "FRN" ;
+    rdfs:comment "FCC Registration Number." ;
+    rdfs:domain fcc:Provider ;
+    rdfs:range xsd:string .
+
+fcc:holdingCompanyName a owl:DatatypeProperty ;
+    rdfs:label "Holding Company Name" ;
+    rdfs:domain fcc:HoldingCompany ;
+    rdfs:range xsd:string .
+
+fcc:holdingCompanyNumber a owl:DatatypeProperty ;
+    rdfs:label "Holding Company Number" ;
+    rdfs:domain fcc:HoldingCompany ;
+    rdfs:range xsd:string .
+
+fcc:locatedIn a owl:ObjectProperty ;
+    rdfs:label "Located In" ;
+    rdfs:comment "The geographic location where this service is available." ;
+    rdfs:domain fcc:ServiceOffering ;
+    rdfs:range fcc:Location .
+
+fcc:maxDownstream a owl:DatatypeProperty ;
+    rdfs:label "Max Advertised Downstream Speed (mbps)" ;
+    rdfs:domain fcc:ServiceOffering ;
+    rdfs:range xsd:float .
+
+fcc:maxUpstream a owl:DatatypeProperty ;
+    rdfs:label "Max Advertised Upstream Speed (mbps)" ;
+    rdfs:domain fcc:ServiceOffering ;
+    rdfs:range xsd:float .
+
+fcc:offeredBy a owl:ObjectProperty ;
+    rdfs:label "Offered By" ;
+    rdfs:comment "The provider offering this service." ;
+    rdfs:domain fcc:ServiceOffering ;
+    rdfs:range fcc:Provider .
+
+fcc:ownedBy a owl:ObjectProperty ;
+    rdfs:label "Owned By" ;
+    rdfs:comment "The holding company that owns this provider." ;
+    rdfs:domain fcc:Provider ;
+    rdfs:range fcc:HoldingCompany .
+
+fcc:providerID a owl:DatatypeProperty ;
+    rdfs:label "Provider ID" ;
+    rdfs:comment "FCC-assigned unique provider identifier." ;
+    rdfs:domain fcc:Provider ;
+    rdfs:range xsd:string .
+
+fcc:providerName a owl:DatatypeProperty ;
+    rdfs:label "Provider Name" ;
+    rdfs:domain fcc:Provider ;
+    rdfs:range xsd:string .
+
+fcc:servesBusiness a owl:DatatypeProperty ;
+    rdfs:label "Business" ;
+    rdfs:comment "Whether this offering serves business customers." ;
+    rdfs:domain fcc:ServiceOffering ;
+    rdfs:range xsd:boolean .
+
+fcc:servesConsumer a owl:DatatypeProperty ;
+    rdfs:label "Consumer" ;
+    rdfs:comment "Whether this offering serves residential consumers." ;
+    rdfs:domain fcc:ServiceOffering ;
+    rdfs:range xsd:boolean .
+
+fcc:state a owl:DatatypeProperty ;
+    rdfs:label "State" ;
+    rdfs:domain fcc:Location ;
+    rdfs:range xsd:string .
+
+fcc:technologyCode a owl:DatatypeProperty ;
+    rdfs:label "Technology Code" ;
+    rdfs:comment "FCC technology code (10=DSL, 40=Cable, 50=Fiber, 60=Satellite, etc.)." ;
+    rdfs:domain fcc:Technology ;
+    rdfs:range xsd:string .
+
+fcc:usesTechnology a owl:ObjectProperty ;
+    rdfs:label "Uses Technology" ;
+    rdfs:comment "The delivery technology used for this service offering." ;
+    rdfs:domain fcc:ServiceOffering ;
+    rdfs:range fcc:Technology .
+
+fcc:Technology a owl:Class ;
+    rdfs:label "Technology" ;
+    rdfs:comment "The broadband delivery technology (e.g., cable, fiber, DSL, satellite)." .
+
+fcc:HoldingCompany a owl:Class ;
+    rdfs:label "Holding Company" ;
+    rdfs:comment "A parent company that owns one or more broadband providers." .
+
+fcc:Location a owl:Class ;
+    rdfs:label "Location" ;
+    rdfs:comment "A geographic location identified by state and census block FIPS code." .
+
+fcc:Provider a owl:Class ;
+    rdfs:label "Broadband Provider" ;
+    rdfs:comment "A company that provides broadband internet service." .
+
+fcc:ServiceOffering a owl:Class ;
+    rdfs:label "Service Offering" ;
+    rdfs:comment "A specific broadband service deployed in a census block with defined speeds and technology." .
+
