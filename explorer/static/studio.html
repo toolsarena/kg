@@ -579,17 +579,28 @@ async function mapToOntology() {
   mappingHTML += '<tr style="border-bottom:1px solid var(--border);"><th style="text-align:left;padding:4px;">Column</th><th style="text-align:left;padding:4px;">→ Property</th><th style="padding:4px;">Type</th></tr>';
 
   col_names.forEach(function(colName, idx) {
+    // Try to auto-match column to a property by name similarity
+    var bestMatch = '';
+    var colLower = colName.toLowerCase().replace(/[^a-z0-9]/g, '');
+    allProps.forEach(function(p) {
+      var propLower = p.label.toLowerCase().replace(/[^a-z0-9]/g, '');
+      var localLower = p.local_name.toLowerCase().replace(/[^a-z0-9]/g, '');
+      if (colLower === propLower || colLower === localLower) bestMatch = p.uri;
+      else if (!bestMatch && (propLower.indexOf(colLower) > -1 || colLower.indexOf(propLower) > -1)) bestMatch = p.uri;
+    });
+
     mappingHTML += '<tr style="border-bottom:1px solid var(--border);">';
     mappingHTML += '<td style="padding:4px;color:var(--accent);">' + colName + '</td>';
     mappingHTML += '<td style="padding:4px;"><select id="map-prop-' + idx + '" style="width:100%;padding:2px;background:var(--bg);border:1px solid var(--border);color:var(--text);border-radius:3px;font-size:10px;">';
     mappingHTML += '<option value="">-- skip --</option>';
     allProps.forEach(function(p) {
-      mappingHTML += '<option value="' + p.uri + '">' + p.label + ' (' + p.local_name + ')</option>';
+      var selected = (p.uri === bestMatch) ? ' selected' : '';
+      mappingHTML += '<option value="' + p.uri + '"' + selected + '>' + p.label + ' (' + p.local_name + ')</option>';
     });
     mappingHTML += '<option value="__new_datatype__">+ New datatype property</option>';
     mappingHTML += '</select></td>';
     mappingHTML += '<td style="padding:4px;"><select id="map-type-' + idx + '" style="padding:2px;background:var(--bg);border:1px solid var(--border);color:var(--text);border-radius:3px;font-size:10px;">';
-    mappingHTML += '<option value="datatype">datatype</option><option value="object">object</option><option value="skip">skip</option>';
+    mappingHTML += '<option value="datatype"' + (bestMatch ? ' selected' : '') + '>datatype</option><option value="object">object</option><option value="skip"' + (!bestMatch ? ' selected' : '') + '>skip</option>';
     mappingHTML += '</select></td>';
     mappingHTML += '</tr>';
   });
