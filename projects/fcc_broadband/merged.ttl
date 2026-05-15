@@ -1608,6 +1608,13 @@ kgr:pradipta_chakrabarty a kg:Entity ;
         kgr:wiki_confluence_update ;
     skos:prefLabel "Pradipta Chakrabarty" .
 
+kgr:reshma_sadasivuni a kg:Entity ;
+    kg:belongs_to_area kgr:engineering ;
+    kg:does_activity kgr:code_delivery,
+        kgr:deployment,
+        kgr:feature_development ;
+    skos:prefLabel "Reshma Sadasivuni" .
+
 kgr:sagar_govindarao_pawar a kg:Entity ;
     kg:belongs_to_area kgr:qlik ;
     kg:does_activity kgr:pv2,
@@ -1620,6 +1627,20 @@ kgr:satish_kamakoti a kg:Entity ;
         kgr:product_ownership,
         kgr:roadmap ;
     skos:prefLabel "Satish Kamakoti" .
+
+kgr:senthilkumar_nagarajan a kg:Entity ;
+    kg:belongs_to_area kgr:engineering ;
+    kg:does_activity kgr:code_delivery,
+        kgr:deployment,
+        kgr:feature_development ;
+    skos:prefLabel "Senthilkumar Nagarajan" .
+
+kgr:shriparna_deb a kg:Entity ;
+    kg:belongs_to_area kgr:engineering ;
+    kg:does_activity kgr:code_delivery,
+        kgr:deployment,
+        kgr:feature_development ;
+    skos:prefLabel "Shriparna Deb" .
 
 kgr:shruti_kapoor a kg:Entity ;
     kg:belongs_to_area kgr:business_digital ;
@@ -1778,19 +1799,6 @@ kgr:architecture a kg:Group ;
 kgr:business_collab_on_techincal_requirements a kg:Activity ;
     skos:prefLabel "Business collab on techincal requirements" .
 
-kgr:code_delivery a kg:Activity ;
-    skos:prefLabel "Code Delivery" .
-
-kgr:deployment a kg:Activity ;
-    skos:prefLabel "Deployment" .
-
-kgr:engineering a kg:Group ;
-    kg:groupType "Area" ;
-    skos:prefLabel "Engineering" .
-
-kgr:feature_development a kg:Activity ;
-    skos:prefLabel "Feature Development" .
-
 kgr:solution_design a kg:Activity ;
     skos:prefLabel "Solution Design" .
 
@@ -1808,4 +1816,17 @@ fcc:Provider a owl:Class ;
 fcc:ServiceOffering a owl:Class ;
     rdfs:label "Service Offering" ;
     rdfs:comment "A specific broadband service deployed in a census block with defined speeds and technology." .
+
+kgr:code_delivery a kg:Activity ;
+    skos:prefLabel "Code Delivery" .
+
+kgr:deployment a kg:Activity ;
+    skos:prefLabel "Deployment" .
+
+kgr:engineering a kg:Group ;
+    kg:groupType "Area" ;
+    skos:prefLabel "Engineering" .
+
+kgr:feature_development a kg:Activity ;
+    skos:prefLabel "Feature Development" .
 
