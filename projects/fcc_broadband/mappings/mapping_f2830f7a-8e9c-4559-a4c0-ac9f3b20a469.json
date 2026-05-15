@@ -1,0 +1,157 @@
+{
+  "id": "f2830f7a-8e9c-4559-a4c0-ac9f3b20a469",
+  "project_id": "fcc_broadband",
+  "ontology_file": "model.ttl",
+  "target_class": "http://kg.local/fcc#Provider",
+  "id_column": "Provider Name",
+  "label_column": "Holding Company Name",
+  "column_mappings": [
+    {
+      "column_name": "id",
+      "mapped_property": "http://kg.local/fcc#providerID",
+      "mapping_type": "datatype",
+      "confidence": 1,
+      "target_class": null
+    },
+    {
+      "column_name": "label",
+      "mapped_property": "http://kg.local/fcc#label",
+      "mapping_type": "datatype",
+      "confidence": 0,
+      "target_class": null
+    },
+    {
+      "column_name": "type",
+      "mapped_property": "http://kg.local/fcc#type",
+      "mapping_type": "datatype",
+      "confidence": 0,
+      "target_class": null
+    },
+    {
+      "column_name": "Logical Record Number",
+      "mapped_property": "http://kg.local/fcc#Logical_Record_Number",
+      "mapping_type": "datatype",
+      "confidence": 0,
+      "target_class": null
+    },
+    {
+      "column_name": "Provider ID",
+      "mapped_property": "http://kg.local/fcc#providerID",
+      "mapping_type": "datatype",
+      "confidence": 1,
+      "target_class": null
+    },
+    {
+      "column_name": "FRN",
+      "mapped_property": "http://kg.local/fcc#frn",
+      "mapping_type": "datatype",
+      "confidence": 1,
+      "target_class": null
+    },
+    {
+      "column_name": "Provider Name",
+      "mapped_property": "http://kg.local/fcc#providerName",
+      "mapping_type": "datatype",
+      "confidence": 1,
+      "target_class": null
+    },
+    {
+      "column_name": "DBA Name",
+      "mapped_property": "http://kg.local/fcc#dbaName",
+      "mapping_type": "datatype",
+      "confidence": 1,
+      "target_class": null
+    },
+    {
+      "column_name": "Holding Company Name",
+      "mapped_property": "http://kg.local/fcc#holdingCompanyName",
+      "mapping_type": "datatype",
+      "confidence": 1,
+      "target_class": null
+    },
+    {
+      "column_name": "Holding Company Number",
+      "mapped_property": "http://kg.local/fcc#holdingCompanyNumber",
+      "mapping_type": "datatype",
+      "confidence": 1,
+      "target_class": null
+    },
+    {
+      "column_name": "Holding Company Final",
+      "mapped_property": "http://kg.local/fcc#Holding_Company_Final",
+      "mapping_type": "datatype",
+      "confidence": 0,
+      "target_class": null
+    },
+    {
+      "column_name": "State",
+      "mapped_property": "http://kg.local/fcc#state",
+      "mapping_type": "datatype",
+      "confidence": 1,
+      "target_class": null
+    },
+    {
+      "column_name": "Census Block FIPS Code",
+      "mapped_property": "http://kg.local/fcc#censusBlockFIPS",
+      "mapping_type": "datatype",
+      "confidence": 1,
+      "target_class": null
+    },
+    {
+      "column_name": "Technology Code",
+      "mapped_property": "http://kg.local/fcc#technologyCode",
+      "mapping_type": "datatype",
+      "confidence": 1,
+      "target_class": null
+    },
+    {
+      "column_name": "Consumer",
+      "mapped_property": "http://kg.local/fcc#servesConsumer",
+      "mapping_type": "datatype",
+      "confidence": 1,
+      "target_class": null
+    },
+    {
+      "column_name": "Max Advertised Downstream Speed (mbps)",
+      "mapped_property": "http://kg.local/fcc#maxDownstream",
+      "mapping_type": "datatype",
+      "confidence": 1,
+      "target_class": null
+    },
+    {
+      "column_name": "Max Advertised Upstream Speed (mbps)",
+      "mapped_property": "http://kg.local/fcc#maxUpstream",
+      "mapping_type": "datatype",
+      "confidence": 1,
+      "target_class": null
+    },
+    {
+      "column_name": "Business",
+      "mapped_property": "http://kg.local/fcc#servesBusiness",
+      "mapping_type": "datatype",
+      "confidence": 1,
+      "target_class": null
+    }
+  ],
+  "created_at": 1778832048.8758464,
+  "dataset_columns": [
+    "id",
+    "label",
+    "type",
+    "Logical Record Number",
+    "Provider ID",
+    "FRN",
+    "Provider Name",
+    "DBA Name",
+    "Holding Company Name",
+    "Holding Company Number",
+    "Holding Company Final",
+    "State",
+    "Census Block FIPS Code",
+    "Technology Code",
+    "Consumer",
+    "Max Advertised Downstream Speed (mbps)",
+    "Max Advertised Upstream Speed (mbps)",
+    "Business"
+  ]
+}

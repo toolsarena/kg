@@ -936,14 +936,12 @@ function renderExploreGraph(graphData) {
   exploreFocused = null;
   exploreSelected = null;
 
-  // Color by type — simple circle colors for default view
+  // Color by type with label-hash fallback
   var typeColors = {class:'#3fb950', objectproperty:'#bc8cff', datatypeproperty:'#d29922', concept:'#58a6ff', entity:'#f0883e', service:'#4363d8', resource:'#911eb4', process:'#e6194b', decision:'#42d4f4', bestpractice:'#aaffc3', group:'#9b59b6', activity:'#a8e6cf', project:'#1a3a8a'};
-  // Label-based color variation for nodes without a type color
   var labelPalette = ['#58a6ff','#3fb950','#f0883e','#bc8cff','#e6194b','#42d4f4','#d29922','#911eb4','#f58231','#4363d8','#aaffc3','#fabebe'];
-  exploreNodes.forEach(function(n, i) {
+  exploreNodes.forEach(function(n) {
     var baseColor = typeColors[n.type];
     if (!baseColor) {
-      // Hash the label to get consistent color per unique label
       var hash = 0;
       var lbl = n.label || n.id;
       for (var j = 0; j < lbl.length; j++) hash = ((hash << 5) - hash) + lbl.charCodeAt(j);
@@ -965,58 +963,58 @@ function renderExploreGraph(graphData) {
   var nodes = exploreNodes.map(function(n) { return Object.assign({}, n); });
   var links = exploreEdges.map(function(e) { return {source: e.source, target: e.target, relation: e.relation}; });
 
+  // Use actual container dimensions, with sensible fallbacks
+  var w = container.clientWidth;
+  var h = container.clientHeight;
+  if (w < 100) w = window.innerWidth - 400;
+  if (h < 100) h = window.innerHeight - 150;
+
   exploreGraph = ForceGraph()(container)
     .graphData({nodes: nodes, links: links})
     .nodeCanvasObject(function(node, ctx, globalScale) {
-      var baseSize = 4 + Math.sqrt(node.degree || 1) * 2.5;
+      var baseSize = 3 + Math.sqrt(node.degree || 1) * 2;
       var isSelected = (exploreSelected === node.id);
-      var isNeighbor = false;
-      if (exploreSelected) {
-        var adj = exploreAdj[exploreSelected] || [];
-        isNeighbor = adj.indexOf(node.id) > -1;
-      }
-      var alpha = exploreSelected ? (isSelected ? 1 : (isNeighbor ? 1 : 0.55)) : 1;
-      var size = isSelected ? baseSize * 1.6 : baseSize;
+      var isNeighbor = exploreSelected ? (exploreAdj[exploreSelected] || []).indexOf(node.id) > -1 : false;
+      var alpha = exploreSelected ? (isSelected ? 1 : (isNeighbor ? 0.9 : 0.2)) : 0.9;
+      var size = isSelected ? baseSize * 2 : (isNeighbor ? baseSize * 1.3 : baseSize);
 
       ctx.globalAlpha = alpha;
 
-      if (isSelected) { ctx.shadowColor = node.color; ctx.shadowBlur = 25; }
+      if (isSelected) { ctx.shadowColor = node.color; ctx.shadowBlur = 20; }
 
       ctx.beginPath();
       ctx.arc(node.x, node.y, size, 0, 2 * Math.PI);
       ctx.fillStyle = isSelected ? '#ffffff' : node.color;
       ctx.fill();
 
-      if (isSelected) { ctx.strokeStyle = node.color; ctx.lineWidth = 3; ctx.stroke(); ctx.shadowBlur = 0; }
-      else if (isNeighbor) { ctx.strokeStyle = 'rgba(255,255,255,0.4)'; ctx.lineWidth = 1.5; ctx.stroke(); }
+      if (isSelected) { ctx.strokeStyle = node.color; ctx.lineWidth = 2; ctx.stroke(); ctx.shadowBlur = 0; }
+      else if (isNeighbor) { ctx.strokeStyle = 'rgba(255,255,255,0.5)'; ctx.lineWidth = 1; ctx.stroke(); }
 
-      // Label
-      if (isSelected || isNeighbor || globalScale > 1.2) {
-        ctx.font = (isSelected ? 'bold ' : '') + Math.max(11/globalScale, 3.5) + 'px sans-serif';
+      // Labels: always show for selected/neighbors, show on zoom for others
+      if (isSelected || isNeighbor || globalScale > 2) {
+        ctx.font = (isSelected ? 'bold ' : '') + Math.max(10/globalScale, 3) + 'px sans-serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'top';
-        ctx.fillStyle = isSelected ? '#ffffff' : 'rgba(255,255,255,0.8)';
-        ctx.fillText(node.label, node.x, node.y + size + 3);
+        ctx.fillStyle = isSelected ? '#fff' : (isNeighbor ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.6)');
+        ctx.fillText(node.label || node.id, node.x, node.y + size + 2);
       }
 
       ctx.globalAlpha = 1;
     })
     .nodeCanvasObjectMode(function() { return 'replace'; })
     .linkColor(function(link) {
-      if (!exploreSelected) return 'rgba(88,166,255,0.25)';
+      if (!exploreSelected) return 'rgba(88,166,255,0.15)';
       var s = typeof link.source === 'object' ? link.source.id : link.source;
       var t = typeof link.target === 'object' ? link.target.id : link.target;
-      var connected = (s === exploreSelected || t === exploreSelected);
-      return connected ? 'rgba(88,166,255,0.8)' : 'rgba(88,166,255,0.12)';
+      return (s === exploreSelected || t === exploreSelected) ? 'rgba(88,166,255,0.7)' : 'rgba(88,166,255,0.04)';
     })
     .linkWidth(function(link) {
-      if (!exploreSelected) return 0.8;
+      if (!exploreSelected) return 0.5;
       var s = typeof link.source === 'object' ? link.source.id : link.source;
       var t = typeof link.target === 'object' ? link.target.id : link.target;
-      var connected = (s === exploreSelected || t === exploreSelected);
-      return connected ? 2.5 : 0.5;
+      return (s === exploreSelected || t === exploreSelected) ? 2 : 0.2;
     })
-    .linkDirectionalArrowLength(4)
+    .linkDirectionalArrowLength(3)
     .linkDirectionalArrowRelPos(0.8)
     .linkDirectionalParticles(function(link) {
       if (!exploreSelected) return 0;
@@ -1024,58 +1022,45 @@ function renderExploreGraph(graphData) {
       var t = typeof link.target === 'object' ? link.target.id : link.target;
       return (s === exploreSelected || t === exploreSelected) ? 2 : 0;
     })
-    .linkDirectionalParticleWidth(2)
+    .linkDirectionalParticleWidth(1.5)
     .linkDirectionalParticleColor(function() { return '#58a6ff'; })
-    .linkLabel(function(l) { return l.relation; })
     .backgroundColor('#080810')
-    .width(container.clientWidth || (window.innerWidth - 380))
-    .height(container.clientHeight || (window.innerHeight - 140))
+    .width(w)
+    .height(h)
     .onNodeClick(function(node) { exploreDrillDown(node.id); })
     .onBackgroundClick(function() { exploreReset(); })
-    .cooldownTicks(120);
+    .cooldownTicks(200)
+    .onEngineStop(function() {
+      // Auto zoom-to-fit ONCE after simulation settles
+      if (exploreGraph) exploreGraph.zoomToFit(400, 30);
+    });
 
-  exploreGraph.d3Force('charge').strength(-180);
-  exploreGraph.d3Force('link').distance(70);
-
-  // Resize graph when tab becomes visible
-  setTimeout(function() {
-    if (exploreGraph && container.clientWidth > 0) {
-      exploreGraph.width(container.clientWidth);
-      exploreGraph.height(container.clientHeight);
-    }
-  }, 500);
+  // Tuned forces for tight clustering (like Neo4j)
+  exploreGraph.d3Force('charge').strength(-50);  // Weak repulsion = tight clusters
+  exploreGraph.d3Force('link').distance(30);     // Short links = nodes stay close
+  exploreGraph.d3Force('center', null);          // Remove center force — let clusters form naturally
 }
 
-// Drill down — click node, it highlights, neighbors stay visible, smooth pan, never lose focus
+// Drill down — Neo4j style: click node, zoom into its neighborhood
 function exploreDrillDown(nodeId) {
   exploreSelected = nodeId;
 
-  // Get direct neighbors of clicked node
-  var neighbors = new Set([nodeId]);
-  (exploreAdj[nodeId] || []).forEach(function(n) { neighbors.add(n); });
-
-  // ADD to existing focus — never remove what's already visible
-  if (!exploreFocused) {
-    // First click — keep whole graph visible but highlight this node + neighbors
-    exploreFocused = new Set(exploreNodes.map(function(n) { return n.id; }));
-  }
-  // The focused set stays as-is (everything visible), we just change `exploreSelected`
-  // which makes the clicked node glow and its neighbors stand out
-
-  // Smooth pan to the clicked node — no zoom change, no jump
+  // Smooth zoom into the clicked node's neighborhood
   var gNode = exploreGraph.graphData().nodes.find(function(n) { return n.id === nodeId; });
   if (gNode) {
-    exploreGraph.centerAt(gNode.x, gNode.y, 800);
+    // Zoom to show the node and its immediate neighbors
+    exploreGraph.centerAt(gNode.x, gNode.y, 600);
+    exploreGraph.zoom(4, 600);  // Zoom in close
   }
 
-  document.getElementById('explore-status').textContent = (exploreNodeMap[nodeId] || {}).label + ' — click neighbors to drill deeper';
+  document.getElementById('explore-status').textContent = (exploreNodeMap[nodeId] || {}).label + ' — click neighbors to go deeper, background to reset';
 }
 
-// Reset — double-click background
+// Reset — click background, zoom out to see everything
 function exploreReset() {
   exploreSelected = null;
   exploreFocused = null;
-  exploreGraph.zoomToFit(1000, 50);
+  exploreGraph.zoomToFit(800, 30);
   document.getElementById('explore-status').textContent = '';
 }
 
