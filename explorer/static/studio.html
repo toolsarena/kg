@@ -1495,9 +1495,9 @@ function renderStructuredGraph(graphData) {
   exploreGraph.d3Force('link').distance(100);
 }
 
-// Decision Tree view — top-down or left-to-right hierarchical layout
+// Decision Tree view — progressive expand, layer by layer
 function renderTreeGraph(graphData, direction) {
-  direction = direction || 'td'; // 'td' = top-down, 'lr' = left-to-right
+  direction = direction || 'td';
   var container = document.getElementById('explore-graph-container');
   container.innerHTML = '';
   if (!graphData || !graphData.nodes || graphData.nodes.length === 0) {
@@ -1505,16 +1505,19 @@ function renderTreeGraph(graphData, direction) {
     return;
   }
 
-  // Build adjacency and find root (highest degree node)
+  // Build adjacency and find root
   var nodeMap = {};
   var adj = {};
   var degrees = {};
+  var children = {}; // parent -> [children] (directed)
   graphData.nodes.forEach(function(n) { nodeMap[n.id] = n; degrees[n.id] = 0; });
   graphData.edges.forEach(function(e) {
     if (!adj[e.source]) adj[e.source] = [];
     if (!adj[e.target]) adj[e.target] = [];
     adj[e.source].push(e.target);
     adj[e.target].push(e.source);
+    if (!children[e.source]) children[e.source] = [];
+    children[e.source].push(e.target);
     degrees[e.source] = (degrees[e.source] || 0) + 1;
     degrees[e.target] = (degrees[e.target] || 0) + 1;
   });
@@ -1524,8 +1527,9 @@ function renderTreeGraph(graphData, direction) {
   var maxDeg = 0;
   Object.keys(degrees).forEach(function(id) { if (degrees[id] > maxDeg) { maxDeg = degrees[id]; rootId = id; } });
 
-  // BFS to assign levels (top-down tree layout)
+  // BFS to assign levels
   var levels = {};
+  var parentOf = {};
   var visited = new Set([rootId]);
   var queue = [{id: rootId, level: 0}];
   levels[rootId] = 0;
@@ -1536,63 +1540,19 @@ function renderTreeGraph(graphData, direction) {
       if (!visited.has(nb)) {
         visited.add(nb);
         levels[nb] = curr.level + 1;
+        parentOf[nb] = curr.id;
         if (curr.level + 1 > maxLevel) maxLevel = curr.level + 1;
         queue.push({id: nb, level: curr.level + 1});
       }
     });
   }
-  // Assign unvisited nodes to last level
-  graphData.nodes.forEach(function(n) { if (levels[n.id] === undefined) levels[n.id] = maxLevel + 1; });
 
-  // Assign x positions per level
-  var levelNodes = {};
-  graphData.nodes.forEach(function(n) {
-    var lv = levels[n.id];
-    if (!levelNodes[lv]) levelNodes[lv] = [];
-    levelNodes[lv].push(n.id);
-  });
+  // State: which nodes are expanded (visible)
+  var expandedNodes = new Set([rootId]);
+  // Show level 1 by default
+  (adj[rootId] || []).forEach(function(nb) { expandedNodes.add(nb); });
 
-  var W = container.clientWidth || 900;
-  var H = container.clientHeight || 600;
-
-  // Calculate spacing based on direction
-  var maxNodesInLevel = 0;
-  Object.keys(levelNodes).forEach(function(lv) {
-    if (levelNodes[lv].length > maxNodesInLevel) maxNodesInLevel = levelNodes[lv].length;
-  });
-
-  var positions = {};
-  if (direction === 'lr') {
-    // Left-to-right: levels go horizontally, nodes stack vertically
-    var levelWidth = 250; // horizontal space between levels
-    var nodeSpacing = 50; // vertical space between nodes in same level
-    Object.keys(levelNodes).forEach(function(lv) {
-      var ids = levelNodes[lv];
-      var totalHeight = ids.length * nodeSpacing;
-      ids.forEach(function(id, i) {
-        positions[id] = {
-          x: parseInt(lv) * levelWidth - (maxLevel * levelWidth) / 3,
-          y: (i * nodeSpacing) - totalHeight / 2
-        };
-      });
-    });
-  } else {
-    // Top-down: levels go vertically, nodes spread horizontally
-    var levelHeight = 100;
-    var nodeSpacing = 200; // horizontal space between nodes
-    Object.keys(levelNodes).forEach(function(lv) {
-      var ids = levelNodes[lv];
-      var totalWidth = ids.length * nodeSpacing;
-      ids.forEach(function(id, i) {
-        positions[id] = {
-          x: (i * nodeSpacing) - totalWidth / 2,
-          y: parseInt(lv) * levelHeight - H / 3
-        };
-      });
-    });
-  }
-
-  // Set up drill-down state
+  // Set up drill-down state for the explore functions
   exploreNodes = graphData.nodes;
   exploreEdges = graphData.edges;
   exploreNodeMap = nodeMap;
@@ -1601,95 +1561,156 @@ function renderTreeGraph(graphData, direction) {
   exploreSelected = null;
 
   var typeColors = {class:'#3fb950', objectproperty:'#bc8cff', concept:'#58a6ff', entity:'#f0883e', service:'#4363d8', resource:'#911eb4', group:'#9b59b6', activity:'#a8e6cf', project:'#2255aa'};
-  var nodes = graphData.nodes.map(function(n) {
-    return Object.assign({}, n, {
-      fx: positions[n.id] ? positions[n.id].x : 0,
-      fy: positions[n.id] ? positions[n.id].y : 0,
-      color: typeColors[n.type] || '#58a6ff',
-      degree: degrees[n.id] || 0
+
+  function getVisibleData() {
+    var visNodes = graphData.nodes.filter(function(n) { return expandedNodes.has(n.id); });
+    var visEdges = graphData.edges.filter(function(e) { return expandedNodes.has(e.source) && expandedNodes.has(e.target); });
+
+    // Assign positions based on level and direction
+    var levelNodes = {};
+    visNodes.forEach(function(n) {
+      var lv = levels[n.id] || 0;
+      if (!levelNodes[lv]) levelNodes[lv] = [];
+      levelNodes[lv].push(n.id);
     });
-  });
-  var links = graphData.edges.map(function(e) { return {source: e.source, target: e.target, relation: e.relation}; });
 
-  exploreGraph = ForceGraph()(container)
-    .graphData({nodes: nodes, links: links})
-    .nodeCanvasObject(function(node, ctx, globalScale) {
-      var label = node.label || node.id;
-      var isRoot = (node.id === rootId);
-      var isSelected = (exploreSelected === node.id);
-      var isNeighbor = exploreSelected ? (adj[exploreSelected] || []).indexOf(node.id) > -1 : false;
-      var alpha = exploreSelected ? (isSelected ? 1 : (isNeighbor ? 1 : 0.4)) : 1;
+    var positions = {};
+    if (direction === 'lr') {
+      var levelWidth = 280;
+      Object.keys(levelNodes).forEach(function(lv) {
+        var ids = levelNodes[lv];
+        var spacing = 55;
+        var totalH = ids.length * spacing;
+        ids.forEach(function(id, i) {
+          positions[id] = { x: parseInt(lv) * levelWidth, y: i * spacing - totalH / 2 };
+        });
+      });
+    } else {
+      var levelHeight = 120;
+      Object.keys(levelNodes).forEach(function(lv) {
+        var ids = levelNodes[lv];
+        var spacing = 220;
+        var totalW = ids.length * spacing;
+        ids.forEach(function(id, i) {
+          positions[id] = { x: i * spacing - totalW / 2, y: parseInt(lv) * levelHeight };
+        });
+      });
+    }
 
-      ctx.globalAlpha = alpha;
-      var fs = Math.max((isRoot ? 12 : 10) / globalScale, 3.5);
-      ctx.font = (isRoot || isSelected ? 'bold ' : '') + fs + 'px sans-serif';
-      var tw = ctx.measureText(label).width;
-      var px = 8/globalScale, py = 5/globalScale;
-      var w = tw + px*2, h = fs + py*2, rad = isRoot ? h/2 : 5/globalScale;
-      var x = node.x - w/2, y = node.y - h/2;
+    var nodes = visNodes.map(function(n) {
+      var hasChildren = (adj[n.id] || []).some(function(nb) { return !expandedNodes.has(nb) && levels[nb] > levels[n.id]; });
+      return Object.assign({}, n, {
+        fx: positions[n.id] ? positions[n.id].x : 0,
+        fy: positions[n.id] ? positions[n.id].y : 0,
+        color: typeColors[n.type] || '#58a6ff',
+        degree: degrees[n.id] || 0,
+        hasChildren: hasChildren,
+        isRoot: n.id === rootId
+      });
+    });
+    var links = visEdges.map(function(e) { return {source: e.source, target: e.target}; });
+    return {nodes: nodes, links: links};
+  }
 
-      if (isSelected) { ctx.shadowColor = '#fff'; ctx.shadowBlur = 15; }
+  function render() {
+    container.innerHTML = '';
+    var gData = getVisibleData();
 
-      // Draw shape — root gets pill shape, others get rounded rect
-      ctx.beginPath();
-      if (isRoot) {
-        // Pill / stadium shape
-        ctx.moveTo(x + rad, y);
-        ctx.lineTo(x + w - rad, y);
-        ctx.arc(x + w - rad, y + h/2, h/2, -Math.PI/2, Math.PI/2);
-        ctx.lineTo(x + rad, y + h);
-        ctx.arc(x + rad, y + h/2, h/2, Math.PI/2, -Math.PI/2);
-      } else {
-        ctx.moveTo(x+rad,y); ctx.lineTo(x+w-rad,y); ctx.quadraticCurveTo(x+w,y,x+w,y+rad);
-        ctx.lineTo(x+w,y+h-rad); ctx.quadraticCurveTo(x+w,y+h,x+w-rad,y+h);
-        ctx.lineTo(x+rad,y+h); ctx.quadraticCurveTo(x,y+h,x,y+h-rad);
-        ctx.lineTo(x,y+rad); ctx.quadraticCurveTo(x,y,x+rad,y);
-      }
-      ctx.closePath();
-      ctx.fillStyle = isRoot ? '#2255aa' : node.color;
-      ctx.fill();
+    exploreGraph = ForceGraph()(container)
+      .graphData(gData)
+      .nodeCanvasObject(function(node, ctx, gs) {
+        var label = node.label || node.id;
+        var isRoot = node.isRoot;
+        var hasKids = node.hasChildren;
+        var fs = Math.max((isRoot ? 13 : 11) / gs, 3.5);
+        ctx.font = (isRoot ? 'bold ' : '') + fs + 'px sans-serif';
+        var tw = ctx.measureText(label).width;
+        var px = 10/gs, py = 6/gs;
+        var w = tw + px*2, h = fs + py*2;
+        var rad = isRoot ? h/2 : 6/gs;
+        var x = node.x - w/2, y = node.y - h/2;
 
-      if (isSelected) { ctx.strokeStyle = '#fff'; ctx.lineWidth = 2.5/globalScale; ctx.stroke(); ctx.shadowBlur = 0; }
-      else if (isNeighbor) { ctx.strokeStyle = 'rgba(255,255,255,0.6)'; ctx.lineWidth = 1.5/globalScale; ctx.stroke(); }
-      else { ctx.strokeStyle = 'rgba(255,255,255,0.15)'; ctx.lineWidth = 0.5/globalScale; ctx.stroke(); }
+        // Draw shape
+        ctx.beginPath();
+        if (isRoot) {
+          ctx.moveTo(x+rad,y); ctx.lineTo(x+w-rad,y); ctx.arc(x+w-rad,y+h/2,h/2,-Math.PI/2,Math.PI/2);
+          ctx.lineTo(x+rad,y+h); ctx.arc(x+rad,y+h/2,h/2,Math.PI/2,-Math.PI/2);
+        } else {
+          ctx.moveTo(x+rad,y); ctx.lineTo(x+w-rad,y); ctx.quadraticCurveTo(x+w,y,x+w,y+rad);
+          ctx.lineTo(x+w,y+h-rad); ctx.quadraticCurveTo(x+w,y+h,x+w-rad,y+h);
+          ctx.lineTo(x+rad,y+h); ctx.quadraticCurveTo(x,y+h,x,y+h-rad);
+          ctx.lineTo(x,y+rad); ctx.quadraticCurveTo(x,y,x+rad,y);
+        }
+        ctx.closePath();
+        ctx.fillStyle = isRoot ? '#2255aa' : node.color;
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+        ctx.lineWidth = 0.5/gs;
+        ctx.stroke();
 
-      // Text
-      ctx.fillStyle = isRoot ? '#fff' : '#fff';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText(label, node.x, node.y);
-      ctx.globalAlpha = 1;
-    })
-    .nodeCanvasObjectMode(function() { return 'replace'; })
-    .nodePointerAreaPaint(function(node, color, ctx, globalScale) {
-      var fs = Math.max(10/globalScale, 3.5);
-      ctx.font = fs + 'px sans-serif';
-      var tw = ctx.measureText(node.label||node.id).width;
-      var w = tw + 16/globalScale, h = fs + 10/globalScale;
-      ctx.fillStyle = color;
-      ctx.fillRect(node.x-w/2, node.y-h/2, w, h);
-    })
-    .linkColor(function(link) {
-      if (!exploreSelected) return 'rgba(150,150,150,0.5)';
-      var s = typeof link.source === 'object' ? link.source.id : link.source;
-      var t = typeof link.target === 'object' ? link.target.id : link.target;
-      return (s === exploreSelected || t === exploreSelected) ? 'rgba(255,255,255,0.8)' : 'rgba(150,150,150,0.1)';
-    })
-    .linkWidth(function(link) {
-      if (!exploreSelected) return 1.5;
-      var s = typeof link.source === 'object' ? link.source.id : link.source;
-      var t = typeof link.target === 'object' ? link.target.id : link.target;
-      return (s === exploreSelected || t === exploreSelected) ? 3 : 0.4;
-    })
-    .linkDirectionalArrowLength(5)
-    .linkDirectionalArrowRelPos(0.85)
-    .linkCurvature(0.1)
-    .backgroundColor('#0a0a14')
-    .width(container.clientWidth)
-    .height(container.clientHeight)
-    .onNodeClick(function(node) { exploreDrillDown(node.id); })
-    .onBackgroundClick(function() { exploreReset(); })
-    .cooldownTicks(0);  // No physics — fixed positions
+        // Expand indicator (+ sign if has hidden children)
+        if (hasKids) {
+          ctx.fillStyle = '#fff';
+          ctx.font = 'bold ' + (fs * 0.8) + 'px sans-serif';
+          ctx.textAlign = 'right';
+          ctx.textBaseline = 'middle';
+          ctx.fillText('+', node.x + w/2 - 3/gs, node.y);
+        }
+
+        // Label
+        ctx.fillStyle = '#fff';
+        ctx.font = (isRoot ? 'bold ' : '') + fs + 'px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(label, node.x - (hasKids ? 4/gs : 0), node.y);
+      })
+      .nodeCanvasObjectMode(function() { return 'replace'; })
+      .nodePointerAreaPaint(function(node, color, ctx, gs) {
+        var fs = Math.max(11/gs, 3.5);
+        ctx.font = fs + 'px sans-serif';
+        var tw = ctx.measureText(node.label||node.id).width;
+        var w = tw + 20/gs, h = fs + 12/gs;
+        ctx.fillStyle = color;
+        ctx.fillRect(node.x-w/2, node.y-h/2, w, h);
+      })
+      .linkColor(function() { return 'rgba(150,150,150,0.6)'; })
+      .linkWidth(1.5)
+      .linkDirectionalArrowLength(5)
+      .linkDirectionalArrowRelPos(0.85)
+      .linkCurvature(0.1)
+      .backgroundColor('#0a0a14')
+      .width(container.clientWidth)
+      .height(container.clientHeight)
+      .onNodeClick(function(node) {
+        // Expand: show children of clicked node
+        var nodeAdj = adj[node.id] || [];
+        var childrenToShow = nodeAdj.filter(function(nb) { return levels[nb] > levels[node.id]; });
+        if (childrenToShow.length > 0 && !childrenToShow.every(function(c) { return expandedNodes.has(c); })) {
+          // Expand
+          childrenToShow.forEach(function(c) { expandedNodes.add(c); });
+          render();
+        } else if (childrenToShow.length > 0) {
+          // Collapse — remove all descendants
+          var toRemove = new Set();
+          var frontier = childrenToShow.slice();
+          while (frontier.length > 0) {
+            var nid = frontier.pop();
+            if (nid !== rootId) {
+              toRemove.add(nid);
+              (adj[nid] || []).forEach(function(nb) {
+                if (levels[nb] > levels[nid] && !toRemove.has(nb)) frontier.push(nb);
+              });
+            }
+          }
+          toRemove.forEach(function(id) { expandedNodes.delete(id); });
+          render();
+        }
+      })
+      .cooldownTicks(0);
+  }
+
+  render();
+  document.getElementById('explore-status').textContent = 'Click nodes to expand/collapse layers';
 }
 
 // Explore tab chat — Context QA and SPARQL Agent
