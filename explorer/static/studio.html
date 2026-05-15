@@ -180,7 +180,8 @@ button.primary { background:var(--accent2); border-color:var(--accent2); color:#
     <div style="margin-left:16px;display:flex;gap:2px;background:var(--bg);border-radius:4px;padding:2px;">
       <button onclick="setGraphView('nodes')" id="view-nodes-btn" class="primary" style="padding:4px 10px;font-size:11px;border-radius:3px;">&#x25CF; Nodes</button>
       <button onclick="setGraphView('mindmap')" id="view-mindmap-btn" style="padding:4px 10px;font-size:11px;border-radius:3px;">&#x25A0; Mind Map</button>
-      <button onclick="setGraphView('tree')" id="view-tree-btn" style="padding:4px 10px;font-size:11px;border-radius:3px;">&#x25BD; Tree</button>
+      <button onclick="setGraphView('tree')" id="view-tree-btn" style="padding:4px 10px;font-size:11px;border-radius:3px;">&#x25BD; Tree ↓</button>
+      <button onclick="setGraphView('treelr')" id="view-treelr-btn" style="padding:4px 10px;font-size:11px;border-radius:3px;">&#x25B7; Tree →</button>
     </div>
     <button onclick="exportGraphHTML()" style="padding:4px 10px;font-size:11px;margin-left:8px;">&#x1f4e4; Export HTML</button>
     <span id="explore-scope" style="margin-left:12px;font-size:12px;color:var(--text2);">No graph loaded</span>
@@ -512,7 +513,7 @@ async function confirmManualMapping() {
       switchTab('explore');
       setTimeout(function() {
         if (currentGraphView === 'mindmap') renderStructuredGraph(mergeData.graph_data);
-        else if (currentGraphView === 'tree') renderTreeGraph(mergeData.graph_data);
+        else if (currentGraphView === 'tree') renderTreeGraph(mergeData.graph_data, currentGraphView === "treelr" ? "lr" : "td");
         else renderExploreGraph(mergeData.graph_data);
       }, 100);
       document.getElementById('explore-scope').innerHTML = '&#x1f500; <strong style="color:var(--accent);">Populated Graph</strong> — ' + mergeData.nodes + ' nodes, ' + mergeData.edges + ' edges';
@@ -908,7 +909,7 @@ async function doBuildGraph(ttl) {
   switchTab('explore');
   setTimeout(function() {
     if (currentGraphView === 'mindmap') renderStructuredGraph(buildData.graph_data);
-    else if (currentGraphView === 'tree') renderTreeGraph(buildData.graph_data);
+    else if (currentGraphView === 'tree') renderTreeGraph(buildData.graph_data, currentGraphView === "treelr" ? "lr" : "td");
     else renderExploreGraph(buildData.graph_data);
   }, 100);
   document.getElementById('explore-scope').innerHTML = '&#x1f4c4; <strong style="color:var(--accent);">' + filename + '</strong> — ' + buildData.nodes + ' nodes, ' + buildData.edges + ' edges';
@@ -1171,7 +1172,7 @@ async function buildFile(filename) {
   switchTab('explore');
   setTimeout(function() {
     if (currentGraphView === 'mindmap') renderStructuredGraph(data.graph_data);
-    else if (currentGraphView === 'tree') renderTreeGraph(data.graph_data);
+    else if (currentGraphView === 'tree') renderTreeGraph(data.graph_data, currentGraphView === "treelr" ? "lr" : "td");
     else renderExploreGraph(data.graph_data);
   }, 100);
   document.getElementById('explore-scope').innerHTML = '&#x1f4c4; <strong style="color:var(--accent);">' + filename + '</strong> — ' + data.nodes + ' nodes, ' + data.edges + ' edges';
@@ -1299,7 +1300,7 @@ async function buildStructuredGraph() {
   switchTab('explore');
   setTimeout(function() {
     if (currentGraphView === 'mindmap') renderStructuredGraph(buildData.graph_data);
-    else if (currentGraphView === 'tree') renderTreeGraph(buildData.graph_data);
+    else if (currentGraphView === 'tree') renderTreeGraph(buildData.graph_data, currentGraphView === "treelr" ? "lr" : "td");
     else renderExploreGraph(buildData.graph_data);
   }, 100);
   document.getElementById('explore-scope').innerHTML = '&#x1f4c4; <strong style="color:var(--accent);">' + (title || data.filename) + '</strong> — ' + buildData.nodes + ' nodes, ' + buildData.edges + ' edges';
@@ -1314,9 +1315,11 @@ function setGraphView(view) {
   document.getElementById('view-nodes-btn').className = (view === 'nodes') ? 'primary' : '';
   document.getElementById('view-mindmap-btn').className = (view === 'mindmap') ? 'primary' : '';
   document.getElementById('view-tree-btn').className = (view === 'tree') ? 'primary' : '';
+  document.getElementById('view-treelr-btn').className = (view === 'treelr') ? 'primary' : '';
   if (lastGraphData) {
     if (view === 'mindmap') renderStructuredGraph(lastGraphData);
-    else if (view === 'tree') renderTreeGraph(lastGraphData);
+    else if (view === 'tree') renderTreeGraph(lastGraphData, 'td');
+    else if (view === 'treelr') renderTreeGraph(lastGraphData, 'lr');
     else renderExploreGraph(lastGraphData);
   }
 }
@@ -1492,8 +1495,9 @@ function renderStructuredGraph(graphData) {
   exploreGraph.d3Force('link').distance(100);
 }
 
-// Decision Tree view — top-down hierarchical layout with drill-down
-function renderTreeGraph(graphData) {
+// Decision Tree view — top-down or left-to-right hierarchical layout
+function renderTreeGraph(graphData, direction) {
+  direction = direction || 'td'; // 'td' = top-down, 'lr' = left-to-right
   var container = document.getElementById('explore-graph-container');
   container.innerHTML = '';
   if (!graphData || !graphData.nodes || graphData.nodes.length === 0) {
@@ -1550,23 +1554,43 @@ function renderTreeGraph(graphData) {
 
   var W = container.clientWidth || 900;
   var H = container.clientHeight || 600;
-  var levelHeight = Math.max(H / (maxLevel + 2), 100);
 
-  // Calculate width needed based on widest level (min 180px per node to avoid overlap)
+  // Calculate spacing based on direction
   var maxNodesInLevel = 0;
   Object.keys(levelNodes).forEach(function(lv) {
     if (levelNodes[lv].length > maxNodesInLevel) maxNodesInLevel = levelNodes[lv].length;
   });
-  var neededWidth = Math.max(W, maxNodesInLevel * 180);
 
   var positions = {};
-  Object.keys(levelNodes).forEach(function(lv) {
-    var ids = levelNodes[lv];
-    var spacing = neededWidth / (ids.length + 1);
-    ids.forEach(function(id, i) {
-      positions[id] = { x: spacing * (i + 1) - neededWidth/2, y: parseInt(lv) * levelHeight - H/3 };
+  if (direction === 'lr') {
+    // Left-to-right: levels go horizontally, nodes stack vertically
+    var levelWidth = 250; // horizontal space between levels
+    var nodeSpacing = 50; // vertical space between nodes in same level
+    Object.keys(levelNodes).forEach(function(lv) {
+      var ids = levelNodes[lv];
+      var totalHeight = ids.length * nodeSpacing;
+      ids.forEach(function(id, i) {
+        positions[id] = {
+          x: parseInt(lv) * levelWidth - (maxLevel * levelWidth) / 3,
+          y: (i * nodeSpacing) - totalHeight / 2
+        };
+      });
     });
-  });
+  } else {
+    // Top-down: levels go vertically, nodes spread horizontally
+    var levelHeight = 100;
+    var nodeSpacing = 200; // horizontal space between nodes
+    Object.keys(levelNodes).forEach(function(lv) {
+      var ids = levelNodes[lv];
+      var totalWidth = ids.length * nodeSpacing;
+      ids.forEach(function(id, i) {
+        positions[id] = {
+          x: (i * nodeSpacing) - totalWidth / 2,
+          y: parseInt(lv) * levelHeight - H / 3
+        };
+      });
+    });
+  }
 
   // Set up drill-down state
   exploreNodes = graphData.nodes;
