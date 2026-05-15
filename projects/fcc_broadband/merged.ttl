@@ -1,0 +1,1811 @@
+@prefix fcc: <http://kg.local/fcc#> .
+@prefix kg: <http://kg.local/ontology#> .
+@prefix kgr: <http://kg.local/resource/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+fcc:censusBlockFIPS a owl:DatatypeProperty ;
+    rdfs:label "Census Block FIPS Code" ;
+    rdfs:comment "15-digit FIPS code identifying the census block." ;
+    rdfs:domain fcc:Location ;
+    rdfs:range xsd:string .
+
+fcc:dbaName a owl:DatatypeProperty ;
+    rdfs:label "DBA Name" ;
+    rdfs:comment "Doing Business As name." ;
+    rdfs:domain fcc:Provider ;
+    rdfs:range xsd:string .
+
+fcc:frn a owl:DatatypeProperty ;
+    rdfs:label "FRN" ;
+    rdfs:comment "FCC Registration Number." ;
+    rdfs:domain fcc:Provider ;
+    rdfs:range xsd:string .
+
+fcc:holdingCompanyName a owl:DatatypeProperty ;
+    rdfs:label "Holding Company Name" ;
+    rdfs:domain fcc:HoldingCompany ;
+    rdfs:range xsd:string .
+
+fcc:holdingCompanyNumber a owl:DatatypeProperty ;
+    rdfs:label "Holding Company Number" ;
+    rdfs:domain fcc:HoldingCompany ;
+    rdfs:range xsd:string .
+
+fcc:locatedIn a owl:ObjectProperty ;
+    rdfs:label "Located In" ;
+    rdfs:comment "The geographic location where this service is available." ;
+    rdfs:domain fcc:ServiceOffering ;
+    rdfs:range fcc:Location .
+
+fcc:maxDownstream a owl:DatatypeProperty ;
+    rdfs:label "Max Advertised Downstream Speed (mbps)" ;
+    rdfs:domain fcc:ServiceOffering ;
+    rdfs:range xsd:float .
+
+fcc:maxUpstream a owl:DatatypeProperty ;
+    rdfs:label "Max Advertised Upstream Speed (mbps)" ;
+    rdfs:domain fcc:ServiceOffering ;
+    rdfs:range xsd:float .
+
+fcc:offeredBy a owl:ObjectProperty ;
+    rdfs:label "Offered By" ;
+    rdfs:comment "The provider offering this service." ;
+    rdfs:domain fcc:ServiceOffering ;
+    rdfs:range fcc:Provider .
+
+fcc:ownedBy a owl:ObjectProperty ;
+    rdfs:label "Owned By" ;
+    rdfs:comment "The holding company that owns this provider." ;
+    rdfs:domain fcc:Provider ;
+    rdfs:range fcc:HoldingCompany .
+
+fcc:providerID a owl:DatatypeProperty ;
+    rdfs:label "Provider ID" ;
+    rdfs:comment "FCC-assigned unique provider identifier." ;
+    rdfs:domain fcc:Provider ;
+    rdfs:range xsd:string .
+
+fcc:providerName a owl:DatatypeProperty ;
+    rdfs:label "Provider Name" ;
+    rdfs:domain fcc:Provider ;
+    rdfs:range xsd:string .
+
+fcc:servesBusiness a owl:DatatypeProperty ;
+    rdfs:label "Business" ;
+    rdfs:comment "Whether this offering serves business customers." ;
+    rdfs:domain fcc:ServiceOffering ;
+    rdfs:range xsd:boolean .
+
+fcc:servesConsumer a owl:DatatypeProperty ;
+    rdfs:label "Consumer" ;
+    rdfs:comment "Whether this offering serves residential consumers." ;
+    rdfs:domain fcc:ServiceOffering ;
+    rdfs:range xsd:boolean .
+
+fcc:state a owl:DatatypeProperty ;
+    rdfs:label "State" ;
+    rdfs:domain fcc:Location ;
+    rdfs:range xsd:string .
+
+fcc:technologyCode a owl:DatatypeProperty ;
+    rdfs:label "Technology Code" ;
+    rdfs:comment "FCC technology code (10=DSL, 40=Cable, 50=Fiber, 60=Satellite, etc.)." ;
+    rdfs:domain fcc:Technology ;
+    rdfs:range xsd:string .
+
+fcc:usesTechnology a owl:ObjectProperty ;
+    rdfs:label "Uses Technology" ;
+    rdfs:comment "The delivery technology used for this service offering." ;
+    rdfs:domain fcc:ServiceOffering ;
+    rdfs:range fcc:Technology .
+
+kgr:1 a kg:Concept ;
+    skos:prefLabel "1" .
+
+kgr:10 a kg:Concept ;
+    skos:prefLabel "10" .
+
+kgr:100 a kg:Concept ;
+    skos:prefLabel "100" .
+
+kgr:101 a kg:Concept ;
+    skos:prefLabel "101" .
+
+kgr:102 a kg:Concept ;
+    skos:prefLabel "102" .
+
+kgr:103 a kg:Concept ;
+    skos:prefLabel "103" .
+
+kgr:104 a kg:Concept ;
+    skos:prefLabel "104" .
+
+kgr:105 a kg:Concept ;
+    skos:prefLabel "105" .
+
+kgr:106 a kg:Concept ;
+    skos:prefLabel "106" .
+
+kgr:107 a kg:Concept ;
+    skos:prefLabel "107" .
+
+kgr:108 a kg:Concept ;
+    skos:prefLabel "108" .
+
+kgr:109 a kg:Concept ;
+    skos:prefLabel "109" .
+
+kgr:11 a kg:Concept ;
+    skos:prefLabel "11" .
+
+kgr:110 a kg:Concept ;
+    skos:prefLabel "110" .
+
+kgr:111 a kg:Concept ;
+    skos:prefLabel "111" .
+
+kgr:112 a kg:Concept ;
+    skos:prefLabel "112" .
+
+kgr:113 a kg:Concept ;
+    skos:prefLabel "113" .
+
+kgr:114 a kg:Concept ;
+    skos:prefLabel "114" .
+
+kgr:115 a kg:Concept ;
+    skos:prefLabel "115" .
+
+kgr:116 a kg:Concept ;
+    skos:prefLabel "116" .
+
+kgr:117 a kg:Concept ;
+    skos:prefLabel "117" .
+
+kgr:118 a kg:Concept ;
+    skos:prefLabel "118" .
+
+kgr:119 a kg:Concept ;
+    skos:prefLabel "119" .
+
+kgr:12 a kg:Concept ;
+    skos:prefLabel "12" .
+
+kgr:120 a kg:Concept ;
+    skos:prefLabel "120" .
+
+kgr:121 a kg:Concept ;
+    skos:prefLabel "121" .
+
+kgr:122 a kg:Concept ;
+    skos:prefLabel "122" .
+
+kgr:123 a kg:Concept ;
+    skos:prefLabel "123" .
+
+kgr:124 a kg:Concept ;
+    skos:prefLabel "124" .
+
+kgr:125 a kg:Concept ;
+    skos:prefLabel "125" .
+
+kgr:126 a kg:Concept ;
+    skos:prefLabel "126" .
+
+kgr:127 a kg:Concept ;
+    skos:prefLabel "127" .
+
+kgr:128 a kg:Concept ;
+    skos:prefLabel "128" .
+
+kgr:129 a kg:Concept ;
+    skos:prefLabel "129" .
+
+kgr:13 a kg:Concept ;
+    skos:prefLabel "13" .
+
+kgr:130 a kg:Concept ;
+    skos:prefLabel "130" .
+
+kgr:131 a kg:Concept ;
+    skos:prefLabel "131" .
+
+kgr:132 a kg:Concept ;
+    skos:prefLabel "132" .
+
+kgr:133 a kg:Concept ;
+    skos:prefLabel "133" .
+
+kgr:134 a kg:Concept ;
+    skos:prefLabel "134" .
+
+kgr:135 a kg:Concept ;
+    skos:prefLabel "135" .
+
+kgr:136 a kg:Concept ;
+    skos:prefLabel "136" .
+
+kgr:137 a kg:Concept ;
+    skos:prefLabel "137" .
+
+kgr:138 a kg:Concept ;
+    skos:prefLabel "138" .
+
+kgr:139 a kg:Concept ;
+    skos:prefLabel "139" .
+
+kgr:14 a kg:Concept ;
+    skos:prefLabel "14" .
+
+kgr:140 a kg:Concept ;
+    skos:prefLabel "140" .
+
+kgr:141 a kg:Concept ;
+    skos:prefLabel "141" .
+
+kgr:142 a kg:Concept ;
+    skos:prefLabel "142" .
+
+kgr:143 a kg:Concept ;
+    skos:prefLabel "143" .
+
+kgr:144 a kg:Concept ;
+    skos:prefLabel "144" .
+
+kgr:145 a kg:Concept ;
+    skos:prefLabel "145" .
+
+kgr:146 a kg:Concept ;
+    skos:prefLabel "146" .
+
+kgr:147 a kg:Concept ;
+    skos:prefLabel "147" .
+
+kgr:148 a kg:Concept ;
+    skos:prefLabel "148" .
+
+kgr:149 a kg:Concept ;
+    skos:prefLabel "149" .
+
+kgr:15 a kg:Concept ;
+    skos:prefLabel "15" .
+
+kgr:150 a kg:Concept ;
+    skos:prefLabel "150" .
+
+kgr:151 a kg:Concept ;
+    skos:prefLabel "151" .
+
+kgr:152 a kg:Concept ;
+    skos:prefLabel "152" .
+
+kgr:153 a kg:Concept ;
+    skos:prefLabel "153" .
+
+kgr:154 a kg:Concept ;
+    skos:prefLabel "154" .
+
+kgr:155 a kg:Concept ;
+    skos:prefLabel "155" .
+
+kgr:156 a kg:Concept ;
+    skos:prefLabel "156" .
+
+kgr:157 a kg:Concept ;
+    skos:prefLabel "157" .
+
+kgr:158 a kg:Concept ;
+    skos:prefLabel "158" .
+
+kgr:159 a kg:Concept ;
+    skos:prefLabel "159" .
+
+kgr:16 a kg:Concept ;
+    skos:prefLabel "16" .
+
+kgr:160 a kg:Concept ;
+    skos:prefLabel "160" .
+
+kgr:161 a kg:Concept ;
+    skos:prefLabel "161" .
+
+kgr:162 a kg:Concept ;
+    skos:prefLabel "162" .
+
+kgr:163 a kg:Concept ;
+    skos:prefLabel "163" .
+
+kgr:164 a kg:Concept ;
+    skos:prefLabel "164" .
+
+kgr:165 a kg:Concept ;
+    skos:prefLabel "165" .
+
+kgr:166 a kg:Concept ;
+    skos:prefLabel "166" .
+
+kgr:167 a kg:Concept ;
+    skos:prefLabel "167" .
+
+kgr:168 a kg:Concept ;
+    skos:prefLabel "168" .
+
+kgr:169 a kg:Concept ;
+    skos:prefLabel "169" .
+
+kgr:17 a kg:Concept ;
+    skos:prefLabel "17" .
+
+kgr:170 a kg:Concept ;
+    skos:prefLabel "170" .
+
+kgr:171 a kg:Concept ;
+    skos:prefLabel "171" .
+
+kgr:172 a kg:Concept ;
+    skos:prefLabel "172" .
+
+kgr:173 a kg:Concept ;
+    skos:prefLabel "173" .
+
+kgr:174 a kg:Concept ;
+    skos:prefLabel "174" .
+
+kgr:175 a kg:Concept ;
+    skos:prefLabel "175" .
+
+kgr:176 a kg:Concept ;
+    skos:prefLabel "176" .
+
+kgr:177 a kg:Concept ;
+    skos:prefLabel "177" .
+
+kgr:178 a kg:Concept ;
+    skos:prefLabel "178" .
+
+kgr:179 a kg:Concept ;
+    skos:prefLabel "179" .
+
+kgr:18 a kg:Concept ;
+    skos:prefLabel "18" .
+
+kgr:180 a kg:Concept ;
+    skos:prefLabel "180" .
+
+kgr:181 a kg:Concept ;
+    skos:prefLabel "181" .
+
+kgr:182 a kg:Concept ;
+    skos:prefLabel "182" .
+
+kgr:183 a kg:Concept ;
+    skos:prefLabel "183" .
+
+kgr:184 a kg:Concept ;
+    skos:prefLabel "184" .
+
+kgr:185 a kg:Concept ;
+    skos:prefLabel "185" .
+
+kgr:186 a kg:Concept ;
+    skos:prefLabel "186" .
+
+kgr:187 a kg:Concept ;
+    skos:prefLabel "187" .
+
+kgr:188 a kg:Concept ;
+    skos:prefLabel "188" .
+
+kgr:189 a kg:Concept ;
+    skos:prefLabel "189" .
+
+kgr:19 a kg:Concept ;
+    skos:prefLabel "19" .
+
+kgr:190 a kg:Concept ;
+    skos:prefLabel "190" .
+
+kgr:191 a kg:Concept ;
+    skos:prefLabel "191" .
+
+kgr:192 a kg:Concept ;
+    skos:prefLabel "192" .
+
+kgr:193 a kg:Concept ;
+    skos:prefLabel "193" .
+
+kgr:194 a kg:Concept ;
+    skos:prefLabel "194" .
+
+kgr:195 a kg:Concept ;
+    skos:prefLabel "195" .
+
+kgr:196 a kg:Concept ;
+    skos:prefLabel "196" .
+
+kgr:197 a kg:Concept ;
+    skos:prefLabel "197" .
+
+kgr:198 a kg:Concept ;
+    skos:prefLabel "198" .
+
+kgr:199 a kg:Concept ;
+    skos:prefLabel "199" .
+
+kgr:2 a kg:Concept ;
+    skos:prefLabel "2" .
+
+kgr:20 a kg:Concept ;
+    skos:prefLabel "20" .
+
+kgr:200 a kg:Concept ;
+    skos:prefLabel "200" .
+
+kgr:21 a kg:Concept ;
+    skos:prefLabel "21" .
+
+kgr:22 a kg:Concept ;
+    skos:prefLabel "22" .
+
+kgr:23 a kg:Concept ;
+    skos:prefLabel "23" .
+
+kgr:24 a kg:Concept ;
+    skos:prefLabel "24" .
+
+kgr:25 a kg:Concept ;
+    skos:prefLabel "25" .
+
+kgr:26 a kg:Concept ;
+    skos:prefLabel "26" .
+
+kgr:27 a kg:Concept ;
+    skos:prefLabel "27" .
+
+kgr:28 a kg:Concept ;
+    skos:prefLabel "28" .
+
+kgr:29 a kg:Concept ;
+    skos:prefLabel "29" .
+
+kgr:3 a kg:Concept ;
+    skos:prefLabel "3" .
+
+kgr:30 a kg:Concept ;
+    skos:prefLabel "30" .
+
+kgr:31 a kg:Concept ;
+    skos:prefLabel "31" .
+
+kgr:32 a kg:Concept ;
+    skos:prefLabel "32" .
+
+kgr:33 a kg:Concept ;
+    skos:prefLabel "33" .
+
+kgr:34 a kg:Concept ;
+    skos:prefLabel "34" .
+
+kgr:35 a kg:Concept ;
+    skos:prefLabel "35" .
+
+kgr:36 a kg:Concept ;
+    skos:prefLabel "36" .
+
+kgr:37 a kg:Concept ;
+    skos:prefLabel "37" .
+
+kgr:38 a kg:Concept ;
+    skos:prefLabel "38" .
+
+kgr:39 a kg:Concept ;
+    skos:prefLabel "39" .
+
+kgr:4 a kg:Concept ;
+    skos:prefLabel "4" .
+
+kgr:40 a kg:Concept ;
+    skos:prefLabel "40" .
+
+kgr:41 a kg:Concept ;
+    skos:prefLabel "41" .
+
+kgr:42 a kg:Concept ;
+    skos:prefLabel "42" .
+
+kgr:43 a kg:Concept ;
+    skos:prefLabel "43" .
+
+kgr:44 a kg:Concept ;
+    skos:prefLabel "44" .
+
+kgr:45 a kg:Concept ;
+    skos:prefLabel "45" .
+
+kgr:46 a kg:Concept ;
+    skos:prefLabel "46" .
+
+kgr:47 a kg:Concept ;
+    skos:prefLabel "47" .
+
+kgr:48 a kg:Concept ;
+    skos:prefLabel "48" .
+
+kgr:49 a kg:Concept ;
+    skos:prefLabel "49" .
+
+kgr:5 a kg:Concept ;
+    skos:prefLabel "5" .
+
+kgr:50 a kg:Concept ;
+    skos:prefLabel "50" .
+
+kgr:51 a kg:Concept ;
+    skos:prefLabel "51" .
+
+kgr:52 a kg:Concept ;
+    skos:prefLabel "52" .
+
+kgr:53 a kg:Concept ;
+    skos:prefLabel "53" .
+
+kgr:54 a kg:Concept ;
+    skos:prefLabel "54" .
+
+kgr:55 a kg:Concept ;
+    skos:prefLabel "55" .
+
+kgr:56 a kg:Concept ;
+    skos:prefLabel "56" .
+
+kgr:57 a kg:Concept ;
+    skos:prefLabel "57" .
+
+kgr:58 a kg:Concept ;
+    skos:prefLabel "58" .
+
+kgr:59 a kg:Concept ;
+    skos:prefLabel "59" .
+
+kgr:6 a kg:Concept ;
+    skos:prefLabel "6" .
+
+kgr:60 a kg:Concept ;
+    skos:prefLabel "60" .
+
+kgr:61 a kg:Concept ;
+    skos:prefLabel "61" .
+
+kgr:62 a kg:Concept ;
+    skos:prefLabel "62" .
+
+kgr:63 a kg:Concept ;
+    skos:prefLabel "63" .
+
+kgr:64 a kg:Concept ;
+    skos:prefLabel "64" .
+
+kgr:65 a kg:Concept ;
+    skos:prefLabel "65" .
+
+kgr:66 a kg:Concept ;
+    skos:prefLabel "66" .
+
+kgr:67 a kg:Concept ;
+    skos:prefLabel "67" .
+
+kgr:68 a kg:Concept ;
+    skos:prefLabel "68" .
+
+kgr:69 a kg:Concept ;
+    skos:prefLabel "69" .
+
+kgr:7 a kg:Concept ;
+    skos:prefLabel "7" .
+
+kgr:70 a kg:Concept ;
+    skos:prefLabel "70" .
+
+kgr:71 a kg:Concept ;
+    skos:prefLabel "71" .
+
+kgr:72 a kg:Concept ;
+    skos:prefLabel "72" .
+
+kgr:73 a kg:Concept ;
+    skos:prefLabel "73" .
+
+kgr:74 a kg:Concept ;
+    skos:prefLabel "74" .
+
+kgr:75 a kg:Concept ;
+    skos:prefLabel "75" .
+
+kgr:76 a kg:Concept ;
+    skos:prefLabel "76" .
+
+kgr:77 a kg:Concept ;
+    skos:prefLabel "77" .
+
+kgr:78 a kg:Concept ;
+    skos:prefLabel "78" .
+
+kgr:79 a kg:Concept ;
+    skos:prefLabel "79" .
+
+kgr:8 a kg:Concept ;
+    skos:prefLabel "8" .
+
+kgr:80 a kg:Concept ;
+    skos:prefLabel "80" .
+
+kgr:81 a kg:Concept ;
+    skos:prefLabel "81" .
+
+kgr:82 a kg:Concept ;
+    skos:prefLabel "82" .
+
+kgr:83 a kg:Concept ;
+    skos:prefLabel "83" .
+
+kgr:84 a kg:Concept ;
+    skos:prefLabel "84" .
+
+kgr:85 a kg:Concept ;
+    skos:prefLabel "85" .
+
+kgr:86 a kg:Concept ;
+    skos:prefLabel "86" .
+
+kgr:87 a kg:Concept ;
+    skos:prefLabel "87" .
+
+kgr:88 a kg:Concept ;
+    skos:prefLabel "88" .
+
+kgr:89 a kg:Concept ;
+    skos:prefLabel "89" .
+
+kgr:9 a kg:Concept ;
+    skos:prefLabel "9" .
+
+kgr:90 a kg:Concept ;
+    skos:prefLabel "90" .
+
+kgr:91 a kg:Concept ;
+    skos:prefLabel "91" .
+
+kgr:92 a kg:Concept ;
+    skos:prefLabel "92" .
+
+kgr:93 a kg:Concept ;
+    skos:prefLabel "93" .
+
+kgr:94 a kg:Concept ;
+    skos:prefLabel "94" .
+
+kgr:95 a kg:Concept ;
+    skos:prefLabel "95" .
+
+kgr:96 a kg:Concept ;
+    skos:prefLabel "96" .
+
+kgr:97 a kg:Concept ;
+    skos:prefLabel "97" .
+
+kgr:98 a kg:Concept ;
+    skos:prefLabel "98" .
+
+kgr:99 a kg:Concept ;
+    skos:prefLabel "99" .
+
+kgr:Broken_Bow_TV_Cable a fcc:Provider ;
+    rdfs:label "Broken Bow TV Cable" ;
+    fcc:Holding_Company_Final "Broken Bow TV Cable"^^xsd:string ;
+    fcc:Logical_Record_Number 1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113,
+        114,
+        115,
+        116,
+        117,
+        118,
+        119,
+        120,
+        121,
+        122,
+        123,
+        124,
+        125,
+        126,
+        127,
+        128,
+        129,
+        130,
+        131,
+        132,
+        133,
+        134,
+        135,
+        136,
+        137,
+        138,
+        139,
+        140,
+        141,
+        142,
+        143,
+        144,
+        145,
+        146,
+        147,
+        148,
+        149,
+        150,
+        151,
+        152,
+        153,
+        154,
+        155,
+        156,
+        157,
+        158,
+        159,
+        160,
+        161,
+        162,
+        163,
+        164,
+        165,
+        166,
+        167,
+        168,
+        169,
+        170,
+        171,
+        172,
+        173,
+        174,
+        175,
+        176,
+        177,
+        178,
+        179,
+        180,
+        181,
+        182,
+        183,
+        184,
+        185,
+        186,
+        187,
+        188,
+        189,
+        190,
+        191,
+        192,
+        193,
+        194,
+        195,
+        196,
+        197,
+        198,
+        199,
+        200 ;
+    fcc:censusBlockFIPS 400890987001002,
+        400890987001003,
+        400890987001004,
+        400890987001005,
+        400890987001006,
+        400890987001007,
+        400890987001008,
+        400890987001011,
+        400890987001012,
+        400890987001020,
+        400890987001021,
+        400890987001035,
+        400890987001036,
+        400890987001037,
+        400890987001038,
+        400890987001039,
+        400890987001045,
+        400890987001046,
+        400890987001047,
+        400890987001048,
+        400890987001049,
+        400890987001050,
+        400890987001051,
+        400890987001052,
+        400890987001053,
+        400890987001054,
+        400890987001130,
+        400890987001131,
+        400890987001132,
+        400890987001133,
+        400890987001135,
+        400890987001137,
+        400890987001138,
+        400890987001139,
+        400890987001140,
+        400890987001141,
+        400890987001142,
+        400890987001143,
+        400890987001144,
+        400890987001145,
+        400890987001146,
+        400890987001147,
+        400890987001148,
+        400890987001149,
+        400890987001150,
+        400890987001151,
+        400890987001152,
+        400890987001153,
+        400890987001154,
+        400890987001155,
+        400890987001156,
+        400890987001157,
+        400890987001158,
+        400890987001159,
+        400890987001160,
+        400890987001161,
+        400890987001162,
+        400890987001163,
+        400890987001164,
+        400890987001166,
+        400890987001167,
+        400890987001187,
+        400890987001188,
+        400890987001190,
+        400890987001196,
+        400890987001204,
+        400890987001205,
+        400890987001207,
+        400890987002000,
+        400890987002002,
+        400890987002003,
+        400890987002004,
+        400890987002005,
+        400890987002014,
+        400890987002015,
+        400890987002070,
+        400890987002071,
+        400890987002072,
+        400890987002073,
+        400890987002074,
+        400890987002076,
+        400890987002078,
+        400890987002079,
+        400890987002085,
+        400890987002086,
+        400890987002087,
+        400890987002088,
+        400890987002089,
+        400890987002090,
+        400890987002091,
+        400890987002092,
+        400890987002093,
+        400890987002094,
+        400890987002095,
+        400890987002096,
+        400890987002097,
+        400890987002098,
+        400890987002099,
+        400890987002140,
+        400890987002141,
+        400890987002142,
+        400890987002143,
+        400890987002144,
+        400890987002145,
+        400890987002146,
+        400890987003000,
+        400890987003001,
+        400890987003002,
+        400890987003003,
+        400890987003004,
+        400890987003005,
+        400890987003006,
+        400890987003007,
+        400890987003008,
+        400890987003009,
+        400890987003010,
+        400890987003011,
+        400890987003012,
+        400890987003013,
+        400890987003014,
+        400890987003015,
+        400890987003016,
+        400890987003017,
+        400890987003018,
+        400890987003019,
+        400890987003020,
+        400890987003021,
+        400890987003022,
+        400890987003023,
+        400890987003024,
+        400890987003025,
+        400890987003026,
+        400890987003027,
+        400890987003028,
+        400890987003029,
+        400890987003030,
+        400890987003031,
+        400890987003032,
+        400890987003033,
+        400890987003034,
+        400890987003035,
+        400890987003036,
+        400890987003037,
+        400890987003038,
+        400890987003039,
+        400890987003040,
+        400890987003041,
+        400890987003042,
+        400890987003043,
+        400890987003044,
+        400890987003045,
+        400890987003046,
+        400890987003047,
+        400890987003048,
+        400890987003049,
+        400890987003050,
+        400890987003051,
+        400890987003052,
+        400890987003053,
+        400890987003054,
+        400890987003055,
+        400890987003056,
+        400890987003057,
+        400890987003058,
+        400890987003059,
+        400890987003060,
+        400890987003061,
+        400890987003062,
+        400890987003063,
+        400890987003064,
+        400890987003065,
+        400890987003066,
+        400890987003067,
+        400890987003068,
+        400890987004000,
+        400890987004001,
+        400890987004002,
+        400890987004003,
+        400890987004004,
+        400890987004005,
+        400890987004006,
+        400890987004007,
+        400890987004008,
+        400890987004009,
+        400890987004010,
+        400890987004011,
+        400890987004012,
+        400890987004013,
+        400890987004014,
+        400890987004015,
+        400890987004016,
+        400890987004017,
+        400890987004018,
+        400890987004019,
+        400890987004020,
+        400890987004021,
+        400890987004022,
+        400890987004023,
+        400890987004024,
+        400890987004025 ;
+    fcc:dbaName "Broken Bow Cable"^^xsd:string ;
+    fcc:frn 3723152 ;
+    fcc:holdingCompanyName "Broken Bow TV Cable"^^xsd:string ;
+    fcc:holdingCompanyNumber 130168 ;
+    fcc:label 1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113,
+        114,
+        115,
+        116,
+        117,
+        118,
+        119,
+        120,
+        121,
+        122,
+        123,
+        124,
+        125,
+        126,
+        127,
+        128,
+        129,
+        130,
+        131,
+        132,
+        133,
+        134,
+        135,
+        136,
+        137,
+        138,
+        139,
+        140,
+        141,
+        142,
+        143,
+        144,
+        145,
+        146,
+        147,
+        148,
+        149,
+        150,
+        151,
+        152,
+        153,
+        154,
+        155,
+        156,
+        157,
+        158,
+        159,
+        160,
+        161,
+        162,
+        163,
+        164,
+        165,
+        166,
+        167,
+        168,
+        169,
+        170,
+        171,
+        172,
+        173,
+        174,
+        175,
+        176,
+        177,
+        178,
+        179,
+        180,
+        181,
+        182,
+        183,
+        184,
+        185,
+        186,
+        187,
+        188,
+        189,
+        190,
+        191,
+        192,
+        193,
+        194,
+        195,
+        196,
+        197,
+        198,
+        199,
+        200 ;
+    fcc:maxDownstream 6 ;
+    fcc:maxUpstream "1.5"^^xsd:float ;
+    fcc:providerID 1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113,
+        114,
+        115,
+        116,
+        117,
+        118,
+        119,
+        120,
+        121,
+        122,
+        123,
+        124,
+        125,
+        126,
+        127,
+        128,
+        129,
+        130,
+        131,
+        132,
+        133,
+        134,
+        135,
+        136,
+        137,
+        138,
+        139,
+        140,
+        141,
+        142,
+        143,
+        144,
+        145,
+        146,
+        147,
+        148,
+        149,
+        150,
+        151,
+        152,
+        153,
+        154,
+        155,
+        156,
+        157,
+        158,
+        159,
+        160,
+        161,
+        162,
+        163,
+        164,
+        165,
+        166,
+        167,
+        168,
+        169,
+        170,
+        171,
+        172,
+        173,
+        174,
+        175,
+        176,
+        177,
+        178,
+        179,
+        180,
+        181,
+        182,
+        183,
+        184,
+        185,
+        186,
+        187,
+        188,
+        189,
+        190,
+        191,
+        192,
+        193,
+        194,
+        195,
+        196,
+        197,
+        198,
+        199,
+        200,
+        69543 ;
+    fcc:providerName "Broken Bow TV Cable"^^xsd:string ;
+    fcc:servesBusiness 1 ;
+    fcc:servesConsumer 1 ;
+    fcc:state "OK"^^xsd:string ;
+    fcc:technologyCode 42 ;
+    fcc:type "concept"^^xsd:string .
+
+kgr:abhishek_gowda a kg:Entity ;
+    kg:belongs_to_area kgr:testing ;
+    kg:does_activity kgr:testing_of_the_features ;
+    skos:prefLabel "Abhishek Gowda" .
+
+kgr:emily_bennetto a kg:Entity ;
+    kg:belongs_to_area kgr:finance_partner___d_ai ;
+    kg:does_activity kgr:business_stakeholder_alignment,
+        kgr:resource_tracker ;
+    skos:prefLabel "Emily Bennetto" .
+
+kgr:ettla_kiranmayi a kg:Entity ;
+    kg:belongs_to_area kgr:engineering ;
+    kg:does_activity kgr:code_delivery,
+        kgr:deployment,
+        kgr:feature_development ;
+    skos:prefLabel "Ettla Kiranmayi" .
+
+kgr:ghanshyam a kg:Entity ;
+    kg:belongs_to_area kgr:engineering ;
+    kg:does_activity kgr:code_delivery,
+        kgr:deployment,
+        kgr:feature_development ;
+    skos:prefLabel "Ghanshyam" .
+
+kgr:hemanth_adapa a kg:Entity ;
+    kg:belongs_to_area kgr:product ;
+    kg:does_activity kgr:overall_delivery_accountability ;
+    skos:prefLabel "Hemanth Adapa" .
+
+kgr:jasmeet_kaur a kg:Entity ;
+    kg:belongs_to_area kgr:qlik ;
+    kg:does_activity kgr:pv6,
+        kgr:qlik_development ;
+    skos:prefLabel "Jasmeet Kaur" .
+
+kgr:john_ayre a kg:Entity ;
+    kg:belongs_to_area kgr:business_digital ;
+    kg:does_activity kgr:contract_life_cycle_management ;
+    skos:prefLabel "John Ayre" .
+
+kgr:kay_mcginn a kg:Entity ;
+    kg:belongs_to_area kgr:finance_partner___digital ;
+    kg:does_activity kgr:budget_management_interface_with_business,
+        kgr:technical_delivery ;
+    skos:prefLabel "Kay McGinn" .
+
+kgr:laura_buckingham a kg:Entity ;
+    kg:belongs_to_area kgr:finance_partner___d_ai ;
+    kg:does_activity kgr:business_stakeholder_alignment,
+        kgr:rmt ;
+    skos:prefLabel "Laura Buckingham" .
+
+kgr:mark_currid a kg:Entity ;
+    kg:belongs_to_area kgr:business_digital ;
+    kg:does_activity kgr:engineering_manager ;
+    skos:prefLabel "Mark Currid" .
+
+kgr:minaxi_basak a kg:Entity ;
+    kg:belongs_to_area kgr:architecture ;
+    kg:does_activity kgr:business_collab_on_techincal_requirements,
+        kgr:solution_design,
+        kgr:wiki_confluence_update ;
+    skos:prefLabel "Minaxi Basak" .
+
+kgr:naveen_jonnala a kg:Entity ;
+    kg:belongs_to_area kgr:business_digital ;
+    kg:does_activity kgr:digital_systems,
+        kgr:solution_architect ;
+    skos:prefLabel "Naveen Jonnala" .
+
+kgr:nicola_richards a kg:Entity ;
+    kg:belongs_to_area kgr:business_sponsor ;
+    kg:does_activity kgr:business_sponsor_for_dar,
+        kgr:revenue_controls ;
+    skos:prefLabel "Nicola Richards" .
+
+kgr:noel_smyth a kg:Entity ;
+    kg:belongs_to_area kgr:business_digital ;
+    kg:does_activity kgr:engineering_manager ;
+    skos:prefLabel "Noel Smyth" .
+
+kgr:pradipta_chakrabarty a kg:Entity ;
+    kg:belongs_to_area kgr:architecture ;
+    kg:does_activity kgr:business_collab_on_techincal_requirements,
+        kgr:solution_design,
+        kgr:wiki_confluence_update ;
+    skos:prefLabel "Pradipta Chakrabarty" .
+
+kgr:sagar_govindarao_pawar a kg:Entity ;
+    kg:belongs_to_area kgr:qlik ;
+    kg:does_activity kgr:pv2,
+        kgr:qlik_development ;
+    skos:prefLabel "Sagar Govindarao Pawar" .
+
+kgr:satish_kamakoti a kg:Entity ;
+    kg:belongs_to_area kgr:product ;
+    kg:does_activity kgr:backlog,
+        kgr:product_ownership,
+        kgr:roadmap ;
+    skos:prefLabel "Satish Kamakoti" .
+
+kgr:shruti_kapoor a kg:Entity ;
+    kg:belongs_to_area kgr:business_digital ;
+    kg:does_activity kgr:digital_systems,
+        kgr:technical_delivery ;
+    skos:prefLabel "Shruti Kapoor" .
+
+kgr:soren_chatterjee a kg:Entity ;
+    kg:belongs_to_area kgr:product ;
+    kg:does_activity kgr:backlog,
+        kgr:product_ownership,
+        kgr:roadmap ;
+    skos:prefLabel "Soren Chatterjee" .
+
+kgr:souvik_ray a kg:Entity ;
+    kg:belongs_to_area kgr:architecture ;
+    kg:does_activity kgr:business_collab_on_techincal_requirements,
+        kgr:solution_design,
+        kgr:wiki_confluence_update ;
+    skos:prefLabel "Souvik Ray" .
+
+kgr:surabhi_pant a kg:Entity ;
+    kg:belongs_to_area kgr:engineering ;
+    kg:does_activity kgr:code_delivery,
+        kgr:deployment,
+        kgr:feature_development ;
+    skos:prefLabel "Surabhi Pant" .
+
+kgr:suveccha_mukherjee a kg:Entity ;
+    kg:belongs_to_area kgr:engineering ;
+    kg:does_activity kgr:code_delivery,
+        kgr:deployment,
+        kgr:feature_development ;
+    skos:prefLabel "Suveccha Mukherjee" .
+
+kgr:uma_devi a kg:Entity ;
+    kg:belongs_to_area kgr:delivery_governance ;
+    kg:does_activity kgr:jira,
+        kgr:release_management ;
+    skos:prefLabel "Uma Devi" .
+
+kgr:varun_kumar a kg:Entity ;
+    kg:belongs_to_area kgr:architecture ;
+    kg:does_activity kgr:business_collab_on_techincal_requirements,
+        kgr:solution_design,
+        kgr:wiki_confluence_update ;
+    skos:prefLabel "Varun Kumar" .
+
+kgr:budget_management_interface_with_business a kg:Activity ;
+    skos:prefLabel "Budget Management Interface with Business" .
+
+kgr:business_sponsor a kg:Group ;
+    kg:groupType "Area" ;
+    skos:prefLabel "Business Sponsor" .
+
+kgr:business_sponsor_for_dar a kg:Activity ;
+    skos:prefLabel "Business Sponsor for DAR" .
+
+kgr:contract_life_cycle_management a kg:Activity ;
+    skos:prefLabel "Contract life cycle management" .
+
+kgr:delivery_governance a kg:Group ;
+    kg:groupType "Area" ;
+    skos:prefLabel "Delivery Governance" .
+
+kgr:finance_partner___digital a kg:Group ;
+    kg:groupType "Area" ;
+    skos:prefLabel "Finance Partner - Digital" .
+
+kgr:jira a kg:Activity ;
+    skos:prefLabel "JIRA" .
+
+kgr:overall_delivery_accountability a kg:Activity ;
+    skos:prefLabel "Overall Delivery Accountability" .
+
+kgr:pv2 a kg:Activity ;
+    skos:prefLabel "PV2" .
+
+kgr:pv6 a kg:Activity ;
+    skos:prefLabel "PV6" .
+
+kgr:release_management a kg:Activity ;
+    skos:prefLabel "Release Management" .
+
+kgr:resource_tracker a kg:Activity ;
+    skos:prefLabel "Resource Tracker" .
+
+kgr:revenue_controls a kg:Activity ;
+    skos:prefLabel "Revenue Controls" .
+
+kgr:rmt a kg:Activity ;
+    skos:prefLabel "RMT" .
+
+kgr:solution_architect a kg:Activity ;
+    skos:prefLabel "Solution Architect" .
+
+kgr:testing a kg:Group ;
+    kg:groupType "Area" ;
+    skos:prefLabel "Testing" .
+
+kgr:testing_of_the_features a kg:Activity ;
+    skos:prefLabel "Testing of the Features" .
+
+fcc:Technology a owl:Class ;
+    rdfs:label "Technology" ;
+    rdfs:comment "The broadband delivery technology (e.g., cable, fiber, DSL, satellite)." .
+
+kgr:backlog a kg:Activity ;
+    skos:prefLabel "Backlog" .
+
+kgr:business_stakeholder_alignment a kg:Activity ;
+    skos:prefLabel "Business Stakeholder Alignment" .
+
+kgr:digital_systems a kg:Activity ;
+    skos:prefLabel "Digital systems" .
+
+kgr:engineering_manager a kg:Activity ;
+    skos:prefLabel "Engineering Manager" .
+
+kgr:finance_partner___d_ai a kg:Group ;
+    kg:groupType "Area" ;
+    skos:prefLabel "Finance Partner - D&AI" .
+
+kgr:product_ownership a kg:Activity ;
+    skos:prefLabel "Product Ownership" .
+
+kgr:qlik a kg:Group ;
+    kg:groupType "Area" ;
+    skos:prefLabel "Qlik" .
+
+kgr:qlik_development a kg:Activity ;
+    skos:prefLabel "Qlik Development" .
+
+kgr:roadmap a kg:Activity ;
+    skos:prefLabel "Roadmap" .
+
+kgr:technical_delivery a kg:Activity ;
+    skos:prefLabel "Technical Delivery" .
+
+fcc:HoldingCompany a owl:Class ;
+    rdfs:label "Holding Company" ;
+    rdfs:comment "A parent company that owns one or more broadband providers." .
+
+fcc:Location a owl:Class ;
+    rdfs:label "Location" ;
+    rdfs:comment "A geographic location identified by state and census block FIPS code." .
+
+kgr:product a kg:Group ;
+    kg:groupType "Area" ;
+    skos:prefLabel "Product" .
+
+kgr:architecture a kg:Group ;
+    kg:groupType "Area" ;
+    skos:prefLabel "Architecture" .
+
+kgr:business_collab_on_techincal_requirements a kg:Activity ;
+    skos:prefLabel "Business collab on techincal requirements" .
+
+kgr:code_delivery a kg:Activity ;
+    skos:prefLabel "Code Delivery" .
+
+kgr:deployment a kg:Activity ;
+    skos:prefLabel "Deployment" .
+
+kgr:engineering a kg:Group ;
+    kg:groupType "Area" ;
+    skos:prefLabel "Engineering" .
+
+kgr:feature_development a kg:Activity ;
+    skos:prefLabel "Feature Development" .
+
+kgr:solution_design a kg:Activity ;
+    skos:prefLabel "Solution Design" .
+
+kgr:wiki_confluence_update a kg:Activity ;
+    skos:prefLabel "Wiki Confluence update" .
+
+kgr:business_digital a kg:Group ;
+    kg:groupType "Area" ;
+    skos:prefLabel "Business Digital" .
+
+fcc:Provider a owl:Class ;
+    rdfs:label "Broadband Provider" ;
+    rdfs:comment "A company that provides broadband internet service." .
+
+fcc:ServiceOffering a owl:Class ;
+    rdfs:label "Service Offering" ;
+    rdfs:comment "A specific broadband service deployed in a census block with defined speeds and technology." .
+
