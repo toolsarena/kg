@@ -49,7 +49,7 @@ button.primary { background:var(--accent2); border-color:var(--accent2); color:#
 .chat-msg.assistant .bubble { background:var(--bg3); color:var(--text); }
 .canvas-node { position:absolute; padding:8px 14px; border-radius:8px; border:2px solid var(--accent); background:var(--bg2); color:var(--text); font-size:12px; cursor:move; user-select:none; z-index:2; }
 .ttl-preview { flex:1; overflow-y:auto; padding:12px; font-family:'Fira Code',monospace; font-size:11px; color:var(--green); white-space:pre-wrap; background:var(--bg); }
-#tab-explore.active { display:flex; flex-direction:column; }
+#tab-explore.active { display:flex !important; flex-direction:column; height:100%; }
 #tab-explore iframe { border:none; }
 #explore-toolbar button { padding:6px 14px; font-size:12px; }
 #explore-toolbar button.primary { background:var(--accent2); border-color:var(--accent2); color:#fff; }
@@ -938,9 +938,18 @@ function renderExploreGraph(graphData) {
 
   // Color by type — simple circle colors for default view
   var typeColors = {class:'#3fb950', objectproperty:'#bc8cff', datatypeproperty:'#d29922', concept:'#58a6ff', entity:'#f0883e', service:'#4363d8', resource:'#911eb4', process:'#e6194b', decision:'#42d4f4', bestpractice:'#aaffc3', group:'#9b59b6', activity:'#a8e6cf', project:'#1a3a8a'};
-  var palette = ['#58a6ff','#3fb950','#f0883e','#bc8cff','#e6194b','#42d4f4','#d29922','#911eb4','#aaffc3','#f58231','#4363d8','#fabebe','#ffd8b1','#fffac8','#bfef45'];
+  // Label-based color variation for nodes without a type color
+  var labelPalette = ['#58a6ff','#3fb950','#f0883e','#bc8cff','#e6194b','#42d4f4','#d29922','#911eb4','#f58231','#4363d8','#aaffc3','#fabebe'];
   exploreNodes.forEach(function(n, i) {
-    n.color = typeColors[n.type] || palette[i % palette.length];
+    var baseColor = typeColors[n.type];
+    if (!baseColor) {
+      // Hash the label to get consistent color per unique label
+      var hash = 0;
+      var lbl = n.label || n.id;
+      for (var j = 0; j < lbl.length; j++) hash = ((hash << 5) - hash) + lbl.charCodeAt(j);
+      baseColor = labelPalette[Math.abs(hash) % labelPalette.length];
+    }
+    n.color = baseColor;
     n.degree = 0;
     exploreNodeMap[n.id] = n;
   });
@@ -1019,14 +1028,22 @@ function renderExploreGraph(graphData) {
     .linkDirectionalParticleColor(function() { return '#58a6ff'; })
     .linkLabel(function(l) { return l.relation; })
     .backgroundColor('#080810')
-    .width(container.clientWidth)
-    .height(container.clientHeight)
+    .width(container.clientWidth || (window.innerWidth - 380))
+    .height(container.clientHeight || (window.innerHeight - 140))
     .onNodeClick(function(node) { exploreDrillDown(node.id); })
     .onBackgroundClick(function() { exploreReset(); })
     .cooldownTicks(120);
 
   exploreGraph.d3Force('charge').strength(-180);
   exploreGraph.d3Force('link').distance(70);
+
+  // Resize graph when tab becomes visible
+  setTimeout(function() {
+    if (exploreGraph && container.clientWidth > 0) {
+      exploreGraph.width(container.clientWidth);
+      exploreGraph.height(container.clientHeight);
+    }
+  }, 500);
 }
 
 // Drill down — click node, it highlights, neighbors stay visible, smooth pan, never lose focus
@@ -1485,14 +1502,22 @@ function renderStructuredGraph(graphData) {
     .linkDirectionalParticleWidth(2.5)
     .linkDirectionalParticleColor(function() { return '#fff'; })
     .backgroundColor('#0a0a14')
-    .width(container.clientWidth)
-    .height(container.clientHeight)
+    .width(container.clientWidth || (window.innerWidth - 380))
+    .height(container.clientHeight || (window.innerHeight - 140))
     .onNodeClick(function(node) { exploreDrillDown(node.id); })
     .onBackgroundClick(function() { exploreReset(); })
     .cooldownTicks(150);
 
   exploreGraph.d3Force('charge').strength(-300);
   exploreGraph.d3Force('link').distance(100);
+
+  // Resize graph when tab becomes visible
+  setTimeout(function() {
+    if (exploreGraph && container.clientWidth > 0) {
+      exploreGraph.width(container.clientWidth);
+      exploreGraph.height(container.clientHeight);
+    }
+  }, 500);
 }
 
 // Decision Tree view — progressive expand, layer by layer
